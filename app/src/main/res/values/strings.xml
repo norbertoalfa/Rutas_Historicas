@@ -3,4 +3,5 @@
     <string name="mensaje_bienvenida">Bienvenido a la app...</string>
     <string name="nombre_federico">Federico García Lorca</string>
     <string name="descripcion_federico">Federico García Lorca era un poeta que...</string>
+    <string name="iniciar_ruta">Iniciar ruta</string>
 </resources>
