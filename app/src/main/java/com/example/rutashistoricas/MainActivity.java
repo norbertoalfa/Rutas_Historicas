@@ -11,7 +11,6 @@ import static com.example.rutashistoricas.R.id.boton_federico;
 
 public class MainActivity extends AppCompatActivity {
     public static final String ID_PERSONAJE = "com.example.myfirstapp.ID_PERSONAJE";
-    private String textoBienvenida = "Bienvenido a la aplicacion...";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
