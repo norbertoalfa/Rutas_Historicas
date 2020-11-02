@@ -15,6 +15,7 @@
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
         android:layout_marginBottom="32dp"
+        android:onClick="ver3d"
         android:text="@string/iniciar_ruta"
         android:textColor="@color/colorTextButton"
         app:layout_constraintBottom_toBottomOf="parent"
