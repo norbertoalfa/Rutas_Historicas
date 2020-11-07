@@ -117,10 +117,16 @@ public class Triangle {
 
     public Triangle() {
 
+        /*float vertices[] = {
+                -0.5f, -1.4f, -10f,
+                0.5f, -1.4f, -10f,
+                0f, 1.8f, -10f
+        };*/
+
         float vertices[] = {
-                -0.5f, -0.29f, -10f,
-                0.5f, -0.29f, -10f,
-                0f, 0.58f, -10f
+                -0.5f, 10f, -1.4f,
+                0.5f, 10f, -1.4f,
+                0f, 10f, 1.8f
         };
 
         byte indices[] = { 0, 1, 2 };
