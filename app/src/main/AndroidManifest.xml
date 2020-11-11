@@ -21,10 +21,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/TemaPrueba">
 
         <activity android:name=".PruebaPosicion" />
-        <activity android:name=".Prueba3d" />
+        <activity android:name=".RealidadAumentada" />
         <activity
             android:name=".PantallaPersonaje"
             android:parentActivityName=".MainActivity">

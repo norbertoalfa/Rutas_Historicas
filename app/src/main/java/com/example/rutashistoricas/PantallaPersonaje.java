@@ -1,13 +1,20 @@
 package com.example.rutashistoricas;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.MotionEventCompat;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MotionEvent;
+import android.view.VelocityTracker;
 import android.view.View;
 import android.widget.TextView;
 
 public class PantallaPersonaje extends AppCompatActivity {
+    private VelocityTracker mVelocityTracker = null;
+    private int mActivePointerId1;
+    private int mActivePointerId2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,22 +36,42 @@ public class PantallaPersonaje extends AppCompatActivity {
         textView.setText(description);
     }
 
-    public void ver3d(View view) {
-        //Intent intent = new Intent(this, PruebaCamara.class);
-        Intent intent = new Intent(this, Prueba3d.class);
-        /*Bundle b = new Bundle();
-        String  name = "",
-                description = "";
-        switch (view.getId()) {
-            case (R.id.boton_federico):
-                name = getString(R.string.nombre_federico);
-                description = getString(R.string.descripcion_federico);
-                break;
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        int action = MotionEventCompat.getActionMasked(event);
+        float xVel1 = 0.0f;
+        float yVel1 = 0.0f;
+        float xVel2 = 0.0f;
+        float yVel2 = 0.0f;
+
+        if (mVelocityTracker == null) {
+            mVelocityTracker = VelocityTracker.obtain();
+        } else {
+            mVelocityTracker.clear();
         }
 
-        b.putCharSequence("nombre", name);
-        b.putCharSequence("descripcion", description);
-        intent.putExtras(b);*/
+        if (action == MotionEvent.ACTION_MOVE && event.getPointerCount() == 2) {
+            mActivePointerId1 = event.getPointerId(0);
+            mActivePointerId2 = event.getPointerId(1);
+
+            mVelocityTracker.addMovement(event);
+            mVelocityTracker.computeCurrentVelocity(1000);
+
+            xVel1 = mVelocityTracker.getXVelocity(mActivePointerId1);
+            yVel1 = mVelocityTracker.getYVelocity(mActivePointerId1);
+
+            xVel2 = mVelocityTracker.getXVelocity(mActivePointerId2);
+            yVel2 = mVelocityTracker.getYVelocity(mActivePointerId2);
+
+            if (Math.abs(yVel1)<1000 && xVel1>100 && Math.abs(yVel2)<1000 && xVel2>100)
+                finish();
+        }
+
+        return true;
+    }
+
+    public void ver3d(View view) {
+        Intent intent = new Intent(this, RealidadAumentada.class);
         startActivity(intent);
     }
 }

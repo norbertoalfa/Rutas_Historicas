@@ -10,9 +10,11 @@
 
     <style name="TemaPrueba" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/colorMyPrimary</item>
+        <item name="colorPrimaryDark">@color/colorMyPrimaryDark</item>
+        <item name="colorAccent">@color/colorMyAccent</item>
+        <item name="android:textColor">@color/colorMyText</item>
+        <item name="android:colorBackground">@color/colorMyBackground</item>
     </style>
 
 </resources>

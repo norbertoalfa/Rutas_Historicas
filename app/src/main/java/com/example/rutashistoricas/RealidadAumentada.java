@@ -9,48 +9,22 @@ import android.hardware.SensorManager;
 import android.opengl.GLSurfaceView;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.MotionEvent;
+import android.view.VelocityTracker;
 import android.view.WindowManager;
-import android.widget.TextView;
-
 import androidx.annotation.RequiresApi;
+import androidx.core.view.MotionEventCompat;
 
-/*
-public class Prueba3d extends Activity {
-    private GLSurfaceView glView;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        glView = new GLSurfaceView(this);
-        glView.setRenderer(new MyGLRenderer());
-        setContentView(glView);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        glView.onPause();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        glView.onResume();
-    }
-
-}*/
-
-public class Prueba3d extends Activity implements SensorEventListener {
+public class RealidadAumentada extends Activity implements SensorEventListener {
+    private VelocityTracker mVelocityTracker = null;
+    private int mActivePointerId1;
+    private int mActivePointerId2;
     private SensorManager sensorManager;
-    //private Sensor sensor;
 
     private final float[] accelerometerReading = new float[3];
     private final float[] magnetometerReading = new float[3];
     private final float[] gravityReading = new float[3];
     private  float[] rotationMatrix = new float[9];
-    private  float[] rotationMatrix2 = new float[9];
     private final float[] orientationAngles = new float[3];
 
     private GLSurfaceView glView;
@@ -62,13 +36,45 @@ public class Prueba3d extends Activity implements SensorEventListener {
         setContentView(R.layout.activity_prueba_posicion);
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
-        //sensor = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
-
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         glView = new GLSurfaceView(this);
         myGLRenderer = new MyGLRenderer();
         glView.setRenderer(myGLRenderer);
         setContentView(glView);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        int action = MotionEventCompat.getActionMasked(event);
+        float xVel1 = 0.0f;
+        float yVel1 = 0.0f;
+        float xVel2 = 0.0f;
+        float yVel2 = 0.0f;
+
+        if (mVelocityTracker == null) {
+            mVelocityTracker = VelocityTracker.obtain();
+        } else {
+            mVelocityTracker.clear();
+        }
+
+        if (action == MotionEvent.ACTION_MOVE && event.getPointerCount() == 2) {
+            mActivePointerId1 = event.getPointerId(0);
+            mActivePointerId2 = event.getPointerId(1);
+
+            mVelocityTracker.addMovement(event);
+            mVelocityTracker.computeCurrentVelocity(1000);
+
+            xVel1 = mVelocityTracker.getXVelocity(mActivePointerId1);
+            yVel1 = mVelocityTracker.getYVelocity(mActivePointerId1);
+
+            xVel2 = mVelocityTracker.getXVelocity(mActivePointerId2);
+            yVel2 = mVelocityTracker.getYVelocity(mActivePointerId2);
+
+            if (Math.abs(yVel1)<1000 && xVel1>100 && Math.abs(yVel2)<1000 && xVel2>100)
+                finish();
+        }
+
+        return true;
     }
 
     @Override
@@ -99,8 +105,6 @@ public class Prueba3d extends Activity implements SensorEventListener {
             sensorManager.registerListener(this, magneticField,
                     SensorManager.SENSOR_DELAY_NORMAL, SensorManager.SENSOR_DELAY_UI);
         }
-
-
     }
 
     @Override
@@ -109,8 +113,6 @@ public class Prueba3d extends Activity implements SensorEventListener {
 
         // Don't receive any more updates from either sensor.
         sensorManager.unregisterListener(this);
-
-
     }
 
     // Get readings from accelerometer and magnetometer. To simplify calculations,
@@ -135,11 +137,11 @@ public class Prueba3d extends Activity implements SensorEventListener {
     // the device's accelerometer and magnetometer.
     public void updateOrientationAngles() {
         // Update rotation matrix, which is needed to update orientation angles.
-        SensorManager.getRotationMatrix(rotationMatrix2, null,
-                accelerometerReading, magnetometerReading);
-        rotationMatrix = rotationMatrix2;
         SensorManager.getRotationMatrix(rotationMatrix, null,
-                gravityReading, magnetometerReading);
+                accelerometerReading, magnetometerReading);
+
+        //SensorManager.getRotationMatrix(rotationMatrix, null,
+        //        gravityReading, magnetometerReading);
         // "mRotationMatrix" now has up-to-date information.
 
         SensorManager.getOrientation(rotationMatrix, orientationAngles);
@@ -150,9 +152,7 @@ public class Prueba3d extends Activity implements SensorEventListener {
                 "\n" + Float.toString(orientationAngles[2]);
         TextView textView = findViewById(R.id.valores);
         textView.setText(str_valores);*/
-        //myGLRenderer.asignarDatosSensor(orientationAngles);
-        //myGLRenderer.asignarDatosSensor(orientationAngles, new float[]{rotationMatrix2[5], rotationMatrix2[2], rotationMatrix2[8]});
-        myGLRenderer.asignarDatosSensor(orientationAngles, new float[]{-rotationMatrix2[2], -rotationMatrix2[5], -rotationMatrix2[8]});
+        myGLRenderer.asignarDatosSensor(orientationAngles, new float[]{-rotationMatrix[2], -rotationMatrix[5], -rotationMatrix[8]});
     }
 
 }

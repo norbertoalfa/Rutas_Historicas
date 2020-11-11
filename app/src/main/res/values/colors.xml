@@ -5,4 +5,12 @@
     <color name="colorAccent">#03DAC5</color>
     <color name="colorText">#000000</color>
     <color name="colorTextButton">#101010</color>
+
+    <color name="colorMyPrimary">#EF912F</color>
+    <color name="colorMyPrimaryDark">#CB6E0E</color>
+    <color name="colorMyAccent">#FFC107</color>
+    <color name="colorMyText">#000000</color>
+    <color name="colorMyTextButton">#A16100</color>
+    <color name="colorMyBackground">#FFFFFF</color>
+    <color name="colorMyButton">#FAEAD1</color>
 </resources>
