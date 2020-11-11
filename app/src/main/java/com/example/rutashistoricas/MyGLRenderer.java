@@ -1,5 +1,7 @@
 package com.example.rutashistoricas;
 
+import android.graphics.SurfaceTexture;
+import android.hardware.Camera;
 import android.opengl.EGLConfig;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
@@ -42,6 +44,8 @@ public class MyGLRenderer implements  GLSurfaceView.Renderer {
 }*/
 
 public class MyGLRenderer implements GLSurfaceView.Renderer {
+    private Camera camera;
+    private SurfaceTexture texture;
 
     private Triangle shape;
     private float n = 0;
@@ -52,6 +56,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     public MyGLRenderer() {
         shape = new Triangle();
+        //camera = Camera.open(1);
     }
 
     public void asignarDatosSensor(float[] angles, float[] p){
@@ -82,9 +87,14 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         */
     }
 
+
     @Override
     public void onDrawFrame(GL10 gl) {
         gl.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+
+        //camera.startPreview();
+        //camera.setPreviewTexture(texture);
+        //camera.setOneShotPreviewCallback(camera.setPreviewCallback());
 
         gl.glMatrixMode(GL11.GL_MODELVIEW);
         gl.glLoadIdentity();

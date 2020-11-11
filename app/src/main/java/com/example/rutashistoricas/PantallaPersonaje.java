@@ -30,8 +30,8 @@ public class PantallaPersonaje extends AppCompatActivity {
     }
 
     public void ver3d(View view) {
+        //Intent intent = new Intent(this, PruebaCamara.class);
         Intent intent = new Intent(this, Prueba3d.class);
-        //Intent intent = new Intent(this, PruebaPosicion.class);
         /*Bundle b = new Bundle();
         String  name = "",
                 description = "";
