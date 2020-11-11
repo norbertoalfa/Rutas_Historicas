@@ -33,7 +33,7 @@ public class RealidadAumentada extends Activity implements SensorEventListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_prueba_posicion);
+        setContentView(R.layout.activity_realidad_aumentada);
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);

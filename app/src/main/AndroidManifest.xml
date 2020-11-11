@@ -23,7 +23,6 @@
         android:supportsRtl="true"
         android:theme="@style/TemaPrueba">
 
-        <activity android:name=".PruebaPosicion" />
         <activity android:name=".RealidadAumentada" />
         <activity
             android:name=".PantallaPersonaje"
