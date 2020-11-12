@@ -6,5 +6,5 @@
     <string name="iniciar_ruta">Iniciar ruta</string>
     <string name="user_location_permission_explanation">Es necesario el acceso a la ubicación del dispositivo para utilizar la app.</string>
     <string name="user_location_permission_not_granted">No se han concedido permisos de ubicación, se cerrará la app.</string>
-    <string name="mapbox_access_token">pk.eyJ1IjoiZnJhbmJsdWVlZSIsImEiOiJja2d1NjJxaHMwaWl2MnlwMDZvbjhneno2In0.gMCY7EvYnmHYAp4gJD3D8A</string>
+    <string name="mapbox_access_token">pk.eyJ1Ijoibm9yYmlmaCIsImEiOiJja2hlem1scWMwenZrMzJuMWZja2dvMDdnIn0.nkx4ZOsg0v38V1kUDZPUyg</string>
 </resources>
