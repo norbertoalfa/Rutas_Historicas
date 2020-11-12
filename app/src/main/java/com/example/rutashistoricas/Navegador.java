@@ -67,7 +67,9 @@ public class Navegador extends AppCompatActivity
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             showDialog = true;
+                            Intent intent = new Intent(Navegador.this, RealidadAumentada.class);
                             dialog.cancel();
+                            startActivity(intent);
                         }
                     });
 
