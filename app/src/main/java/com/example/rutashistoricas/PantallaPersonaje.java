@@ -71,7 +71,9 @@ public class PantallaPersonaje extends AppCompatActivity {
     }
 
     public void ver3d(View view) {
-        Intent intent = new Intent(this, RealidadAumentada.class);
+        Intent intent = new Intent(this, Mapa.class);
+        //Intent intent = new Intent(this, PruebaCamara.class);
+        //Intent intent = new Intent(this, RealidadAumentada.class);
         startActivity(intent);
     }
 }
