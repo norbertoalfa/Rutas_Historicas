@@ -1,7 +1,9 @@
 package com.example.rutashistoricas;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -26,6 +28,8 @@ public class RealidadAumentada extends Activity implements SensorEventListener {
     private final float[] gravityReading = new float[3];
     private  float[] rotationMatrix = new float[9];
     private final float[] orientationAngles = new float[3];
+
+    private final float[] posTriangulo = {0.0f, 1.0f, 0.0f};
 
     private GLSurfaceView glView;
     private MyGLRenderer myGLRenderer;
@@ -70,8 +74,18 @@ public class RealidadAumentada extends Activity implements SensorEventListener {
             xVel2 = mVelocityTracker.getXVelocity(mActivePointerId2);
             yVel2 = mVelocityTracker.getYVelocity(mActivePointerId2);
 
-            if (Math.abs(yVel1)<1000 && xVel1>100 && Math.abs(yVel2)<1000 && xVel2>100)
+            if (Math.abs(yVel1)<1000 && xVel1>100 && Math.abs(yVel2)<1000 && xVel2>100) {
                 finish();
+            }
+
+            float distancia = (float) Math.pow(Math.pow(posTriangulo[0]+rotationMatrix[2],2)
+                    + Math.pow(posTriangulo[1]+rotationMatrix[5],2)
+                    + Math.pow(posTriangulo[0]+rotationMatrix[2],2) ,0.5);
+
+            if (Math.abs(yVel1)<1000 && xVel1<-100 && Math.abs(yVel2)<1000 && xVel2<-100 && distancia<0.05) {
+                Intent intent = new Intent(this, InfoPuntoInteres.class);
+                startActivity(intent);
+            }
         }
 
         return true;
@@ -113,6 +127,7 @@ public class RealidadAumentada extends Activity implements SensorEventListener {
 
         // Don't receive any more updates from either sensor.
         sensorManager.unregisterListener(this);
+        finish();
     }
 
     // Get readings from accelerometer and magnetometer. To simplify calculations,
@@ -131,6 +146,23 @@ public class RealidadAumentada extends Activity implements SensorEventListener {
         }
 
         updateOrientationAngles();
+
+        // "mOrientationAngles" now has up-to-date information.
+        /*String str_valores = Float.toString(orientationAngles[0]) +
+                "\n" + Float.toString(orientationAngles[1]) +
+                "\n" + Float.toString(orientationAngles[2]);
+        TextView textView = findViewById(R.id.valores);
+        textView.setText(str_valores);*/
+        myGLRenderer.asignarDatosSensor(orientationAngles, new float[]{-rotationMatrix[2], -rotationMatrix[5], -rotationMatrix[8]});
+
+        float distancia = (float) Math.pow(Math.pow(posTriangulo[0]+rotationMatrix[2],2)
+                + Math.pow(posTriangulo[1]+rotationMatrix[5],2)
+                + Math.pow(posTriangulo[0]+rotationMatrix[2],2) ,0.5);
+
+        if (distancia<0.05) {
+            Intent intent = new Intent(this, InfoPuntoInteres.class);
+            startActivity(intent);
+        }
     }
 
     // Compute the three orientation angles based on the most recent readings from
@@ -145,14 +177,6 @@ public class RealidadAumentada extends Activity implements SensorEventListener {
         // "mRotationMatrix" now has up-to-date information.
 
         SensorManager.getOrientation(rotationMatrix, orientationAngles);
-
-        // "mOrientationAngles" now has up-to-date information.
-        /*String str_valores = Float.toString(orientationAngles[0]) +
-                "\n" + Float.toString(orientationAngles[1]) +
-                "\n" + Float.toString(orientationAngles[2]);
-        TextView textView = findViewById(R.id.valores);
-        textView.setText(str_valores);*/
-        myGLRenderer.asignarDatosSensor(orientationAngles, new float[]{-rotationMatrix[2], -rotationMatrix[5], -rotationMatrix[8]});
     }
 
 }

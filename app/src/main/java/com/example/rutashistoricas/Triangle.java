@@ -114,22 +114,22 @@ public class Triangle {
 
     private FloatBuffer mFVertexBuffer;
     private ByteBuffer mIndexBuffer;
+    //private short drawOrder[] = {0, 1, 2, 0, 2, 3};
+    private float vertices[];
+    private byte indices[];
+
 
     public Triangle() {
 
-        /*float vertices[] = {
-                -0.5f, -1.4f, -10f,
-                0.5f, -1.4f, -10f,
-                0f, 1.8f, -10f
-        };*/
-
-        float vertices[] = {
-                -0.5f, 10f, -1.4f,
-                0.5f, 10f, -1.4f,
-                0f, 10f, 1.8f
+        vertices = new float[]{
+                -0.5f, 10f, -0.5f,
+                0.5f, 10f, -0.5f,
+                -0.5f, 10f, 0.5f,
+                0.5f, 10f, 0.5f,
+                0.0f, 10f, 1.0f
         };
 
-        byte indices[] = { 0, 1, 2 };
+        indices = new byte[]{ 0, 1, 2, 1, 2, 3, 2, 3, 4};
 
         mFVertexBuffer = makeFloatBuffer(vertices);
 
@@ -140,7 +140,8 @@ public class Triangle {
 
     public void draw(GL10 gl) {
         gl.glVertexPointer(3, GL11.GL_FLOAT, 0, mFVertexBuffer);
-        gl.glDrawElements(GL11.GL_TRIANGLES, 3, GL11.GL_UNSIGNED_BYTE, mIndexBuffer);
+        //gl.glDrawElements(GL11.GL_TRIANGLES, indices.length, GL11.GL_UNSIGNED_BYTE, mIndexBuffer);
+        gl.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, vertices.length);
     }
 
     private static FloatBuffer makeFloatBuffer(float[] arr) {
