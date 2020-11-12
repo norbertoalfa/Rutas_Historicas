@@ -8,6 +8,7 @@ import java.util.List;
 
 public class Routes {
 
+    //private List<Point> stops;
     static DirectionsRoute currentDirectionsRoute;
 
     public static void setCurrentDirectionsRoute(DirectionsRoute dir){
@@ -34,6 +35,12 @@ public class Routes {
         }
         return stops;
     }
+/*
+    public static Point getParada(int index) {
+        return stops[index];
+    }
+
+ */
 
     public static Point getParada(String lugar){
         switch (lugar){

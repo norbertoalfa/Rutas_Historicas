@@ -88,6 +88,8 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
     private Sensor accelerometer;
     private float lastZ;
 
+    private boolean navegacion_iniciada = false;
+
     private static class LocationCallback implements LocationEngineCallback<LocationEngineResult> {
 
         private final WeakReference<Mapa> activityWeakReference;
@@ -379,7 +381,8 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
     @Override
     public void onSensorChanged(SensorEvent event) {
         float deltaZ=lastZ-event.values[2];
-        if(deltaZ>15.0f){
+        if(deltaZ>15.0f && !navegacion_iniciada){
+            navegacion_iniciada = true;
             Intent intent = new Intent(Mapa.this, Navegador.class);
             startActivity(intent);
             Toast.makeText(this, "Iniciando navegación", Toast.LENGTH_LONG).show();
