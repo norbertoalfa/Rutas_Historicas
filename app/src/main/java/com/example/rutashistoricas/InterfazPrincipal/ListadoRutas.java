@@ -99,6 +99,7 @@ public class ListadoRutas extends AppCompatActivity {
         b.putInt("idPnj", idPnj);
         b.putInt("idRuta", 1);
         Intent intent = new Intent(this, Mapa.class);
+        //Intent intent = new Intent(this, RealidadAumentada.class);
         intent.putExtras(b);
         startActivity(intent);
     }

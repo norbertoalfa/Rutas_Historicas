@@ -13,7 +13,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.rutashistoricas.Navegacion.Navegador;
 import com.example.rutashistoricas.R;
+import com.example.rutashistoricas.RealidadAumentada.RealidadAumentada;
 
 public class InfoPuntoInteres extends AppCompatActivity {
     private VelocityTracker mVelocityTracker = null;
@@ -87,7 +89,14 @@ public class InfoPuntoInteres extends AppCompatActivity {
     }
 
     public void continuarRuta(View view){
-       finishActivity(0);
+        super.finish();
+    }
+
+    @Override
+    public void finish(){
+        Intent intent = new Intent(InfoPuntoInteres.this, RealidadAumentada.class);
+        startActivity(intent);
+        super.finish();
     }
 
     public void masInfo(View view){

@@ -190,6 +190,7 @@ public class RealidadAumentada extends Activity implements SensorEventListener {
                 Intent intent = new Intent(this, InfoPuntoInteres.class);
                 intent.putExtra("indexPuntoInteres", indexPuntoInteres);
                 startActivity(intent);
+                finish();
             }
         } else {
             inTime = false;

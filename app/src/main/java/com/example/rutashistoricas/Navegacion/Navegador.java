@@ -72,9 +72,22 @@ public class Navegador extends AppCompatActivity implements OnNavigationReadyCal
                 Button button=(Button) findViewById(R.id.button3);
                 button.setVisibility(View.VISIBLE);
                 button.setEnabled(true);
-
             }
+                      /*  }
+                    });
 
+             builder1.setNegativeButton(
+                    "Quiero continuar",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            showDialog = false;
+                            mapboxNavigation.navigateNextRouteLeg();
+                            dialog.cancel();
+                        }
+                    });
+
+            currentDialog = builder1.create();
+            showDialog = true;*/
             return false;
         }
     };
@@ -119,9 +132,6 @@ public class Navegador extends AppCompatActivity implements OnNavigationReadyCal
         Mapbox.getInstance(this,getString(R.string.mapbox_access_token));
         setContentView(R.layout.activity_navegador);
         navigationView = (NavigationView) findViewById(R.id.navigationView);
-
-        setTitle(titulo);
-
         navigationView.onCreate(savedInstanceState);
         navigationView.initialize(this);
 
@@ -153,6 +163,10 @@ public class Navegador extends AppCompatActivity implements OnNavigationReadyCal
     public void onResume(){
         super.onResume();
         navigationView.onResume();
+        if(puntoInteresLanzado){
+            mapboxNavigation.navigateNextRouteLeg();
+            puntoInteresLanzado=false;
+        }
     }
 
     @Override

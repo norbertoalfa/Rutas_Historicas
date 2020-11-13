@@ -49,8 +49,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="#D6D7D7"
-            android:onClick="iniciarRuta1">
+            android:background="#D6D7D7">
 
             <Button
                 android:id="@+id/botonRuta1"
@@ -131,8 +130,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="#D6D7D7"
-            android:onClick="iniciarRuta1">
+            android:background="#D6D7D7">
 
             <Button
                 android:id="@+id/botonRuta2"
@@ -211,8 +209,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="#D6D7D7"
-            android:onClick="iniciarRuta1">
+            android:background="#D6D7D7">
 
             <Button
                 android:id="@+id/botonRuta3"
