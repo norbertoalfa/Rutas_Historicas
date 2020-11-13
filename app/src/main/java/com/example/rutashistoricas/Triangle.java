@@ -1,6 +1,11 @@
 package com.example.rutashistoricas;
 
+import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
+import android.opengl.GLUtils;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -9,139 +14,110 @@ import java.nio.FloatBuffer;
 import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.opengles.GL11;
 
-/*
-public class Triangle {
-
-    private FloatBuffer vertexBuffer;
-
-    private final String vertexShaderCode =
-            "attribute vec4 vPosition;" +
-                    "void main() {" +
-                    "  gl_Position = vPosition;" +
-                    "}";
-
-    private final String fragmentShaderCode =
-            "precision mediump float;" +
-                    "uniform vec4 vColor;" +
-                    "void main() {" +
-                    "  gl_FragColor = vColor;" +
-                    "}";
-
-    private final int mProgram;
-
-    // number of coordinates per vertex in this array
-    static final int COORDS_PER_VERTEX = 3;
-    static float triangleCoords[] = {   // in counterclockwise order:
-            0.0f,  0.622008459f, 0.0f, // top
-            -0.5f, -0.311004243f, 0.0f, // bottom left
-            0.5f, -0.311004243f, 0.0f  // bottom right
-    };
-
-    // Set color with red, green, blue and alpha (opacity) values
-    float color[] = { 0.63671875f, 0.76953125f, 0.22265625f, 1.0f };
-
-    private int positionHandle;
-    private int colorHandle;
-
-    private final int vertexCount = triangleCoords.length / COORDS_PER_VERTEX;
-    private final int vertexStride = COORDS_PER_VERTEX * 4; // 4 bytes per vertex
-
-
-    public Triangle() {
-        // initialize vertex byte buffer for shape coordinates
-        ByteBuffer bb = ByteBuffer.allocateDirect(
-                // (number of coordinate values * 4 bytes per float)
-                triangleCoords.length * 4);
-        // use the device hardware's native byte order
-        bb.order(ByteOrder.nativeOrder());
-
-        // create a floating point buffer from the ByteBuffer
-        vertexBuffer = bb.asFloatBuffer();
-        // add the coordinates to the FloatBuffer
-        vertexBuffer.put(triangleCoords);
-        // set the buffer to read the first coordinate
-        vertexBuffer.position(0);
-
-        int vertexShader = MyGLRenderer.loadShader(GLES20.GL_VERTEX_SHADER,
-                vertexShaderCode);
-        int fragmentShader = MyGLRenderer.loadShader(GLES20.GL_FRAGMENT_SHADER,
-                fragmentShaderCode);
-
-        // create empty OpenGL ES Program
-        mProgram = GLES20.glCreateProgram();
-
-        // add the vertex shader to program
-        GLES20.glAttachShader(mProgram, vertexShader);
-
-        // add the fragment shader to program
-        GLES20.glAttachShader(mProgram, fragmentShader);
-
-        // creates OpenGL ES program executables
-        GLES20.glLinkProgram(mProgram);
-    }
-
-    public void draw() {
-        // Add program to OpenGL ES environment
-        GLES20.glUseProgram(mProgram);
-
-        // get handle to vertex shader's vPosition member
-        positionHandle = GLES20.glGetAttribLocation(mProgram, "vPosition");
-
-        // Enable a handle to the triangle vertices
-        GLES20.glEnableVertexAttribArray(positionHandle);
-
-        // Prepare the triangle coordinate data
-        GLES20.glVertexAttribPointer(positionHandle, COORDS_PER_VERTEX,
-                GLES20.GL_FLOAT, false,
-                vertexStride, vertexBuffer);
-
-        // get handle to fragment shader's vColor member
-        colorHandle = GLES20.glGetUniformLocation(mProgram, "vColor");
-
-        // Set color for drawing the triangle
-        GLES20.glUniform4fv(colorHandle, 1, color, 0);
-
-        // Draw the triangle
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertexCount);
-
-        // Disable vertex array
-        GLES20.glDisableVertexAttribArray(positionHandle);
-    }
-
-}*/
 
 public class Triangle {
 
     private FloatBuffer mFVertexBuffer;
     private ByteBuffer mIndexBuffer;
     //private short drawOrder[] = {0, 1, 2, 0, 2, 3};
-    private float vertices[];
-    private byte indices[];
+    private float[] vertices = new float[126];
+    private byte[] indices = new byte[42];
+    private float[] textureCoordinates = new float[84];
+
+    // Our UV texture buffer.
+    private FloatBuffer mTextureBuffer;
+
+    // Our texture id.
+    private int mTextureId = -1;
+
+    // The bitmap we want to load as a texture.
+    private Bitmap mBitmap;
+
+    // Indicates if we need to load the texture.
+    private boolean mShouldLoadTexture = false;
 
 
-    public Triangle() {
+    public Triangle(Context context) {
+        vertices[0] = 20.0f;
+        vertices[1] = 0.0f;
+        vertices[2] = -10.0f;
+        indices[0] = (byte) (0);
+        textureCoordinates[0] = 0.0f;
+        textureCoordinates[1] = 1.0f;
 
-        vertices = new float[]{
-                -0.5f, 10f, -0.5f,
-                0.5f, 10f, -0.5f,
-                -0.5f, 10f, 0.5f,
-                0.5f, 10f, 0.5f,
-                0.0f, 10f, 1.0f
-        };
+        vertices[3] = 20.0f;
+        vertices[4] = 0.0f;
+        vertices[5] = 10.0f;
+        indices[1] = (byte) (1);
+        textureCoordinates[2] = 0.0f;
+        textureCoordinates[3] = 0.0f;
 
-        indices = new byte[]{ 0, 1, 2, 1, 2, 3, 2, 3, 4};
+        for (int i=1; i<21; i++){
+            vertices[6*i]   = (float) (20*Math.cos(2*i*Math.PI/20));
+            vertices[6*i+1] = (float) (20*Math.sin(2*i*Math.PI/20));
+            vertices[6*i+2] = -10.0f;
+            indices[2*i] = (byte) (2*i);
+            textureCoordinates[4*i] = (float) (0.05*i);
+            textureCoordinates[4*i+1] = 1.0f;
+
+            vertices[6*i+3] = (float) (20*Math.cos(2*i*Math.PI/20));
+            vertices[6*i+4] = (float) (20*Math.sin(2*i*Math.PI/20));
+            vertices[6*i+5] = 10.0f;
+            indices[2*i+1] = (byte) (2*i+1);
+            textureCoordinates[4*i+2] = (float) (0.05*i);
+            textureCoordinates[4*i+3] = 0.0f;
+        }
 
         mFVertexBuffer = makeFloatBuffer(vertices);
 
         mIndexBuffer = ByteBuffer.allocateDirect(indices.length);
         mIndexBuffer.put(indices);
         mIndexBuffer.position(0);
+
+        //////
+        loadBitmap(BitmapFactory.decodeResource( context.getResources(),R.drawable.casa_federico_360));
+        setTextureCoordinates(textureCoordinates);
     }
 
     public void draw(GL10 gl) {
-        gl.glVertexPointer(3, GL11.GL_FLOAT, 0, mFVertexBuffer);
-        //gl.glDrawElements(GL11.GL_TRIANGLES, indices.length, GL11.GL_UNSIGNED_BYTE, mIndexBuffer);
-        gl.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, vertices.length);
+
+        /* Smooth color
+        if (mColorBuffer != null) {
+            // Enable the color array buffer to be used during rendering.
+            gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
+            gl.glColorPointer(4, GL10.GL_FLOAT, 0, mColorBuffer);
+        }*/
+
+        if (mShouldLoadTexture) {
+            loadGLTexture(gl);
+            mShouldLoadTexture = false;
+        }
+        if (mTextureId != -1 && mTextureBuffer != null) {
+            gl.glEnable(GL10.GL_TEXTURE_2D);
+            // Enable the texture state
+            gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+
+            // Point to our buffers
+            gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, mTextureBuffer);
+            gl.glBindTexture(GL10.GL_TEXTURE_2D, mTextureId);
+        }
+
+        //gl.glTranslatef(x, y, z);
+
+        gl.glVertexPointer(3, GL10.GL_FLOAT, 0, mFVertexBuffer); //
+        // Point out the where the color buffer is.
+        gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, indices.length);
+
+        if (mTextureId != -1 && mTextureBuffer != null) {
+            gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+        }
+
+        ///////////
+        //gl.glVertexPointer(3, GL10.GL_FLOAT, 0, mFVertexBuffer);
+        //gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, vertices.length);
+        /////////
+
+
     }
 
     private static FloatBuffer makeFloatBuffer(float[] arr) {
@@ -151,6 +127,48 @@ public class Triangle {
         fb.put(arr);
         fb.position(0);
         return fb;
+    }
+
+    protected void setTextureCoordinates(float[] textureCoords) {
+        // float is 4 bytes, therefore we multiply the number if
+        // vertices with 4.
+        ByteBuffer byteBuf = ByteBuffer.allocateDirect(
+                textureCoords.length * 4);
+        byteBuf.order(ByteOrder.nativeOrder());
+        mTextureBuffer = byteBuf.asFloatBuffer();
+        mTextureBuffer.put(textureCoords);
+        mTextureBuffer.position(0);
+    }
+
+    public void loadBitmap(Bitmap bitmap) {
+        this.mBitmap = bitmap;
+        mShouldLoadTexture = true;
+    }
+
+    private void loadGLTexture(GL10 gl) {
+        // Generate one texture pointer...
+        int[] textures = new int[1];
+        gl.glGenTextures(1, textures, 0);
+        mTextureId = textures[0];
+
+        // ...and bind it to our array
+        gl.glBindTexture(GL10.GL_TEXTURE_2D, mTextureId);
+
+        // Create Nearest Filtered Texture
+        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER,
+                GL10.GL_LINEAR);
+        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER,
+                GL10.GL_LINEAR);
+
+        // Different possible texture parameters, e.g. GL11.GL_CLAMP_TO_EDGE
+        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S,
+                GL10.GL_CLAMP_TO_EDGE);
+        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T,
+                GL10.GL_REPEAT);
+
+        // Use the Android GLUtils to specify a two-dimensional texture image
+        // from our bitmap
+        GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, mBitmap, 0);
     }
 }
 
