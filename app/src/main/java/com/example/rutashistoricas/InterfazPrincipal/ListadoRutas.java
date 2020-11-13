@@ -1,4 +1,4 @@
-package com.example.rutashistoricas.InterfazPrincipal;
+package com.example.rutashistoricas;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,7 +18,7 @@ public class ListadoRutas extends AppCompatActivity {
     private VelocityTracker mVelocityTracker = null;
     private int mActivePointerId1;
     private int mActivePointerId2;
-    private static String name = "", texto_ruta_1 = "";
+    private static String name = "";
     private static int index_pnj = 0;
 
     @Override
@@ -29,18 +29,28 @@ public class ListadoRutas extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle b = intent.getExtras();
 
+        String name = "", titulo_ruta_1 = "", texto_ruta_1 = "", texto_ruta_2 = "", texto_ruta_3 = "";
         if (b != null) {
             index_pnj = b.getInt("index_pnj");
             switch (index_pnj) {
                 case 1:
                     name = getString(R.string.nombre_federico);
-                    texto_ruta_1 = getString(R.string.texto_ruta_1);
+                    titulo_ruta_1 = getString(R.string.federico_titulo_ruta_1);
+                    texto_ruta_2 = getString(R.string.federico_titulo_ruta_2);
+                    texto_ruta_3 = getString(R.string.federico_titulo_ruta_3);
             }
         }
 
         setTitle(name);
-        TextView textView = findViewById(R.id.textoRuta1);
-        textView.setText(texto_ruta_1);
+        TextView textView;
+
+        textView = findViewById(R.id.tituloRuta1);
+        textView.setText(titulo_ruta_1);
+        textView = findViewById(R.id.tituloRuta2);
+        textView.setText(texto_ruta_2);
+        textView = findViewById(R.id.tituloRuta3);
+        textView.setText(texto_ruta_3);
+
     }
 
     // para volver atrás con los dos dedos
@@ -79,8 +89,28 @@ public class ListadoRutas extends AppCompatActivity {
     }
 
     public void iniciarRuta1(View view) {
+        Bundle b = new Bundle();
+        b.putInt("index_pnj", index_pnj);
+        b.putInt("index_ruta", 1);
         Intent intent = new Intent(this, Mapa.class);
-        //Intent intent = new Intent(this, RealidadAumentada.class);
+        intent.putExtras(b);
+        startActivity(intent);
+    }
+
+    public void iniciarRuta2(View view) {
+        Bundle b = new Bundle();
+        b.putInt("index_pnj", index_pnj);
+        b.putInt("index_ruta", 2);
+        Intent intent = new Intent(this, Mapa.class);
+        intent.putExtras(b);
+        startActivity(intent);
+    }
+    public void iniciarRuta3(View view) {
+        Bundle b = new Bundle();
+        b.putInt("index_pnj", index_pnj);
+        b.putInt("index_ruta", 3);
+        Intent intent = new Intent(this, Mapa.class);
+        intent.putExtras(b);
         startActivity(intent);
     }
 
