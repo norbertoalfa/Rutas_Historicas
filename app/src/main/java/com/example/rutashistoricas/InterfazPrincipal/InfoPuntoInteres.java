@@ -1,44 +1,37 @@
-package com.example.rutashistoricas;
+package com.example.rutashistoricas.InterfazPrincipal;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.MotionEventCompat;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-public class PantallaPersonaje extends AppCompatActivity {
+import com.example.rutashistoricas.R;
+
+public class InfoPuntoInteres extends AppCompatActivity {
     private VelocityTracker mVelocityTracker = null;
     private int mActivePointerId1;
     private int mActivePointerId2;
-    private int index_pnj = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pantalla_personaje);
+        setContentView(R.layout.activity_info_punto_interes);
 
-        Intent intent = getIntent();
-        Bundle b = intent.getExtras();
-        String  name = "",
-                description = "";
+        ImageView imgView = findViewById(R.id.imgPtoInteres);
+        imgView.setImageResource(R.drawable.casa_federico);
 
-        if (b != null) {
-            index_pnj = b.getInt("index_pnj");
-            switch (index_pnj) {
-                case 1:
-                    name = getString(R.string.nombre_federico);
-                    description = getString(R.string.descripcion_federico);
-            }
+        TextView textView = findViewById(R.id.textoPtoInteres);
+        textView.setText(getString(R.string.pto_interes_1));
 
-        }
-
-        setTitle(name);
-        TextView textView = findViewById(R.id.descripcion);
-        textView.setText(description);
+        setTitle(getString(R.string.nombre_pto_interes_1));
     }
 
     @Override
@@ -75,18 +68,14 @@ public class PantallaPersonaje extends AppCompatActivity {
         return true;
     }
 
-    public void saberMas(View view) {
-        //Intent intent = new Intent(this, PantallaPersonaje.class);
-        //startActivity(intent);
+    public void continuarRuta(View view){
+       finishActivity(0);
     }
 
-    public void mostrarRutas(View view) {
-
-        Bundle b = new Bundle();
-        b.putInt("index_pnj", index_pnj);
-
-        Intent intent = new Intent(this, ListadoRutas.class);
-        intent.putExtras(b);
+    public void masInfo(View view){
+        String url = getString(R.string.url_casa_federico);
+        Uri uri = Uri.parse(url);
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         startActivity(intent);
     }
 }

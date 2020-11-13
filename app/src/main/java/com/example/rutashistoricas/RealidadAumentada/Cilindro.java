@@ -1,9 +1,11 @@
-package com.example.rutashistoricas;
+package com.example.rutashistoricas.RealidadAumentada;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLUtils;
+
+import com.example.rutashistoricas.R;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -32,9 +34,8 @@ public class Cilindro {
     // Indicates if we need to load the texture.
     private boolean mShouldLoadTexture = false;
 
-
     public Cilindro(Context context) {
-        vertices[0] = 20.0f;
+        /*vertices[0] = 20.0f;
         vertices[1] = 0.0f;
         vertices[2] = -10.0f;
         indices[0] = (byte) (0);
@@ -46,9 +47,9 @@ public class Cilindro {
         vertices[5] = 10.0f;
         indices[1] = (byte) (1);
         textureCoordinates[2] = 1.0f;
-        textureCoordinates[3] = 0.0f;
+        textureCoordinates[3] = 0.0f;*/
 
-        for (int i=1; i<21; i++){
+        for (int i=0; i<21; i++){
             vertices[6*i]   = (float) (20*Math.cos(2*i*Math.PI/20));
             vertices[6*i+1] = (float) (20*Math.sin(2*i*Math.PI/20));
             vertices[6*i+2] = -10.0f;
@@ -70,7 +71,7 @@ public class Cilindro {
         mIndexBuffer.put(indices);
         mIndexBuffer.position(0);
 
-        loadBitmap(BitmapFactory.decodeResource( context.getResources(),R.drawable.casa_federico_360));
+        loadBitmap(BitmapFactory.decodeResource( context.getResources(), R.drawable.casa_federico_360));
         setTextureCoordinates(textureCoordinates);
     }
 

@@ -1,4 +1,4 @@
-package com.example.rutashistoricas;
+package com.example.rutashistoricas.Navegacion;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,10 +16,9 @@ import android.location.Location;
 import android.hardware.SensorEventListener;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.rutashistoricas.R;
 import com.mapbox.android.core.location.LocationEngine;
 import com.mapbox.android.core.location.LocationEngineCallback;
 import com.mapbox.android.core.location.LocationEngineProvider;
@@ -322,6 +321,8 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
                         .baseUrl(Constants.BASE_API_URL)
                         .user(DirectionsCriteria.PROFILE_DEFAULT_USER)
                         .requestUuid("uuid")
+                        .bannerInstructions(false)
+                        .voiceInstructions(false)
                         .build()
                 , new RoutesRequestCallback() {
                     @Override
@@ -443,6 +444,7 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
     protected void onResume() {
         super.onResume();
         mapView.onResume();
+        navegacion_iniciada = false;
     }
 
     @Override

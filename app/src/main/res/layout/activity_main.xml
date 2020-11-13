@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".InterfazPrincipal.MainActivity">
 
     <TextView
         android:id="@+id/personajes_destacados"
@@ -78,7 +78,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:drawableLeft="@drawable/mariana_reducida"
+            android:drawableStart="@drawable/mariana_reducida"
             android:onClick="irPantallaPersonaje"
             android:text="@string/nombre_mariana"
             android:textSize="18sp" />
@@ -88,7 +88,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:drawableLeft="@drawable/ganivet_reducida"
+            android:drawableStart="@drawable/ganivet_reducida"
             android:onClick="irPantallaPersonaje"
             android:text="@string/nombre_ganivet"
             android:textSize="18sp" />

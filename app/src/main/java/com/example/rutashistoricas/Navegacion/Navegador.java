@@ -1,23 +1,15 @@
-package com.example.rutashistoricas;
+package com.example.rutashistoricas.Navegacion;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
+import com.example.rutashistoricas.R;
+import com.example.rutashistoricas.RealidadAumentada.RealidadAumentada;
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
-import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.navigation.base.trip.model.RouteLegProgress;
 import com.mapbox.navigation.core.MapboxNavigation;
@@ -30,9 +22,6 @@ import com.mapbox.navigation.ui.listeners.NavigationListener;
 import com.mapbox.navigation.ui.map.NavigationMapboxMap;
 
 import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Navegador extends AppCompatActivity
         implements OnNavigationReadyCallback, NavigationListener {
@@ -114,11 +103,15 @@ public class Navegador extends AppCompatActivity
         navigationView.onCreate(savedInstanceState);
         navigationView.initialize(this);
 
-        currentRoute=Routes.getCurrentDirectionsRoute();
+        currentRoute= Routes.getCurrentDirectionsRoute();
 
         Button button=(Button) findViewById(R.id.button3);
         button.setVisibility(View.INVISIBLE);
         button.setEnabled(false);
+
+        View inst=findViewById(R.id.instructionView);
+        inst.setVisibility(View.INVISIBLE);
+        inst.setEnabled(false);
 
         /*sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         if (sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) {

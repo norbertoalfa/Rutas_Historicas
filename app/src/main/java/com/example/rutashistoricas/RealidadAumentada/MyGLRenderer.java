@@ -1,4 +1,4 @@
-package com.example.rutashistoricas;
+package com.example.rutashistoricas.RealidadAumentada;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;

@@ -5,17 +5,21 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.MotionEventCompat;
 
+import com.example.rutashistoricas.Navegacion.Mapa;
+import com.example.rutashistoricas.R;
+import com.example.rutashistoricas.RealidadAumentada.RealidadAumentada;
+
 public class ListadoRutas extends AppCompatActivity {
     private VelocityTracker mVelocityTracker = null;
     private int mActivePointerId1;
     private int mActivePointerId2;
-    int index_pnj = 0;
+    private static String name = "";
+    private static int index_pnj = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +113,5 @@ public class ListadoRutas extends AppCompatActivity {
         intent.putExtras(b);
         startActivity(intent);
     }
-
 
 }
