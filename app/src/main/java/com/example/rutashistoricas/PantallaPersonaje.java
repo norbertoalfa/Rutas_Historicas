@@ -88,8 +88,11 @@ public class PantallaPersonaje extends AppCompatActivity {
     }
 
     public void saberMas(View view) {
-        //Intent intent = new Intent(this, PantallaPersonaje.class);
-        //startActivity(intent);
+        Intent intent = new Intent(this, SaberMas.class);
+        Bundle b = new Bundle();
+        b.putInt("index_pnj", index_pnj);
+        intent.putExtras(b);
+        startActivity(intent);
     }
 
     public void mostrarRutas(View view) {

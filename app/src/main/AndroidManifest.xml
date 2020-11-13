@@ -23,7 +23,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/TemaPrueba">
-        <activity android:name=".InfoPuntoInteres">
+        <activity android:name=".SaberMas"
+            android:parentActivityName=".PantallaPersonaje">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".PantallaPersonaje" />
+        </activity>
+        <activity android:name=".InfoPuntoInteres"
+                  android:parentActivityName=".RealidadAumentada">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".RealidadAumentada" />
@@ -35,28 +42,31 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RealidadAumentada">
+        <activity android:name=".RealidadAumentada"
+            android:parentActivityName=".Navegador">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Navegador" />
         </activity>
-        <activity android:name=".PantallaPersonaje">
+        <activity android:name=".PantallaPersonaje"
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-        <activity android:name=".Mapa">
+        <activity android:name=".Mapa"
+            android:parentActivityName=".PantallaPersonaje">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".PantallaPersonaje" />
         </activity>
-        <activity android:name=".Navegador">
+        <activity android:name=".Navegador"
+            android:parentActivityName=".Mapa">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Mapa" />
         </activity>
-        <activity android:name=".ListadoRutas"></activity>
-
+        <activity android:name=".ListadoRutas" />
     </application>
 
 </manifest>
