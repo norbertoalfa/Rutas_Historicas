@@ -1,8 +1,5 @@
 package com.example.rutashistoricas;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.MotionEventCompat;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -10,34 +7,36 @@ import android.view.VelocityTracker;
 import android.view.View;
 import android.widget.TextView;
 
-public class PantallaPersonaje extends AppCompatActivity {
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.MotionEventCompat;
+
+public class ListadoRutas extends AppCompatActivity {
     private VelocityTracker mVelocityTracker = null;
     private int mActivePointerId1;
     private int mActivePointerId2;
-    private int index_pnj = 0;
+    int index_pnj = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pantalla_personaje);
+        setContentView(R.layout.activity_listado_rutas);
 
         Intent intent = getIntent();
         Bundle b = intent.getExtras();
-        String  name = "", description = "";
 
+        String name = "", texto_ruta_1 = "";
         if (b != null) {
             index_pnj = b.getInt("index_pnj");
             switch (index_pnj) {
                 case 1:
                     name = getString(R.string.nombre_federico);
-                    description = getString(R.string.descripcion_federico);
+                    texto_ruta_1 = getString(R.string.texto_ruta_1);
             }
-
         }
 
         setTitle(name);
-        TextView textView = findViewById(R.id.descripcion);
-        textView.setText(description);
+        TextView textView = findViewById(R.id.textoRuta1);
+        textView.setText(texto_ruta_1);
     }
 
     // para volver atrás con los dos dedos
@@ -75,18 +74,9 @@ public class PantallaPersonaje extends AppCompatActivity {
         return true;
     }
 
-    public void saberMas(View view) {
-        //Intent intent = new Intent(this, PantallaPersonaje.class);
-        //startActivity(intent);
-    }
-
-    public void mostrarRutas(View view) {
-
-        Bundle b = new Bundle();
-        b.putInt("index_pnj", index_pnj);
-
-        Intent intent = new Intent(this, ListadoRutas.class);
-        intent.putExtras(b);
+    public void iniciarRuta1(View view) {
+        Intent intent = new Intent(this, Mapa.class);
         startActivity(intent);
     }
+
 }

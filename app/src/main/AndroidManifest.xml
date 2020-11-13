@@ -33,6 +33,7 @@
         </activity>
         <activity android:name=".RealidadAumentada" />
         <activity android:name=".PantallaPersonaje"></activity>
+        <activity android:name=".ListadoRutas"></activity>
         <activity android:name=".Mapa" android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
         <activity android:name=".Navegador"></activity>
     </application>
