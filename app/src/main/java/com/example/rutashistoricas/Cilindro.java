@@ -1,10 +1,8 @@
 package com.example.rutashistoricas;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.opengl.GLES20;
 import android.opengl.GLUtils;
 
 import java.nio.ByteBuffer;
@@ -12,14 +10,12 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
-import javax.microedition.khronos.opengles.GL11;
 
 
-public class Triangle {
+public class Cilindro {
 
     private FloatBuffer mFVertexBuffer;
     private ByteBuffer mIndexBuffer;
-    //private short drawOrder[] = {0, 1, 2, 0, 2, 3};
     private float[] vertices = new float[126];
     private byte[] indices = new byte[42];
     private float[] textureCoordinates = new float[84];
@@ -37,19 +33,19 @@ public class Triangle {
     private boolean mShouldLoadTexture = false;
 
 
-    public Triangle(Context context) {
+    public Cilindro(Context context) {
         vertices[0] = 20.0f;
         vertices[1] = 0.0f;
         vertices[2] = -10.0f;
         indices[0] = (byte) (0);
-        textureCoordinates[0] = 0.0f;
+        textureCoordinates[0] = 1.0f;
         textureCoordinates[1] = 1.0f;
 
         vertices[3] = 20.0f;
         vertices[4] = 0.0f;
         vertices[5] = 10.0f;
         indices[1] = (byte) (1);
-        textureCoordinates[2] = 0.0f;
+        textureCoordinates[2] = 1.0f;
         textureCoordinates[3] = 0.0f;
 
         for (int i=1; i<21; i++){
@@ -57,14 +53,14 @@ public class Triangle {
             vertices[6*i+1] = (float) (20*Math.sin(2*i*Math.PI/20));
             vertices[6*i+2] = -10.0f;
             indices[2*i] = (byte) (2*i);
-            textureCoordinates[4*i] = (float) (0.05*i);
+            textureCoordinates[4*i] = (float) (0.05*(20-i));
             textureCoordinates[4*i+1] = 1.0f;
 
             vertices[6*i+3] = (float) (20*Math.cos(2*i*Math.PI/20));
             vertices[6*i+4] = (float) (20*Math.sin(2*i*Math.PI/20));
             vertices[6*i+5] = 10.0f;
             indices[2*i+1] = (byte) (2*i+1);
-            textureCoordinates[4*i+2] = (float) (0.05*i);
+            textureCoordinates[4*i+2] = (float) (0.05*(20-i));
             textureCoordinates[4*i+3] = 0.0f;
         }
 
@@ -74,7 +70,6 @@ public class Triangle {
         mIndexBuffer.put(indices);
         mIndexBuffer.position(0);
 
-        //////
         loadBitmap(BitmapFactory.decodeResource( context.getResources(),R.drawable.casa_federico_360));
         setTextureCoordinates(textureCoordinates);
     }
@@ -102,8 +97,6 @@ public class Triangle {
             gl.glBindTexture(GL10.GL_TEXTURE_2D, mTextureId);
         }
 
-        //gl.glTranslatef(x, y, z);
-
         gl.glVertexPointer(3, GL10.GL_FLOAT, 0, mFVertexBuffer); //
         // Point out the where the color buffer is.
         gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, indices.length);
@@ -111,12 +104,6 @@ public class Triangle {
         if (mTextureId != -1 && mTextureBuffer != null) {
             gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
         }
-
-        ///////////
-        //gl.glVertexPointer(3, GL10.GL_FLOAT, 0, mFVertexBuffer);
-        //gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, vertices.length);
-        /////////
-
 
     }
 

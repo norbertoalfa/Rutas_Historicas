@@ -5,27 +5,25 @@ import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
 
 import javax.microedition.khronos.opengles.GL10;
-import javax.microedition.khronos.opengles.GL11;
 
 public class MyGLRenderer implements GLSurfaceView.Renderer {
-    private Triangle shape;
+    private Cilindro shape;
 
     private float n = 0;
     private float[] orientationAngles = {0.0f,0.0f,1.0f};
     private float[] vectorUp = {0.0f,0.0f,-10.0f};
-    private float[] vectorRight = {0.0f,0.0f,-10.0f};
     private float[] point = {0.0f,0.0f,-10.0f};
 
     public MyGLRenderer(Context context) {
-        shape = new Triangle(context);
+        shape = new Cilindro(context);
     }
 
     public void asignarDatosSensor(float[] angles, float[] p){
         orientationAngles = angles;
         point = p;
 
-        vectorUp[0] = (float) (-Math.sin(-angles[0])*Math.cos(angles[1]));
-        vectorUp[1] = (float) (-Math.cos(-angles[0])*Math.cos(angles[1]));
+        vectorUp[0] = (float) (Math.sin(angles[0])*Math.cos(angles[1]));
+        vectorUp[1] = (float) (Math.cos(angles[0])*Math.cos(angles[1]));
         vectorUp[2] = (float) (-Math.sin(angles[1]));
 
     }
@@ -38,11 +36,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         gl.glMatrixMode(GL10.GL_MODELVIEW);
         gl.glLoadIdentity();
 
-        /*gl.glTranslatef(orientationAngles[0], orientationAngles[1], orientationAngles[2]);
-        gl.glRotatef((float)(orientationAngles[0]*180.f/Math.PI), 0.0f, 0.0f, 1.0f);
-        gl.glRotatef((float)(orientationAngles[1]*180.f/Math.PI), 1.0f, 0.0f, 0.0f);
-        gl.glRotatef((float)(-orientationAngles[2]*180.f/Math.PI), 0.0f, 1.0f, 0.0f);
-        */
         gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 
         GLU.gluLookAt(gl,0.0f, 0.0f, 0.0f, point[0], point[1], point[2],vectorUp[0], vectorUp[1], vectorUp[2]);
@@ -83,7 +76,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_FASTEST);
 
-        gl.glClearColor(0, 0, 0, 0);
+        gl.glClearColor(67.0f/255, 120.0f/255, 200.0f/255, 0);
 
         gl.glEnable(GL10.GL_CULL_FACE);
         gl.glFrontFace(GL10.GL_CCW);
