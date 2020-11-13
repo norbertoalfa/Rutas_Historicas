@@ -42,7 +42,7 @@ public class RealidadAumentada extends Activity implements SensorEventListener {
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         glView = new GLSurfaceView(this);
-        myGLRenderer = new MyGLRenderer();
+        myGLRenderer = new MyGLRenderer(this);
         glView.setRenderer(myGLRenderer);
         setContentView(glView);
     }
@@ -159,10 +159,10 @@ public class RealidadAumentada extends Activity implements SensorEventListener {
                 + Math.pow(posTriangulo[1]+rotationMatrix[5],2)
                 + Math.pow(posTriangulo[0]+rotationMatrix[2],2) ,0.5);
 
-        if (distancia<0.05) {
+        /*if (distancia<0.05) {
             Intent intent = new Intent(this, InfoPuntoInteres.class);
             startActivity(intent);
-        }
+        }*/
     }
 
     // Compute the three orientation angles based on the most recent readings from

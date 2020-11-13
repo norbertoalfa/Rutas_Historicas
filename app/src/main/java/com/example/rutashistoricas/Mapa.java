@@ -226,7 +226,7 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
         }
 
         lastZ=0;
-
+        setTitle("Ruta 1");
     }
 
 

@@ -2,6 +2,8 @@
     <string name="app_name">Rutas Historicas</string>
     <string name="mensaje_bienvenida">Bienvenido a la app...\n \nElige la ruta del personaje que quieras conocer:</string>
     <string name="nombre_federico">Federico García Lorca</string>
+    <string name="nombre_mariana">Mariana Pineda</string>
+    <string name="nombre_ganivet">Ángel Ganivet</string>
     <string name="descripcion_federico">Federico García Lorca es uno de los genios de la literatura del siglo XX. Granada es Lorca, y Lorca es Granada. La vida hecha tierra; la tierra hecha obra; y la literatura convertida en una suma de sentimientos, biografía y emociones. Aquí está el poeta y sus paisajes:  Cientos de páginas, un diccionario de personajes, biografías, la música, el cine… Todo lo necesario para emprender un viaje sin fin por Lorca y Granada, por su tierra y sus metáforas.</string>
     <string name="saber_mas">Quiero saber más</string>
     <string name="mostrar_rutas">Mostrar rutas</string>

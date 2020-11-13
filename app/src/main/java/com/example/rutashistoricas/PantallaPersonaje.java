@@ -5,6 +5,7 @@ import androidx.core.view.MotionEventCompat;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -23,7 +24,8 @@ public class PantallaPersonaje extends AppCompatActivity {
 
         Intent intent = getIntent();
         Bundle b = intent.getExtras();
-        String  name = "", description = "";
+        String  name = "",
+                description = "";
 
         if (b != null) {
             index_pnj = b.getInt("index_pnj");
@@ -40,7 +42,6 @@ public class PantallaPersonaje extends AppCompatActivity {
         textView.setText(description);
     }
 
-    // para volver atrás con los dos dedos
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         int action = MotionEventCompat.getActionMasked(event);

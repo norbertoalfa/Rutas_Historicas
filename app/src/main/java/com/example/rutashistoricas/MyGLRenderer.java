@@ -1,5 +1,6 @@
 package com.example.rutashistoricas;
 
+import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
 
@@ -15,8 +16,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private float[] vectorRight = {0.0f,0.0f,-10.0f};
     private float[] point = {0.0f,0.0f,-10.0f};
 
-    public MyGLRenderer() {
-        shape = new Triangle();
+    public MyGLRenderer(Context context) {
+        shape = new Triangle(context);
     }
 
     public void asignarDatosSensor(float[] angles, float[] p){
@@ -32,9 +33,9 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onDrawFrame(GL10 gl) {
-        gl.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+        gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 
-        gl.glMatrixMode(GL11.GL_MODELVIEW);
+        gl.glMatrixMode(GL10.GL_MODELVIEW);
         gl.glLoadIdentity();
 
         /*gl.glTranslatef(orientationAngles[0], orientationAngles[1], orientationAngles[2]);
@@ -42,13 +43,13 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         gl.glRotatef((float)(orientationAngles[1]*180.f/Math.PI), 1.0f, 0.0f, 0.0f);
         gl.glRotatef((float)(-orientationAngles[2]*180.f/Math.PI), 0.0f, 1.0f, 0.0f);
         */
-        gl.glEnableClientState(GL11.GL_VERTEX_ARRAY);
+        gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 
         GLU.gluLookAt(gl,0.0f, 0.0f, 0.0f, point[0], point[1], point[2],vectorUp[0], vectorUp[1], vectorUp[2]);
 
         shape.draw(gl);
 
-        gl.glDisableClientState(GL11.GL_VERTEX_ARRAY);
+        gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
     }
 
     @Override
@@ -62,34 +63,34 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         float fieldOfView = (float) Math.toRadians(30);
         float size;
 
-        gl.glEnable(GL11.GL_NORMALIZE);
+        gl.glEnable(GL10.GL_NORMALIZE);
 
         ratio = (float) width / (float) height;
 
-        gl.glMatrixMode(GL11.GL_PROJECTION);
+        gl.glMatrixMode(GL10.GL_PROJECTION);
 
         size = zNear * (float) (Math.tan((double) (fieldOfView / 2.0f)));
 
         gl.glFrustumf(-size, size, -size / ratio, size / ratio, zNear, zFar);
 
-        gl.glMatrixMode(GL11.GL_MODELVIEW);
+        gl.glMatrixMode(GL10.GL_MODELVIEW);
     }
 
     @Override
     public void onSurfaceCreated(GL10 gl, javax.microedition.khronos.egl.EGLConfig config) {
 
-        gl.glDisable(GL11.GL_DITHER);
+        gl.glDisable(GL10.GL_DITHER);
 
-        gl.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_FASTEST);
+        gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_FASTEST);
 
         gl.glClearColor(0, 0, 0, 0);
 
-        gl.glEnable(GL11.GL_CULL_FACE);
-        gl.glFrontFace(GL11.GL_CCW);
+        gl.glEnable(GL10.GL_CULL_FACE);
+        gl.glFrontFace(GL10.GL_CCW);
 
-        gl.glShadeModel(GL11.GL_SMOOTH);
+        gl.glShadeModel(GL10.GL_SMOOTH);
 
-        gl.glEnable(GL11.GL_DEPTH_TEST);
+        gl.glEnable(GL10.GL_DEPTH_TEST);
     }
 
 }

@@ -23,7 +23,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/TemaPrueba">
-        <activity android:name=".InfoPuntoInteres"></activity>
+        <activity android:name=".InfoPuntoInteres">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".RealidadAumentada" />
+        </activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,11 +35,28 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RealidadAumentada" />
-        <activity android:name=".PantallaPersonaje"></activity>
+        <activity android:name=".RealidadAumentada">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Navegador" />
+        </activity>
+        <activity android:name=".PantallaPersonaje">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity android:name=".Mapa">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".PantallaPersonaje" />
+        </activity>
+        <activity android:name=".Navegador">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Mapa" />
+        </activity>
         <activity android:name=".ListadoRutas"></activity>
-        <activity android:name=".Mapa" android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
-        <activity android:name=".Navegador"></activity>
+
     </application>
 
 </manifest>

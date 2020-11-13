@@ -31,4 +31,28 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@drawable/casa_federico" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="371dp"
+        android:layout_height="52dp"
+        android:layout_marginBottom="24dp"
+        android:text="Continuar Ruta"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:onClick="continuarRuta"/>
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="371dp"
+        android:layout_height="52dp"
+        android:layout_marginBottom="88dp"
+        android:text="Más información"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:onClick="masInfo"/>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
