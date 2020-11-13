@@ -62,7 +62,31 @@ public class Cilindro {
             indices[2*i+1] = (byte) (2*i+1);
             textureCoordinates[4*i+2] = (float) (0.05*(20-i));
             textureCoordinates[4*i+3] = 0.0f;
-        }
+        }/*
+
+        vertices[0] = 20.0f;
+        vertices[1] = 0.0f;
+        vertices[2] = -10.0f;
+        indices[0] = (byte) (0);
+        textureCoordinates[0] = 1.0f;
+        textureCoordinates[1] = 1.0f;
+
+
+        for (int i=1; i<21; i++){
+            vertices[6*i]   = (float) (20*Math.cos(2*i*Math.PI/20));
+            vertices[6*i+1] = (float) (20*Math.sin(2*i*Math.PI/20));
+            vertices[6*i+2] = -10.0f;
+            indices[2*i] = (byte) (2*i);
+            textureCoordinates[4*i] = (float) (0.05*(20-i));
+            textureCoordinates[4*i+1] = 1.0f;
+
+            vertices[6*i+3] = (float) (20*Math.cos(2*i*Math.PI/20));
+            vertices[6*i+4] = (float) (20*Math.sin(2*i*Math.PI/20));
+            vertices[6*i+5] = 10.0f;
+            indices[2*i+1] = (byte) (2*i+1);
+            textureCoordinates[4*i+2] = (float) (0.05*(20-i));
+            textureCoordinates[4*i+3] = 0.0f;
+        }*/
 
         mFVertexBuffer = makeFloatBuffer(vertices);
 
