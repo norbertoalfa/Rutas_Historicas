@@ -26,7 +26,8 @@ public class PantallaPersonaje extends AppCompatActivity {
         String  nombre = "",
                 nacimiento = "",
                 fallecimiento = "",
-                categorias = "";
+                categorias = "",
+                descripcion = "";
 
         if (b != null) {
             index_pnj = b.getInt("index_pnj");
@@ -36,6 +37,7 @@ public class PantallaPersonaje extends AppCompatActivity {
                     nacimiento = getString(R.string.nacimiento_federico);
                     fallecimiento = getString(R.string.fallecimiento_federico);
                     categorias = getString(R.string.categorias_federico);
+                    descripcion = getString(R.string.descripcion_federico);
             }
 
         }
@@ -47,6 +49,8 @@ public class PantallaPersonaje extends AppCompatActivity {
         textView.setText(fallecimiento);
         textView = findViewById(R.id.categorias);
         textView.setText(categorias);
+        textView = findViewById(R.id.descripcion);
+        textView.setText(descripcion);
     }
 
     @Override
