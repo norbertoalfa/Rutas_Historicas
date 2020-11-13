@@ -170,6 +170,7 @@ public class RealidadAumentada extends Activity implements SensorEventListener {
             if (currentTime - lastTime > 2000.0f) {
                 Intent intent = new Intent(this, InfoPuntoInteres.class);
                 startActivity(intent);
+                finish();
             }
         } else {
             inTime = false;
