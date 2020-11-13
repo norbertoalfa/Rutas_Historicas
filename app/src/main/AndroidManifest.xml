@@ -24,7 +24,7 @@
         android:supportsRtl="true"
         android:theme="@style/TemaPrueba">
         <activity android:name=".SaberMas"
-            android:parentActivityName=".PantallaPersonaje">
+                  android:parentActivityName=".PantallaPersonaje">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".PantallaPersonaje" />

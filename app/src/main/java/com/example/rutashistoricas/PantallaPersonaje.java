@@ -15,11 +15,11 @@ public class PantallaPersonaje extends AppCompatActivity {
     private int mActivePointerId1;
     private int mActivePointerId2;
     private int index_pnj = 0;
-    String  nombre = "",
-            nacimiento = "",
-            fallecimiento = "",
-            categorias = "",
-            descripcion = "";
+    private String nombre = "",
+                   nacimiento = "",
+                   fallecimiento = "",
+                   categorias = "",
+                   descripcion = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
