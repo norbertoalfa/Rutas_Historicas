@@ -63,9 +63,9 @@ public class Navegador extends AppCompatActivity
                 //dialog.cancel();
                 startActivity(intent);
                 puntoInteresLanzado=true;
-                Button button=(Button) findViewById(R.id.button3);
+                /*Button button=(Button) findViewById(R.id.button3);
                 button.setVisibility(View.VISIBLE);
-                button.setEnabled(true);
+                button.setEnabled(true);*/
             }
                       /*  }
                     });
@@ -86,13 +86,13 @@ public class Navegador extends AppCompatActivity
         }
     };
 
-    public void continueRoute(View view){
+    /*public void continueRoute(View view){
         mapboxNavigation.navigateNextRouteLeg();
         puntoInteresLanzado=false;
         Button button=(Button) findViewById(R.id.button3);
         button.setVisibility(View.INVISIBLE);
         button.setEnabled(false);
-    }
+    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,9 +105,9 @@ public class Navegador extends AppCompatActivity
 
         currentRoute= Routes.getCurrentDirectionsRoute();
 
-        Button button=(Button) findViewById(R.id.button3);
+        /*Button button=(Button) findViewById(R.id.button3);
         button.setVisibility(View.INVISIBLE);
-        button.setEnabled(false);
+        button.setEnabled(false);*/
 
         View inst=findViewById(R.id.instructionView);
         inst.setVisibility(View.INVISIBLE);
@@ -143,6 +143,10 @@ public class Navegador extends AppCompatActivity
     public void onResume(){
         super.onResume();
         navigationView.onResume();
+        if(puntoInteresLanzado){
+            mapboxNavigation.navigateNextRouteLeg();
+            puntoInteresLanzado=false;
+        }
     }
 
     @Override
