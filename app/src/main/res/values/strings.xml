@@ -1,6 +1,9 @@
 <resources>
-    <string name="app_name">Rutas Historicas</string>
+    <string name="app_name">Rutas Históricas</string>
     <string name="mensaje_bienvenida">Bienvenido a la app...\n \nElige la ruta del personaje que quieras conocer:</string>
+    <string name="texto_buscador">Introduce personaje o categoría</string>
+    <string name="buscar">Buscar</string>
+    <string name="personajes_destacados">Personajes destacados:</string>
     <string name="nombre_federico">Federico García Lorca</string>
     <string name="nombre_mariana">Mariana Pineda</string>
     <string name="nombre_ganivet">Ángel Ganivet</string>
