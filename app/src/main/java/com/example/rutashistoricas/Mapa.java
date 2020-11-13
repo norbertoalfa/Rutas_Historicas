@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.hardware.Sensor;
@@ -146,7 +148,7 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
         /**
          * El método de la interfaz LocationEngineCallback que se lanza cuando la localización del dispositivo ha cambiado. Dado que es una aplicación de prueba, sólo obtenemos la localización del dispositivo una vez y desactivamos este callback, ya que la navegación a través de la ruta es simulada.
          *
-         * @param result El objeto LocationEngineResult que contiene la última localización conocida dentro.
+         * @param result El objeto LocationEngineResult que contiene la última localización conocida.
          */
         @Override
         public void onSuccess(LocationEngineResult result) {
@@ -260,8 +262,22 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
                         });
                         */
 
-                        if(locationEngine!=null)
+                        if(locationEngine!=null) {
                             dibujarRuta(1, style);
+                            AlertDialog.Builder builder1 = new AlertDialog.Builder(Mapa.this);
+                            builder1.setMessage("Agita el móvil hacia arriba y abajo para iniciar la navegación.");
+                            builder1.setCancelable(true);
+
+                            builder1.setPositiveButton(
+                                    "OK",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            dialog.cancel();
+                                        }
+                                    });
+
+                            builder1.create().show();
+                        }
 
                         /*
                         button.setEnabled(true);
@@ -397,6 +413,19 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
             if (mapboxMap.getStyle() != null) {
                 enableLocationComponent(mapboxMap.getStyle());
                 dibujarRuta(1,mapboxMap.getStyle());
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(Mapa.this);
+                builder1.setMessage("Agita el móvil hacia arriba y abajo para iniciar la navegación.");
+                builder1.setCancelable(true);
+
+                builder1.setPositiveButton(
+                        "OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+                builder1.create().show();
             }
         } else {
             Toast.makeText(this, R.string.user_location_permission_not_granted, Toast.LENGTH_LONG).show();

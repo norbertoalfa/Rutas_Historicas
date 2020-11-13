@@ -33,19 +33,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Navegador extends AppCompatActivity
-        implements OnNavigationReadyCallback, NavigationListener, SensorEventListener {
+        implements OnNavigationReadyCallback, NavigationListener {
 
     private NavigationMapboxMap navigationMapBoxMap = null;
     private MapboxNavigation mapboxNavigation=null;
     private DirectionsRoute currentRoute;
     private NavigationView navigationView;
 
-    private SensorManager sensorManager;
-    private Sensor accelerometer;
-    private float lastZ;
+    //private SensorManager sensorManager;
+    //private Sensor accelerometer;
+    //private float lastZ;
 
-    private boolean showDialog=false;
-    private AlertDialog currentDialog;
+    private boolean puntoInteresLanzado=false;
+    //private AlertDialog currentDialog;
 
     private ArrivalController arrivalController = new ArrivalController() {
         @NotNull
@@ -57,7 +57,7 @@ public class Navegador extends AppCompatActivity
 
         @Override
         public boolean navigateNextRouteLeg(@NotNull RouteLegProgress routeLegProgress) {
-            Log.d("Franprueba", "Franprueba1");
+            /*Log.d("Franprueba", "Franprueba1");
             AlertDialog.Builder builder1 = new AlertDialog.Builder(Navegador.this);
             builder1.setMessage("Has llegado a X(" + routeLegProgress.getLegIndex() + "), ¿qué te gustaría hacer?");
             builder1.setCancelable(true);
@@ -66,14 +66,17 @@ public class Navegador extends AppCompatActivity
                     "Enséñame más",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            showDialog = true;
-                            Intent intent = new Intent(Navegador.this, RealidadAumentada.class);
-                            dialog.cancel();
-                            startActivity(intent);
-                        }
+                            showDialog = true;*/
+            if(!puntoInteresLanzado) {
+                Intent intent = new Intent(Navegador.this, RealidadAumentada.class);
+                //dialog.cancel();
+                startActivity(intent);
+                puntoInteresLanzado=true;
+            }
+                      /*  }
                     });
 
-            builder1.setNegativeButton(
+             builder1.setNegativeButton(
                     "Quiero continuar",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
@@ -84,10 +87,15 @@ public class Navegador extends AppCompatActivity
                     });
 
             currentDialog = builder1.create();
-            showDialog = true;
+            showDialog = true;*/
             return false;
         }
     };
+
+    public void continueRoute(){
+        mapboxNavigation.navigateNextRouteLeg();
+        puntoInteresLanzado=false;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +108,7 @@ public class Navegador extends AppCompatActivity
 
         currentRoute=Routes.getCurrentDirectionsRoute();
 
-        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        /*sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         if (sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) {
             // success! we have an accelerometer
 
@@ -111,7 +119,7 @@ public class Navegador extends AppCompatActivity
             // fai! we dont have an accelerometer!
         }
 
-        lastZ=0;
+        lastZ=0;*/
     }
 
     @Override
@@ -203,14 +211,14 @@ public class Navegador extends AppCompatActivity
 
     }
 
-    @Override
+    /*@Override
     public void onSensorChanged(SensorEvent event) {
         float deltaZ=lastZ-event.values[2];
         if(showDialog && deltaZ>20.0f){
             showDialog = false;
             currentDialog.show();
             Toast.makeText(this, "Se ha movido", Toast.LENGTH_LONG).show();
-            /*
+
             if(deltaZ<-12.0f){
                 //mapboxNavigation.navigateNextRouteLeg();
                 currentDialog.show();
@@ -221,7 +229,7 @@ public class Navegador extends AppCompatActivity
                 showingDialog=false;
                 Toast.makeText(this, "Hacia abajo", Toast.LENGTH_LONG).show();
             }
-             */
+
         }
         lastZ=event.values[2];
     }
@@ -229,6 +237,6 @@ public class Navegador extends AppCompatActivity
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
-    }
+    }*/
 }
 
