@@ -1,4 +1,4 @@
-package com.example.rutashistoricas;
+package com.example.rutashistoricas.InterfazPrincipal;
 
 import android.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+
+import com.example.rutashistoricas.R;
 
 public class MainActivity extends AppCompatActivity {
     public static final String ID_PERSONAJE = "com.example.myfirstapp.ID_PERSONAJE";

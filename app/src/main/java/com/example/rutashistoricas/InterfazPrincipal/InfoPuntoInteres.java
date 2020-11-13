@@ -1,4 +1,4 @@
-package com.example.rutashistoricas;
+package com.example.rutashistoricas.InterfazPrincipal;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.MotionEventCompat;
@@ -11,6 +11,8 @@ import android.view.VelocityTracker;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.rutashistoricas.R;
 
 public class InfoPuntoInteres extends AppCompatActivity {
     private VelocityTracker mVelocityTracker = null;

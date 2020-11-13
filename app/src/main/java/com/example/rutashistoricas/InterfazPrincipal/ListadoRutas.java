@@ -1,4 +1,4 @@
-package com.example.rutashistoricas;
+package com.example.rutashistoricas.InterfazPrincipal;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +9,9 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.MotionEventCompat;
+
+import com.example.rutashistoricas.Navegacion.Mapa;
+import com.example.rutashistoricas.R;
 
 public class ListadoRutas extends AppCompatActivity {
     private VelocityTracker mVelocityTracker = null;

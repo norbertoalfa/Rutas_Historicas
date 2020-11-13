@@ -1,4 +1,4 @@
-package com.example.rutashistoricas;
+package com.example.rutashistoricas.RealidadAumentada;
 
 import android.app.Activity;
 import android.content.Context;
@@ -16,6 +16,9 @@ import android.view.VelocityTracker;
 import android.view.WindowManager;
 import androidx.annotation.RequiresApi;
 import androidx.core.view.MotionEventCompat;
+
+import com.example.rutashistoricas.InterfazPrincipal.InfoPuntoInteres;
+import com.example.rutashistoricas.R;
 
 public class RealidadAumentada extends Activity implements SensorEventListener {
     private VelocityTracker mVelocityTracker = null;

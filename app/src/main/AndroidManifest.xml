@@ -23,50 +23,50 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/TemaPrueba">
-        <activity android:name=".SaberMas"
-                  android:parentActivityName=".PantallaPersonaje">
+        <activity android:name=".InterfazPrincipal.SaberMas"
+                  android:parentActivityName=".InterfazPrincipal.PantallaPersonaje">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".PantallaPersonaje" />
+                android:value=".InterfazPrincipal.PantallaPersonaje" />
         </activity>
-        <activity android:name=".InfoPuntoInteres"
-                  android:parentActivityName=".RealidadAumentada">
+        <activity android:name=".InterfazPrincipal.InfoPuntoInteres"
+                  android:parentActivityName=".RealidadAumentada.RealidadAumentada">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".RealidadAumentada" />
+                android:value=".RealidadAumentada.RealidadAumentada" />
         </activity>
-        <activity android:name=".MainActivity">
+        <activity android:name=".InterfazPrincipal.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RealidadAumentada"
-            android:parentActivityName=".Navegador">
+        <activity android:name=".RealidadAumentada.RealidadAumentada"
+            android:parentActivityName=".Navegacion.Navegador">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Navegador" />
+                android:value=".Navegacion.Navegador" />
         </activity>
-        <activity android:name=".PantallaPersonaje"
-            android:parentActivityName=".MainActivity">
+        <activity android:name=".InterfazPrincipal.PantallaPersonaje"
+            android:parentActivityName=".InterfazPrincipal.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".InterfazPrincipal.MainActivity" />
         </activity>
-        <activity android:name=".Mapa"
-            android:parentActivityName=".PantallaPersonaje">
+        <activity android:name=".Navegacion.Mapa"
+            android:parentActivityName=".InterfazPrincipal.PantallaPersonaje">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".PantallaPersonaje" />
+                android:value=".InterfazPrincipal.PantallaPersonaje" />
         </activity>
-        <activity android:name=".Navegador"
-            android:parentActivityName=".Mapa">
+        <activity android:name=".Navegacion.Navegador"
+            android:parentActivityName=".Navegacion.Mapa">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Mapa" />
+                android:value=".Navegacion.Mapa" />
         </activity>
-        <activity android:name=".ListadoRutas" />
+        <activity android:name=".InterfazPrincipal.ListadoRutas" />
     </application>
 
 </manifest>
