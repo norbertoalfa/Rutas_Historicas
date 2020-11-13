@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -62,5 +63,13 @@ public class InfoPuntoInteres extends AppCompatActivity {
         }
 
         return true;
+    }
+
+    public void continuarRuta(View view){
+       finish();
+    }
+
+    public void masInfo(View view){
+
     }
 }
