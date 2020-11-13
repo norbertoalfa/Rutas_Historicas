@@ -66,7 +66,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Navegacion.Mapa" />
         </activity>
-        <activity android:name=".InterfazPrincipal.ListadoRutas" />
+        <activity android:name=".InterfazPrincipal.ListadoRutas"
+            android:parentActivityName=".InterfazPrincipal.PantallaPersonaje">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".InterfazPrincipal.PantallaPersonaje" />
+        </activity>
     </application>
 
 </manifest>

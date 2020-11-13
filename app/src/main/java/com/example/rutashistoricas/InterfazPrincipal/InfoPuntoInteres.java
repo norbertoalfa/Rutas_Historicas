@@ -5,6 +5,7 @@ import androidx.core.view.MotionEventCompat;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -68,10 +69,13 @@ public class InfoPuntoInteres extends AppCompatActivity {
     }
 
     public void continuarRuta(View view){
-       finish();
+       finishActivity(0);
     }
 
     public void masInfo(View view){
-
+        String url = getString(R.string.url_casa_federico);
+        Uri uri = Uri.parse(url);
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(intent);
     }
 }

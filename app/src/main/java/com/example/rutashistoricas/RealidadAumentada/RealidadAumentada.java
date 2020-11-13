@@ -42,6 +42,8 @@ public class RealidadAumentada extends Activity implements SensorEventListener {
 
     private static boolean inTime = false;
 
+    private boolean punto_interes_lanzado = false;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,15 +87,6 @@ public class RealidadAumentada extends Activity implements SensorEventListener {
             if (Math.abs(yVel1)<1000 && xVel1>100 && Math.abs(yVel2)<1000 && xVel2>100) {
                 finish();
             }
-
-            float distancia = (float) Math.pow(Math.pow(posTriangulo[0]+rotationMatrix[2],2)
-                    + Math.pow(posTriangulo[1]+rotationMatrix[5],2)
-                    + Math.pow(posTriangulo[0]+rotationMatrix[2],2) ,0.5);
-
-            if (Math.abs(yVel1)<1000 && xVel1<-100 && Math.abs(yVel2)<1000 && xVel2<-100 && distancia<0.05) {
-                Intent intent = new Intent(this, InfoPuntoInteres.class);
-                startActivity(intent);
-            }
         }
 
         return true;
@@ -109,6 +102,14 @@ public class RealidadAumentada extends Activity implements SensorEventListener {
     @Override
     protected void onResume() {
         super.onResume();
+        setContentView(R.layout.activity_realidad_aumentada);
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        glView = new GLSurfaceView(this);
+        myGLRenderer = new MyGLRenderer(this);
+        glView.setRenderer(myGLRenderer);
+        setContentView(glView);
 
         // Get updates from the accelerometer and magnetometer at a constant rate.
         // To make batch operations more efficient and reduce power consumption,
@@ -135,7 +136,6 @@ public class RealidadAumentada extends Activity implements SensorEventListener {
 
         // Don't receive any more updates from either sensor.
         sensorManager.unregisterListener(this);
-        finish();
     }
 
     // Get readings from accelerometer and magnetometer. To simplify calculations,

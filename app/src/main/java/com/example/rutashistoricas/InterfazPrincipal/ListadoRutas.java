@@ -12,6 +12,7 @@ import androidx.core.view.MotionEventCompat;
 
 import com.example.rutashistoricas.Navegacion.Mapa;
 import com.example.rutashistoricas.R;
+import com.example.rutashistoricas.RealidadAumentada.RealidadAumentada;
 
 public class ListadoRutas extends AppCompatActivity {
     private VelocityTracker mVelocityTracker = null;
@@ -78,8 +79,8 @@ public class ListadoRutas extends AppCompatActivity {
     }
 
     public void iniciarRuta1(View view) {
-        Intent intent = new Intent(this, Mapa.class);
-        //Intent intent = new Intent(this, RealidadAumentada.class);
+        //Intent intent = new Intent(this, Mapa.class);
+        Intent intent = new Intent(this, RealidadAumentada.class);
         startActivity(intent);
     }
 

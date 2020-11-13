@@ -444,6 +444,7 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
     protected void onResume() {
         super.onResume();
         mapView.onResume();
+        navegacion_iniciada = false;
     }
 
     @Override
