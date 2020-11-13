@@ -109,6 +109,10 @@ public class Navegador extends AppCompatActivity
         button.setVisibility(View.INVISIBLE);
         button.setEnabled(false);
 
+        View inst=findViewById(R.id.instructionView);
+        inst.setVisibility(View.INVISIBLE);
+        inst.setEnabled(false);
+
         /*sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         if (sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) {
             // success! we have an accelerometer

@@ -321,6 +321,8 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
                         .baseUrl(Constants.BASE_API_URL)
                         .user(DirectionsCriteria.PROFILE_DEFAULT_USER)
                         .requestUuid("uuid")
+                        .bannerInstructions(false)
+                        .voiceInstructions(false)
                         .build()
                 , new RoutesRequestCallback() {
                     @Override
