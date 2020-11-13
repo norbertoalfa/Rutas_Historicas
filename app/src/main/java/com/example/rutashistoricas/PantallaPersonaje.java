@@ -5,7 +5,6 @@ import androidx.core.view.MotionEventCompat;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -24,22 +23,30 @@ public class PantallaPersonaje extends AppCompatActivity {
 
         Intent intent = getIntent();
         Bundle b = intent.getExtras();
-        String  name = "",
-                description = "";
+        String  nombre = "",
+                nacimiento = "",
+                fallecimiento = "",
+                categorias = "";
 
         if (b != null) {
             index_pnj = b.getInt("index_pnj");
             switch (index_pnj) {
                 case 1:
-                    name = getString(R.string.nombre_federico);
-                    description = getString(R.string.descripcion_federico);
+                    nombre = getString(R.string.nombre_federico);
+                    nacimiento = getString(R.string.nacimiento_federico);
+                    fallecimiento = getString(R.string.fallecimiento_federico);
+                    categorias = getString(R.string.categorias_federico);
             }
 
         }
 
-        setTitle(name);
-        TextView textView = findViewById(R.id.descripcion);
-        textView.setText(description);
+        setTitle(nombre);
+        TextView textView = findViewById(R.id.nacimiento);
+        textView.setText(nacimiento);
+        textView = findViewById(R.id.fallecimiento);
+        textView.setText(fallecimiento);
+        textView = findViewById(R.id.categorias);
+        textView.setText(categorias);
     }
 
     @Override

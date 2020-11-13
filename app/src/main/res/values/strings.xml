@@ -3,10 +3,13 @@
     <string name="mensaje_bienvenida">Bienvenido a la app...\n \nElige la ruta del personaje que quieras conocer:</string>
     <string name="texto_buscador">Introduce personaje o categoría</string>
     <string name="buscar">Buscar</string>
-    <string name="personajes_destacados">Personajes destacados:</string>
+    <string name="personajes_destacados">Personajes destacados</string>
     <string name="nombre_federico">Federico García Lorca</string>
     <string name="nombre_mariana">Mariana Pineda</string>
     <string name="nombre_ganivet">Ángel Ganivet</string>
+    <string name="nacimiento_federico">Nacimiento: 5 de junio de 1898, Fuente Vaqueros</string>
+    <string name="fallecimiento_federico">Fallecimiento: 18 de agosto de 1936, Camino de Víznar a Alfacar (Granada)</string>
+    <string name="categorias_federico">Categorías: poeta, dramaturgo, prosista, generación del 27</string>
     <string name="descripcion_federico">Federico García Lorca es uno de los genios de la literatura del siglo XX. Granada es Lorca, y Lorca es Granada. La vida hecha tierra; la tierra hecha obra; y la literatura convertida en una suma de sentimientos, biografía y emociones. Aquí está el poeta y sus paisajes:  Cientos de páginas, un diccionario de personajes, biografías, la música, el cine… Todo lo necesario para emprender un viaje sin fin por Lorca y Granada, por su tierra y sus metáforas.</string>
     <string name="saber_mas">Quiero saber más</string>
     <string name="mostrar_rutas">Mostrar rutas</string>
