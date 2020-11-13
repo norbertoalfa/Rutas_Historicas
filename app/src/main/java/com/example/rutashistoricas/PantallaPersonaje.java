@@ -15,6 +15,11 @@ public class PantallaPersonaje extends AppCompatActivity {
     private int mActivePointerId1;
     private int mActivePointerId2;
     private int index_pnj = 0;
+    String  nombre = "",
+            nacimiento = "",
+            fallecimiento = "",
+            categorias = "",
+            descripcion = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,11 +28,6 @@ public class PantallaPersonaje extends AppCompatActivity {
 
         Intent intent = getIntent();
         Bundle b = intent.getExtras();
-        String  nombre = "",
-                nacimiento = "",
-                fallecimiento = "",
-                categorias = "",
-                descripcion = "";
 
         if (b != null) {
             index_pnj = b.getInt("index_pnj");
@@ -40,6 +40,30 @@ public class PantallaPersonaje extends AppCompatActivity {
                     descripcion = getString(R.string.descripcion_federico);
             }
 
+        }
+
+        setTitle(nombre);
+        TextView textView = findViewById(R.id.nacimiento);
+        textView.setText(nacimiento);
+        textView = findViewById(R.id.fallecimiento);
+        textView.setText(fallecimiento);
+        textView = findViewById(R.id.categorias);
+        textView.setText(categorias);
+        textView = findViewById(R.id.descripcion);
+        textView.setText(descripcion);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        switch (index_pnj) {
+            case 1:
+                nombre = getString(R.string.nombre_federico);
+                nacimiento = getString(R.string.nacimiento_federico);
+                fallecimiento = getString(R.string.fallecimiento_federico);
+                categorias = getString(R.string.categorias_federico);
+                descripcion = getString(R.string.descripcion_federico);
         }
 
         setTitle(nombre);
