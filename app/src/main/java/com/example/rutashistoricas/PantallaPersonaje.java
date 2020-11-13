@@ -14,8 +14,8 @@ public class PantallaPersonaje extends AppCompatActivity {
     private VelocityTracker mVelocityTracker = null;
     private int mActivePointerId1;
     private int mActivePointerId2;
-    private int index_pnj = 0;
-    private String nombre = "",
+    private static int index_pnj = 0;
+    private static String nombre = "",
                    nacimiento = "",
                    fallecimiento = "",
                    categorias = "",
@@ -57,7 +57,7 @@ public class PantallaPersonaje extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        switch (index_pnj) {
+        /*switch (index_pnj) {
             case 1:
                 nombre = getString(R.string.nombre_federico);
                 nacimiento = getString(R.string.nacimiento_federico);
@@ -74,7 +74,7 @@ public class PantallaPersonaje extends AppCompatActivity {
         textView = findViewById(R.id.categorias);
         textView.setText(categorias);
         textView = findViewById(R.id.descripcion);
-        textView.setText(descripcion);
+        textView.setText(descripcion);*/
     }
 
     @Override

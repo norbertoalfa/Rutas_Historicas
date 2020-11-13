@@ -11,7 +11,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class SaberMas extends AppCompatActivity {
-    private int index_pnj = 0;
+    private static int index_pnj = 0;
+    private static String  nombre = "",
+            biografia = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,8 +22,6 @@ public class SaberMas extends AppCompatActivity {
 
         Intent intent = getIntent();
         Bundle b = intent.getExtras();
-        String  nombre = "",
-                biografia = "";
 
         if (b != null) {
             index_pnj = b.getInt("index_pnj");

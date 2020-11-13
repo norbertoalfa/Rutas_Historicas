@@ -14,7 +14,8 @@ public class ListadoRutas extends AppCompatActivity {
     private VelocityTracker mVelocityTracker = null;
     private int mActivePointerId1;
     private int mActivePointerId2;
-    int index_pnj = 0;
+    private static String name = "", texto_ruta_1 = "";
+    private static int index_pnj = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +25,6 @@ public class ListadoRutas extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle b = intent.getExtras();
 
-        String name = "", texto_ruta_1 = "";
         if (b != null) {
             index_pnj = b.getInt("index_pnj");
             switch (index_pnj) {
