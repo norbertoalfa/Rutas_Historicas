@@ -10,13 +10,14 @@ import android.view.VelocityTracker;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.rutashistoricas.InterfazPrincipal.ListadoRutas;
 import com.example.rutashistoricas.R;
 
 public class PantallaPersonaje extends AppCompatActivity {
     private VelocityTracker mVelocityTracker = null;
     private int mActivePointerId1;
     private int mActivePointerId2;
-    private static int index_pnj = 0;
+    private static int idPnj = 0;
     private static String nombre = "",
                    nacimiento = "",
                    fallecimiento = "",
@@ -32,8 +33,8 @@ public class PantallaPersonaje extends AppCompatActivity {
         Bundle b = intent.getExtras();
 
         if (b != null) {
-            index_pnj = b.getInt("index_pnj");
-            switch (index_pnj) {
+            idPnj = b.getInt("index_pnj");
+            switch (idPnj) {
                 case 1:
                     nombre = getString(R.string.nombre_federico);
                     nacimiento = getString(R.string.nacimiento_federico);
@@ -116,7 +117,7 @@ public class PantallaPersonaje extends AppCompatActivity {
     public void saberMas(View view) {
         Intent intent = new Intent(this, SaberMas.class);
         Bundle b = new Bundle();
-        b.putInt("index_pnj", index_pnj);
+        b.putInt("idPnj", idPnj);
         intent.putExtras(b);
         startActivity(intent);
     }
@@ -124,7 +125,7 @@ public class PantallaPersonaje extends AppCompatActivity {
     public void mostrarRutas(View view) {
 
         Bundle b = new Bundle();
-        b.putInt("index_pnj", index_pnj);
+        b.putInt("idPnj", idPnj);
 
         Intent intent = new Intent(this, ListadoRutas.class);
         intent.putExtras(b);

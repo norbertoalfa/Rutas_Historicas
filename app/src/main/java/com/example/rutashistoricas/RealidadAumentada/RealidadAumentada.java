@@ -11,6 +11,7 @@ import android.opengl.GLSurfaceView;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.WindowManager;
@@ -44,17 +45,35 @@ public class RealidadAumentada extends Activity implements SensorEventListener {
 
     private boolean punto_interes_lanzado = false;
 
+    private int indexPuntoInteres = -1;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_realidad_aumentada);
-        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        glView = new GLSurfaceView(this);
-        myGLRenderer = new MyGLRenderer(this);
-        glView.setRenderer(myGLRenderer);
-        setContentView(glView);
+        indexPuntoInteres = getIntent().getIntExtra("indexPuntoInteres", -1);
+
+        Log.d("Franquepasa", ""+indexPuntoInteres);
+
+        switch (indexPuntoInteres) {
+            case 1:
+                setContentView(R.layout.activity_realidad_aumentada);
+                sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+
+                getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                glView = new GLSurfaceView(this);
+                myGLRenderer = new MyGLRenderer(this);
+                glView.setRenderer(myGLRenderer);
+                setContentView(glView);
+                break;
+            default:
+                Intent intent = new Intent(this, InfoPuntoInteres.class);
+                intent.putExtra("indexPuntoInteres", indexPuntoInteres);
+                startActivity(intent);
+                break;
+        }
+
+
     }
 
     @Override
@@ -169,6 +188,7 @@ public class RealidadAumentada extends Activity implements SensorEventListener {
             currentTime = SystemClock.uptimeMillis();
             if (currentTime - lastTime > 2000.0f) {
                 Intent intent = new Intent(this, InfoPuntoInteres.class);
+                intent.putExtra("indexPuntoInteres", indexPuntoInteres);
                 startActivity(intent);
             }
         } else {

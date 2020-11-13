@@ -131,6 +131,11 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
      */
     private boolean navegacion_iniciada = false;
 
+    private int idPnj = 0;
+    private int idRuta = 0;
+
+    private RutaHistorica ruta;
+
 
     /**
      * Clase que implementa LocationEngineCallback, callback que es usado para captar las actualizaciones en la localización que detecta el motor de localización.
@@ -205,6 +210,37 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        String titulo = "";
+        Intent intent = getIntent();
+        Bundle b = intent.getExtras();
+
+        if (b != null) {
+            idPnj = b.getInt("idPnj");
+            idRuta = b.getInt("idRuta");
+            switch (idPnj) {
+                case 1:
+                    switch (idRuta) {
+                        case 1:
+                            titulo = getString(R.string.federico_titulo_ruta_1);
+                            break;
+                        case 2:
+                            titulo = getString(R.string.federico_titulo_ruta_2);
+                            break;
+                        case 3:
+                            titulo = getString(R.string.federico_titulo_ruta_3);
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                default:
+                    break;
+
+            }
+        }
+
+        ruta = new RutaHistorica(idPnj, idRuta);
+
         Mapbox.getInstance(this, getString(R.string.mapbox_access_token));
 
         setContentView(R.layout.activity_mapa);
@@ -221,11 +257,10 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
             sensorManager.registerListener( this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
         } else {
             Log.e("f","f");
-            // fai! we dont have an accelerometer!
         }
 
         lastZ=0;
-        setTitle("Ruta 1");
+        setTitle(titulo);
     }
 
 
@@ -246,20 +281,6 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
                     public void onStyleLoaded(@NonNull Style style) {
                         enableLocationComponent(style);
 
-                        //mapboxMap.addOnMapClickListener(MainActivity.this);
-
-                        /*
-                        button=findViewById(R.id.startButton);
-
-                        button.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-
-                                Intent intent = new Intent(MainActivity.this, Navegador.class);
-                                startActivity(intent);
-                            }
-                        });
-                        */
 
                         if(locationEngine!=null) {
                             dibujarRuta(1, style);
@@ -277,12 +298,6 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
 
                             builder1.create().show();
                         }
-
-                        /*
-                        button.setEnabled(true);
-                        button.setBackgroundResource(R.color.mapboxBlue);
-                        button.setAlpha(1);
-                         */
                     }
                 });
     }
@@ -299,12 +314,12 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
         LocationComponent locationComponent = mapboxMap.getLocationComponent();
         Point origin = Point.fromLngLat(locationComponent.getLastKnownLocation().getLongitude(), locationComponent.getLastKnownLocation().getLatitude());
 
-        List<Point> ruta = Routes.getRoute(index);
-        ruta.add(0,origin);
+        List<Point> paradas = ruta.getParadas();
+        paradas.add(0,origin);
 
         List<Feature> markerCoordinates = new ArrayList<>();
-        for(int i=1; i<ruta.size(); i++) {
-            markerCoordinates.add(Feature.fromGeometry( ruta.get(i) ));
+        for(int i=1; i<paradas.size(); i++) {
+            markerCoordinates.add(Feature.fromGeometry( paradas.get(i) ));
         }
 
         style.addSource(new GeoJsonSource("marker-source", FeatureCollection.fromFeatures(markerCoordinates)));
@@ -316,7 +331,7 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
         mapboxNavigation.requestRoutes(
                 RouteOptions.builder()
                         .accessToken(getString(R.string.mapbox_access_token))
-                        .coordinates(ruta)
+                        .coordinates(paradas)
                         .profile(DirectionsCriteria.PROFILE_WALKING)
                         .baseUrl(Constants.BASE_API_URL)
                         .user(DirectionsCriteria.PROFILE_DEFAULT_USER)
@@ -328,7 +343,7 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
                     @Override
                     public void onRoutesReady(@NotNull List<? extends DirectionsRoute> list) {
                         currentRoute = list.get(0);
-                        Routes.setCurrentDirectionsRoute(currentRoute);
+                        ruta.setDirectionsRoute(currentRoute);
                         if (navigationMapRoute != null)
                             navigationMapRoute.addRoute(currentRoute);
                     }
@@ -492,20 +507,9 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
         if(deltaZ>15.0f && !navegacion_iniciada){
             navegacion_iniciada = true;
             Intent intent = new Intent(Mapa.this, Navegador.class);
+            intent.putExtra("rutaHistorica", ruta);
             startActivity(intent);
             Toast.makeText(this, "Iniciando navegación", Toast.LENGTH_LONG).show();
-            /*
-            if(deltaZ<-12.0f){
-                //mapboxNavigation.navigateNextRouteLeg();
-                currentDialog.show();
-                Toast.makeText(this, "Hacia arriba", Toast.LENGTH_LONG).show();
-            }
-            else if(deltaZ>12.0f){
-                currentDialog.cancel();
-                showingDialog=false;
-                Toast.makeText(this, "Hacia abajo", Toast.LENGTH_LONG).show();
-            }
-             */
         }
         lastZ=event.values[2];
     }

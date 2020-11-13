@@ -2,11 +2,14 @@ package com.example.rutashistoricas.Navegacion;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.rutashistoricas.InterfazPrincipal.ListadoRutas;
 import com.example.rutashistoricas.R;
 import com.example.rutashistoricas.RealidadAumentada.RealidadAumentada;
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
@@ -23,20 +26,18 @@ import com.mapbox.navigation.ui.map.NavigationMapboxMap;
 
 import org.jetbrains.annotations.NotNull;
 
-public class Navegador extends AppCompatActivity
-        implements OnNavigationReadyCallback, NavigationListener {
+public class Navegador extends AppCompatActivity implements OnNavigationReadyCallback, NavigationListener {
 
     private NavigationMapboxMap navigationMapBoxMap = null;
     private MapboxNavigation mapboxNavigation=null;
     private DirectionsRoute currentRoute;
     private NavigationView navigationView;
 
-    //private SensorManager sensorManager;
-    //private Sensor accelerometer;
-    //private float lastZ;
+    private RutaHistorica ruta;
 
     private boolean puntoInteresLanzado=false;
-    //private AlertDialog currentDialog;
+
+    AlertDialog currentDialog = null;
 
     private ArrivalController arrivalController = new ArrivalController() {
         @NotNull
@@ -48,40 +49,32 @@ public class Navegador extends AppCompatActivity
 
         @Override
         public boolean navigateNextRouteLeg(@NotNull RouteLegProgress routeLegProgress) {
-            /*Log.d("Franprueba", "Franprueba1");
-            AlertDialog.Builder builder1 = new AlertDialog.Builder(Navegador.this);
-            builder1.setMessage("Has llegado a X(" + routeLegProgress.getLegIndex() + "), ¿qué te gustaría hacer?");
-            builder1.setCancelable(true);
 
-            builder1.setPositiveButton(
-                    "Enséñame más",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            showDialog = true;*/
             if(!puntoInteresLanzado) {
-                Intent intent = new Intent(Navegador.this, RealidadAumentada.class);
-                //dialog.cancel();
-                startActivity(intent);
                 puntoInteresLanzado=true;
+                int indexPto = routeLegProgress.getLegIndex() + 1;
+                switch (indexPto) {
+                    case 1:
+                        Intent intent = new Intent(Navegador.this, RealidadAumentada.class);
+                        //dialog.cancel();
+                        intent.putExtra("indexPuntoInteres", indexPto);
+                        startActivity(intent);
+                        break;
+                    default:
+                        AlertDialog.Builder builder = new AlertDialog.Builder(Navegador.this);
+                        builder.setMessage(getString(R.string.func_no_prog));
+                        builder.setCancelable(true);
+                        currentDialog = builder.create();
+                        currentDialog.show();
+                        break;
+                }
+
                 Button button=(Button) findViewById(R.id.button3);
                 button.setVisibility(View.VISIBLE);
                 button.setEnabled(true);
+
             }
-                      /*  }
-                    });
 
-             builder1.setNegativeButton(
-                    "Quiero continuar",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            showDialog = false;
-                            mapboxNavigation.navigateNextRouteLeg();
-                            dialog.cancel();
-                        }
-                    });
-
-            currentDialog = builder1.create();
-            showDialog = true;*/
             return false;
         }
     };
@@ -97,13 +90,42 @@ public class Navegador extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        String titulo = "";
+
+        ruta = (RutaHistorica) getIntent().getSerializableExtra("rutaHistorica");
+
+
+        switch (ruta.getIdPnj()) {
+            case 1:
+                switch (ruta.getIdRuta()) {
+                    case 1:
+                        titulo = getString(R.string.federico_titulo_ruta_1);
+                        break;
+                    case 2:
+                        titulo = getString(R.string.federico_titulo_ruta_2);
+                        break;
+                    case 3:
+                        titulo = getString(R.string.federico_titulo_ruta_3);
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            default:
+                break;
+        }
+
         Mapbox.getInstance(this,getString(R.string.mapbox_access_token));
         setContentView(R.layout.activity_navegador);
         navigationView = (NavigationView) findViewById(R.id.navigationView);
+
+        setTitle(titulo);
+
         navigationView.onCreate(savedInstanceState);
         navigationView.initialize(this);
 
-        currentRoute= Routes.getCurrentDirectionsRoute();
+        currentRoute = ruta.getDirectionsRoute();
 
         Button button=(Button) findViewById(R.id.button3);
         button.setVisibility(View.INVISIBLE);
@@ -113,18 +135,6 @@ public class Navegador extends AppCompatActivity
         inst.setVisibility(View.INVISIBLE);
         inst.setEnabled(false);
 
-        /*sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        if (sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) {
-            // success! we have an accelerometer
-
-            accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-            sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-        } else {
-            Log.e("f","f");
-            // fai! we dont have an accelerometer!
-        }
-
-        lastZ=0;*/
     }
 
     @Override
@@ -215,33 +225,5 @@ public class Navegador extends AppCompatActivity
     public void onNavigationRunning() {
 
     }
-
-    /*@Override
-    public void onSensorChanged(SensorEvent event) {
-        float deltaZ=lastZ-event.values[2];
-        if(showDialog && deltaZ>20.0f){
-            showDialog = false;
-            currentDialog.show();
-            Toast.makeText(this, "Se ha movido", Toast.LENGTH_LONG).show();
-
-            if(deltaZ<-12.0f){
-                //mapboxNavigation.navigateNextRouteLeg();
-                currentDialog.show();
-                Toast.makeText(this, "Hacia arriba", Toast.LENGTH_LONG).show();
-            }
-            else if(deltaZ>12.0f){
-                currentDialog.cancel();
-                showingDialog=false;
-                Toast.makeText(this, "Hacia abajo", Toast.LENGTH_LONG).show();
-            }
-
-        }
-        lastZ=event.values[2];
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-    }*/
 }
 

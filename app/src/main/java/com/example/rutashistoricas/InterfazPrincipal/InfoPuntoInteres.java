@@ -20,18 +20,36 @@ public class InfoPuntoInteres extends AppCompatActivity {
     private int mActivePointerId1;
     private int mActivePointerId2;
 
+    private int indexPuntoInteres = -1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info_punto_interes);
 
+        int id_img=0, id_texto=0;
+
+        indexPuntoInteres = getIntent().getIntExtra("indexPuntoInteres", -1);
+
+        switch (indexPuntoInteres) {
+            case 1:
+                id_img = R.drawable.casa_federico;
+                id_texto = R.string.nombre_pto_interes_1;
+                break;
+            default:
+                finishActivity(0);
+                break;
+
+        }
         ImageView imgView = findViewById(R.id.imgPtoInteres);
-        imgView.setImageResource(R.drawable.casa_federico);
+        imgView.setImageResource(id_img);
 
         TextView textView = findViewById(R.id.textoPtoInteres);
-        textView.setText(getString(R.string.pto_interes_1));
+        textView.setText(getString(id_texto));
 
-        setTitle(getString(R.string.nombre_pto_interes_1));
+        setTitle(getString(id_texto));
+
+
     }
 
     @Override

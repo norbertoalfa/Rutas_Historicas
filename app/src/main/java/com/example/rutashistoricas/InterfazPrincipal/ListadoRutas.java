@@ -1,5 +1,6 @@
-package com.example.rutashistoricas;
+package com.example.rutashistoricas.InterfazPrincipal;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -19,7 +20,9 @@ public class ListadoRutas extends AppCompatActivity {
     private int mActivePointerId1;
     private int mActivePointerId2;
     private static String name = "";
-    private static int index_pnj = 0;
+    private static int idPnj = 0;
+
+    AlertDialog currentDialog = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +34,8 @@ public class ListadoRutas extends AppCompatActivity {
 
         String name = "", titulo_ruta_1 = "", texto_ruta_1 = "", texto_ruta_2 = "", texto_ruta_3 = "";
         if (b != null) {
-            index_pnj = b.getInt("index_pnj");
-            switch (index_pnj) {
+            idPnj = b.getInt("idPnj");
+            switch (idPnj) {
                 case 1:
                     name = getString(R.string.nombre_federico);
                     titulo_ruta_1 = getString(R.string.federico_titulo_ruta_1);
@@ -46,10 +49,13 @@ public class ListadoRutas extends AppCompatActivity {
 
         textView = findViewById(R.id.tituloRuta1);
         textView.setText(titulo_ruta_1);
+        textView.setAllCaps(true);
         textView = findViewById(R.id.tituloRuta2);
         textView.setText(texto_ruta_2);
+        textView.setAllCaps(true);
         textView = findViewById(R.id.tituloRuta3);
         textView.setText(texto_ruta_3);
+        textView.setAllCaps(true);
 
     }
 
@@ -90,28 +96,41 @@ public class ListadoRutas extends AppCompatActivity {
 
     public void iniciarRuta1(View view) {
         Bundle b = new Bundle();
-        b.putInt("index_pnj", index_pnj);
-        b.putInt("index_ruta", 1);
+        b.putInt("idPnj", idPnj);
+        b.putInt("idRuta", 1);
         Intent intent = new Intent(this, Mapa.class);
         intent.putExtras(b);
         startActivity(intent);
     }
 
     public void iniciarRuta2(View view) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(ListadoRutas.this);
+        builder.setMessage(getString(R.string.func_no_prog));
+        builder.setCancelable(true);
+        currentDialog = builder.create();
+        currentDialog.show();
+        /*
         Bundle b = new Bundle();
-        b.putInt("index_pnj", index_pnj);
-        b.putInt("index_ruta", 2);
+        b.putInt("idPnj", idPnj);
+        b.putInt("idRuta", 2);
         Intent intent = new Intent(this, Mapa.class);
         intent.putExtras(b);
         startActivity(intent);
+         */
     }
     public void iniciarRuta3(View view) {
+
+
+        // No borrar este comentario
+        /*
         Bundle b = new Bundle();
-        b.putInt("index_pnj", index_pnj);
-        b.putInt("index_ruta", 3);
+        b.putInt("idPnj", idPnj);
+        b.putInt("idRuta", 3);
         Intent intent = new Intent(this, Mapa.class);
         intent.putExtras(b);
         startActivity(intent);
+         */
     }
 
 }
