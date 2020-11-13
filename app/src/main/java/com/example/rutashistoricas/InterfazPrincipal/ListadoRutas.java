@@ -1,4 +1,4 @@
-package com.example.rutashistoricas;
+package com.example.rutashistoricas.InterfazPrincipal;
 
 import android.content.Intent;
 import android.os.Bundle;
