@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Rutas Históricas</string>
-    <string name="busca_personaje">Busca un personaje</string>
+    <string name="texto_buscador">Introduce personaje o categoría</string>
     <string name="buscar">Buscar</string>
-    <string name="personajes_destacados">Personajes destacados:</string>
+    <string name="personajes_destacados">Personajes destacados</string>
     <string name="nombre_federico">Federico García Lorca</string>
     <string name="nombre_mariana">Mariana Pineda</string>
     <string name="nombre_ganivet">Ángel Ganivet</string>
