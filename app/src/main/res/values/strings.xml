@@ -10,8 +10,12 @@
     <string name="descripcion_federico">Federico García Lorca es uno de los genios de la literatura del siglo XX. Granada es Lorca, y Lorca es Granada. La vida hecha tierra; la tierra hecha obra; y la literatura convertida en una suma de sentimientos, biografía y emociones. Aquí está el poeta y sus paisajes:  Cientos de páginas, un diccionario de personajes, biografías, la música, el cine… Todo lo necesario para emprender un viaje sin fin por Lorca y Granada, por su tierra y sus metáforas.</string>
     <string name="saber_mas">Quiero saber más</string>
     <string name="mostrar_rutas">Mostrar rutas</string>
-    <string name="texto_ruta_1"> Ruta lorquiana de Granada: para realizar a pie y/o con transporte público por Granada. Recorre algunos de los rincones más emblemáticos y bellos de la ciudad, que además tuvieron un vínculo con Federico García Lorca, por haber sido residencia del poeta, lugar de inspiración de su obra o de encuentro con otros personajes notables de la vida cultural de su época. </string>
+    <string name="federico_titulo_ruta_1">RUTA LORQUIANA DE GRANADA</string>
+    <string name="federico_texto_ruta_1">Para realizar a pie y/o con transporte público. Recorre algunos de los rincones más emblemáticos y bellos de la ciudad, que además tuvieron un gran vínculo con el poeta</string>
+    <string name="federico_titulo_ruta_2">RUTA LORQUIANA DEL AGUA</string>
+    <string name="federico_titulo_ruta_3">RUTA LORQUIANA DE VÍZNAR Y ALFACAR</string>
     <string name="iniciar_ruta">Iniciar ruta</string>
+    <string name="info">Info</string>
     <string name="nombre_pto_interes_1">Casa de Federico García Lorca</string>
     <string name="pto_interes_1">La casa de Federico se construyó en el año...</string>
     <string name="user_location_permission_explanation">Es necesario el acceso a la ubicación del dispositivo para utilizar la app.</string>
