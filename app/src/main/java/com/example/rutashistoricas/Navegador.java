@@ -12,6 +12,8 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
@@ -72,6 +74,9 @@ public class Navegador extends AppCompatActivity
                 //dialog.cancel();
                 startActivity(intent);
                 puntoInteresLanzado=true;
+                Button button=(Button) findViewById(R.id.button3);
+                button.setVisibility(View.VISIBLE);
+                button.setEnabled(true);
             }
                       /*  }
                     });
@@ -92,9 +97,12 @@ public class Navegador extends AppCompatActivity
         }
     };
 
-    public void continueRoute(){
+    public void continueRoute(View view){
         mapboxNavigation.navigateNextRouteLeg();
         puntoInteresLanzado=false;
+        Button button=(Button) findViewById(R.id.button3);
+        button.setVisibility(View.INVISIBLE);
+        button.setEnabled(false);
     }
 
     @Override
@@ -107,6 +115,10 @@ public class Navegador extends AppCompatActivity
         navigationView.initialize(this);
 
         currentRoute=Routes.getCurrentDirectionsRoute();
+
+        Button button=(Button) findViewById(R.id.button3);
+        button.setVisibility(View.INVISIBLE);
+        button.setEnabled(false);
 
         /*sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         if (sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) {
