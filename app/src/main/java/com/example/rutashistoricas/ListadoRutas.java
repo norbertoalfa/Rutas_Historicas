@@ -75,7 +75,8 @@ public class ListadoRutas extends AppCompatActivity {
     }
 
     public void iniciarRuta1(View view) {
-        Intent intent = new Intent(this, Mapa.class);
+        //Intent intent = new Intent(this, Mapa.class);
+        Intent intent = new Intent(this, RealidadAumentada.class);
         startActivity(intent);
     }
 
