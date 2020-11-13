@@ -51,11 +51,6 @@ import com.mapbox.navigation.core.MapboxNavigation;
 import com.mapbox.navigation.core.MapboxNavigationProvider;
 import com.mapbox.navigation.core.directions.session.RoutesRequestCallback;
 import com.mapbox.navigation.ui.route.NavigationMapRoute;
-/*import com.mapbox.services.android.navigation.ui.v5.NavigationLauncher;
-import com.mapbox.services.android.navigation.ui.v5.NavigationLauncherOptions;
-import com.mapbox.services.android.navigation.ui.v5.route.NavigationMapRoute;
-import com.mapbox.services.android.navigation.v5.navigation.MapboxNavigation;
-import com.mapbox.services.android.navigation.v5.navigation.NavigationRoute;*/
 
 import org.jetbrains.annotations.NotNull;
 
@@ -67,29 +62,79 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconAllowOverlap
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconIgnorePlacement;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconImage;
 
+
+/**
+ * Clase correspondiente a la actividad que nos muestra el mapa junto con la ruta correspondiente al personaje seleccionado.
+ *
+ */
 public class Mapa extends AppCompatActivity implements OnMapReadyCallback, PermissionsListener, SensorEventListener {
 
-    /*private static final String SOURCE_ID = "SOURCE_ID";
-    private static final String ICON_ID = "ICON_ID";
-    private static final String LAYER_ID = "LAYER_ID";*/
+    /**
+     * Ruta que se va a dibujar en el mapa.
+     */
     private DirectionsRoute currentRoute;
+    /**
+     * TAG usada para imprimir logs.
+     */
     private static final String TAG="DirectionsActivity";
+    /**
+     * Se encarga de dibujar la ruta.
+     */
     private NavigationMapRoute navigationMapRoute;
+    /**
+     * Vista asociada a esta actividad.
+     */
     private MapView mapView;
+    /**
+     * Gestor de permisos para poder acceder a la localización gps del dispositivo.
+     */
     private PermissionsManager permissionsManager;
+    /**
+     * Mapa usado.
+     */
     private MapboxMap mapboxMap;
-    private LocationEngine locationEngine;
+    /**
+     * Motor de localización que permite conocer la ubicación del dispositivo en cada momento.
+     */
+    private LocationEngine locationEngine = null;
+    /**
+     * Intervalo de tiempo entre cada consulta de la posición del dispositivo.
+     */
     private long DEFAULT_INTERVAL_IN_MILLISECONDS = 1000L;
+    /**
+     * Máximo tiempo que se esperará a que el motor de localización responda con la ubicación del dispositivo.
+     */
     private long DEFAULT_MAX_WAIT_TIME = DEFAULT_INTERVAL_IN_MILLISECONDS * 5;
+    /**
+     * Callback que se lanza cada vez que el motor de localización obtiene una nueva ubicación.
+     */
     private LocationCallback callback = new LocationCallback(this);
+    /**
+     * Usado para obtener la ruta a partir de un conjunto de puntos por los que queremos que esta pase.
+     */
     private MapboxNavigation mapboxNavigation;
-
+    /**
+     * Gestor de sensores que nos da acceso al acelerómetro.
+     */
     private SensorManager sensorManager;
+    /**
+     * Acelerómetro.
+     */
     private Sensor accelerometer;
+    /**
+     * Última aceleración en el eje Z detectada por el acelerómetro. Se usa para la interacción relacionada con el inicio de la navegación.
+     */
     private float lastZ;
-
+    /**
+     * Nos permite saber si ya se ha iniciado la navegación por la ruta.
+     */
     private boolean navegacion_iniciada = false;
 
+
+    /**
+     * Clase que implementa LocationEngineCallback, callback que es usado para captar las actualizaciones en la localización que detecta el motor de localización.
+     *
+     */
     private static class LocationCallback implements LocationEngineCallback<LocationEngineResult> {
 
         private final WeakReference<Mapa> activityWeakReference;
@@ -99,9 +144,9 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
         }
 
         /**
-         * The LocationEngineCallback interface's method which fires when the device's location has changed.
+         * El método de la interfaz LocationEngineCallback que se lanza cuando la localización del dispositivo ha cambiado. Dado que es una aplicación de prueba, sólo obtenemos la localización del dispositivo una vez y desactivamos este callback, ya que la navegación a través de la ruta es simulada.
          *
-         * @param result the LocationEngineResult object which has the last known location within it.
+         * @param result El objeto LocationEngineResult que contiene la última localización conocida dentro.
          */
         @Override
         public void onSuccess(LocationEngineResult result) {
@@ -135,9 +180,9 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
         }
 
         /**
-         * The LocationEngineCallback interface's method which fires when the device's location can not be captured
+         * El método de la interfaz LocationEngineCallback que se lanza cuando la localización del dispositivo no puede ser capturada.
          *
-         * @param exception the exception message
+         * @param exception La excepción lanzada.
          */
         @Override
         public void onFailure(@NonNull Exception exception) {
@@ -149,6 +194,12 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
         }
     }
 
+
+    /**
+     * Obtiene el acceso a la API de MapBox. Pone el layout. Crea la vista la vista del mapa ({@link #mapView}). Inicializa el acelerómetro.
+     *
+     * @param savedInstanceState Conjunto de datos del estado de la instancia.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -176,6 +227,12 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
 
     }
 
+
+    /**
+     * Se ejecuta una vez el mapa ha sido cargado. Almacena la referencia al mapa (en {@link #mapboxMap}) y configura el estilo del mapa. Una vez el estilo está cargado, habilita la localización del dispositivo ({@link #enableLocationComponent}) y dibuja la ruta en el mapa (en caso de que la localización se halla podido habilitar correctamente, {@link #dibujarRuta}).
+     *
+     * @param mapboxMap Mapa que acaba de ser cargado.
+     */
     @Override
     public void onMapReady(@NonNull final MapboxMap mapboxMap) {
 
@@ -203,7 +260,9 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
                         });
                         */
 
-                        dibujarRuta(1, style);
+                        if(locationEngine!=null)
+                            dibujarRuta(1, style);
+
                         /*
                         button.setEnabled(true);
                         button.setBackgroundResource(R.color.mapboxBlue);
@@ -214,6 +273,12 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
     }
 
 
+    /**
+     * Dibuja la ruta en el mapa, iniciando dicha ruta en la localización actual del dispositivo.
+     *
+     * @param index Índice de la ruta que será pintada en el mapa. El índice 1 corresponde a la ruta de Federico García Lorca.
+     * @param style Estilo del mapa que se está usando.
+     */
     public void dibujarRuta(int index, Style style) {
 
         LocationComponent locationComponent = mapboxMap.getLocationComponent();
@@ -264,7 +329,11 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
         );
     }
 
-
+    /**
+     * Si la aplicación tiene permisos para acceder a la localización, habilita el componente de localización del mapa e inicia el motor de localización (llamando al método {@link #initLocationEngine}). Si no tiene dichos permisos crea el gestor de permisos y los solicita.
+     *
+     * @param loadedMapStyle Estilo del mapa que se está usando.
+     */
     @SuppressWarnings( {"MissingPermission"})
     private void enableLocationComponent(@NonNull Style loadedMapStyle) {
         if (PermissionsManager.areLocationPermissionsGranted(this)) {
@@ -285,7 +354,7 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
     }
 
     /**
-     * Set up the LocationEngine and the parameters for querying the device's location
+     * Configura el motor de localización. Después inicializa {@link #mapboxNavigation} y {@link #navigationMapRoute}.
      */
     @SuppressLint("MissingPermission")
     private void initLocationEngine() {
@@ -309,7 +378,6 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
                 .build();
     }
 
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         permissionsManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -320,11 +388,15 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
         Toast.makeText(this, R.string.user_location_permission_explanation, Toast.LENGTH_LONG).show();
     }
 
+    /**
+     * Se ejecuta cuando le concedemos o denegamos los permisos de localización a la aplicación. En caso de concederselos habilita el componente de localización y dibuja la ruta ({@link #enableLocationComponent}, {@link #dibujarRuta}) y en caso de denegarselos imprime un mensaje y finaliza.
+     */
     @Override
     public void onPermissionResult(boolean granted) {
         if (granted) {
             if (mapboxMap.getStyle() != null) {
                 enableLocationComponent(mapboxMap.getStyle());
+                dibujarRuta(1,mapboxMap.getStyle());
             }
         } else {
             Toast.makeText(this, R.string.user_location_permission_not_granted, Toast.LENGTH_LONG).show();
@@ -378,9 +450,14 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
         mapboxNavigation.onDestroy();
     }
 
+    /**
+     * Se ejecuta cada vez que el acelerómetro detecta un cambio. Si no hemos iniciado aún la navegación y el movimiento del dispositivo es suficientemente grande se lanzará la actividad de navegación por la ruta.
+     *
+     * @param event Evento que almacena la aceleración detectada.
+     */
     @Override
     public void onSensorChanged(SensorEvent event) {
-        float deltaZ=lastZ-event.values[2];
+        float deltaZ=Math.abs(lastZ-event.values[2]);
         if(deltaZ>15.0f && !navegacion_iniciada){
             navegacion_iniciada = true;
             Intent intent = new Intent(Mapa.this, Navegador.class);
