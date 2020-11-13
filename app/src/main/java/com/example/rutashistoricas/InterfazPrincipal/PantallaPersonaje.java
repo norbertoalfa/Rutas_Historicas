@@ -10,7 +10,7 @@ import android.view.VelocityTracker;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.rutashistoricas.ListadoRutas;
+import com.example.rutashistoricas.InterfazPrincipal.ListadoRutas;
 import com.example.rutashistoricas.R;
 
 public class PantallaPersonaje extends AppCompatActivity {
