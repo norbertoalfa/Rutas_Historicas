@@ -18,25 +18,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void irPantallaPersonaje(View view) {
-        Intent intent = new Intent(this, PantallaPersonaje.class);
-        Bundle b = new Bundle();
         boolean irAPantallaValida = true;
         int index_pnj = 0;
         switch (view.getId()) {
             case (R.id.boton_federico):
                 index_pnj = 1;
                 break;
-
             default:
                 irAPantallaValida = false;
         }
         if (irAPantallaValida) {
+            Intent intent = new Intent(this, PantallaPersonaje.class);
+            Bundle b = new Bundle();
             b.putInt("index_pnj", index_pnj);
             intent.putExtras(b);
             startActivity(intent);
         } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-            builder.setMessage("Ruta actualmente no disponible.");
+            builder.setMessage("Personaje actualmente no disponible.");
             builder.setCancelable(true);
             currentDialog = builder.create();
             currentDialog.show();
