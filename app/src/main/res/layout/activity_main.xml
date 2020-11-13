@@ -12,7 +12,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
-        android:layout_marginEnd="32dp"
         android:text="@string/personajes_destacados"
         android:textColor="@color/colorText"
         android:textSize="24sp"
@@ -22,47 +21,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buscador_personajes" />
 
-    <Button
-        android:id="@+id/boton_federico"
-        android:layout_width="350dp"
-        android:layout_height="100dp"
-        android:layout_marginStart="64dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="64dp"
-        android:background="@drawable/federico_img_text"
-        android:onClick="irPantallaPersonaje"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/personajes_destacados" />
-
-    <Button
-        android:id="@+id/boton_mariana_pineda"
-        android:layout_width="350dp"
-        android:layout_height="100dp"
-        android:layout_marginStart="64dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="64dp"
-        android:background="@drawable/mariana_img_text"
-        android:onClick="irPantallaPersonaje"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.477"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/boton_federico" />
-
-    <Button
-        android:id="@+id/boton_angel_ganivet"
-        android:layout_width="350dp"
-        android:layout_height="100dp"
-        android:layout_marginStart="64dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="64dp"
-        android:background="@drawable/ganivet_img_text"
-        android:onClick="irPantallaPersonaje"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.477"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/boton_mariana_pineda" />
-
     <EditText
         android:id="@+id/buscador_personajes"
         android:layout_width="0dp"
@@ -71,12 +29,12 @@
         android:layout_marginTop="32dp"
         android:ems="10"
         android:hint="@string/busca_personaje"
+        android:importantForAutofill="no"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toStartOf="@+id/boton_buscar"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:importantForAutofill="no" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/boton_buscar"
@@ -89,5 +47,51 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/buscador_personajes"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="64dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/personajes_destacados"
+        app:layout_constraintVertical_bias="1.0">
+
+        <Button
+            android:id="@+id/boton_federico"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:drawableStart="@drawable/federico_reducida"
+            android:onClick="irPantallaPersonaje"
+            android:text="@string/nombre_federico"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/boton_mariana_pineda"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/mariana_reducida"
+            android:onClick="irPantallaPersonaje"
+            android:text="@string/nombre_mariana"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/boton_angel_ganivet"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/ganivet_reducida"
+            android:onClick="irPantallaPersonaje"
+            android:text="@string/nombre_ganivet"
+            android:textSize="18sp" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
