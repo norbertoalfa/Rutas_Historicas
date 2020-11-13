@@ -54,8 +54,8 @@ public class PantallaPersonaje extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onResume() {
+        super.onResume();
 
         switch (index_pnj) {
             case 1:
