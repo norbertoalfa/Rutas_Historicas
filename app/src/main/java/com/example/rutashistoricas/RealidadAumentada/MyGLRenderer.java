@@ -13,7 +13,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private static float[] current_vectorUp = {0.0f,0.0f,-10.0f};
     private static float[] new_point = {0.0f,0.0f,-10.0f};
     private static float[] current_point = {0.0f,0.0f,-10.0f};
-    private static float alfa = 0.5f;
+    private static float alfa = 0.1f;
     private static float norm_point = 0.1f, norm_vect = 0.1f;
     private static float distance_points;
 
@@ -36,10 +36,10 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         distance_points = distance(current_point, new_point);
 
         if (distance_points>0.05) {
-            //alfa = (float) Math.exp(-Math.pow(distance_points-0.1,2)/4)/2;
-            current_point[0] = (0.1f) * new_point[0]/norm(new_point) + current_point[0];
-            current_point[1] = (0.1f) * new_point[1]/norm(new_point) + current_point[1];
-            current_point[2] = (0.1f) * new_point[2]/norm(new_point) + current_point[2];
+            alfa = (float) distance_points/10.0f;
+            current_point[0] = alfa * new_point[0]/norm(new_point) + current_point[0];
+            current_point[1] = alfa * new_point[1]/norm(new_point) + current_point[1];
+            current_point[2] = alfa * new_point[2]/norm(new_point) + current_point[2];
             norm_point = norm(current_point);
             current_point[0] /= norm_point;
             current_point[1] /= norm_point;
@@ -49,10 +49,10 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         distance_points = distance(current_vectorUp, new_vectorUp);
 
         if (distance_points>0.05) {
-            //alfa = (float) Math.exp(-Math.pow(distance_points-0.1,2)/4)/2;
-            current_vectorUp[0] = (0.1f) * new_vectorUp[0]/norm(new_vectorUp) + current_vectorUp[0];
-            current_vectorUp[1] = (0.1f) * new_vectorUp[1]/norm(new_vectorUp) + current_vectorUp[1];
-            current_vectorUp[2] = (0.1f) * new_vectorUp[2]/norm(new_vectorUp) + current_vectorUp[2];
+            alfa = (float) distance_points/10.0f;
+            current_vectorUp[0] = alfa * new_vectorUp[0]/norm(new_vectorUp) + current_vectorUp[0];
+            current_vectorUp[1] = alfa * new_vectorUp[1]/norm(new_vectorUp) + current_vectorUp[1];
+            current_vectorUp[2] = alfa * new_vectorUp[2]/norm(new_vectorUp) + current_vectorUp[2];
             norm_vect = norm(current_vectorUp);
             current_vectorUp[0] /= norm_vect;
             current_vectorUp[1] /= norm_vect;
