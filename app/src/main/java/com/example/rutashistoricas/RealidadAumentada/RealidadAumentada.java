@@ -27,7 +27,6 @@ import com.example.rutashistoricas.R;
 /**
  * Clase correspondiente a la actividad de visualización de la foto 360 para el punto de interés actual.
  */
-
 public class RealidadAumentada extends AppCompatActivity implements SensorEventListener {
     /**
      * Datos de lectura del acelerómetro.
