@@ -13,4 +13,5 @@
     <color name="colorMyTextButton">#A16100</color>
     <color name="colorMyBackground">#FFFFFF</color>
     <color name="colorMyButton">#FAEAD1</color>
+    <color name="colorMySecButton">#F3B474</color>
 </resources>
