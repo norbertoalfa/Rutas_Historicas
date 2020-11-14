@@ -16,14 +16,56 @@ import com.example.rutashistoricas.R;
 import com.example.rutashistoricas.RealidadAumentada.RealidadAumentada;
 
 public class ListadoRutas extends AppCompatActivity {
+    /**
+     * Para gestión interna de los eventos táctiles. Nos permite saber a que velocidad se mueven los punteros por la pantalla durante un evento táctil.
+     */
     private VelocityTracker mVelocityTracker = null;
+
+    /**
+     * Para gestión interna de los eventos táctiles. ID correspondiente a un puntero que produce un evento táctil.
+     */
     private int mActivePointerId1;
+    /**
+     * Para gestión interna de los eventos táctiles. ID correspondiente a un puntero que produce un evento táctil.
+     */
     private int mActivePointerId2;
-    private static String name = "", titulo_ruta_1 = "", texto_ruta_1 = "", texto_ruta_2 = "", texto_ruta_3 = "";
+
+    /**
+     * Nombre de la actividad, que será el nombre del personaje para el cuál se están visualizando las rutas.
+     */
+    private static String name = "";
+
+    /**
+     * Nombre de la ruta con ID=1 del personaje.
+     */
+    private static String titulo_ruta_1 = "";
+    //private static String texto_ruta_1 = "";
+    /**
+     * Nombre de la ruta con ID=2 del personaje.
+     */
+    private static String texto_ruta_2 = "";
+    /**
+     * Nombre de la ruta con ID=3 del personaje.
+     */
+    private static String texto_ruta_3 = "";
+
+    /**
+     * ID del personaje para el cual se están visualizando las rutas.
+     */
     private static int idPnj = 0;
 
+    /**
+     * Cuadro de diálogo que se está mostrando en pantalla actualmente, en caso de haberlo.
+     */
     AlertDialog currentDialog = null;
 
+    /**
+     * Se ejecuta al crear la actividad. Obtiene el ID del personaje seleccionado, que es enviado por la actividad {@link PantallaPersonaje}
+     * (actividad padre de esta).
+     * Inicializa los campos de texto del layout con el nombre de las rutas y el nombre del personaje asociados a dicho ID.
+     *
+     * @param savedInstanceState Conjunto de datos del estado de la instancia.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +100,14 @@ public class ListadoRutas extends AppCompatActivity {
 
     }
 
-    // para volver atrás con los dos dedos
+    /**
+     * Se ejecuta cuando se produce un evento táctil. Se encarga de comprobar si se hace un movimiento con dos dedos desplazándose
+     * por la pantalla de izquierda a derecha, y en caso de producirse finaliza la actividad para volver a su actividad padre.
+     *
+     * @param event Evento táctil.
+     *
+     * @return Devuelve siempre true.
+     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         int action = MotionEventCompat.getActionMasked(event);
@@ -93,6 +142,13 @@ public class ListadoRutas extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Método ejecutado al pulsar el botón correspondiente a iniciar la primera ruta.
+     * Lanza la actividad {@link com.example.rutashistoricas.Navegacion.Mapa} y le envía el ID del personaje
+     * y el ID de la ruta, en este caso 1.
+     *
+     * @param view Vista del botón que se ha pulsado.
+     */
     public void iniciarRuta1(View view) {
         Bundle b = new Bundle();
         b.putInt("idPnj", idPnj);
@@ -103,6 +159,12 @@ public class ListadoRutas extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /**
+     * Método ejecutado al pulsar el botón correspondiente a iniciar la segunda ruta.
+     * Esta ruta no está implementada e informa de ello por pantalla.
+     *
+     * @param view Vista del botón que se ha pulsado.
+     */
     public void iniciarRuta2(View view) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(ListadoRutas.this);
@@ -119,6 +181,13 @@ public class ListadoRutas extends AppCompatActivity {
         startActivity(intent);
          */
     }
+
+    /**
+     * Método ejecutado al pulsar el botón correspondiente a iniciar la primera ruta.
+     * Esta ruta no está implementada y por tanto esta función no hace nada.
+     *
+     * @param view Vista del botón que se ha pulsado.
+     */
     public void iniciarRuta3(View view) {
 
 
