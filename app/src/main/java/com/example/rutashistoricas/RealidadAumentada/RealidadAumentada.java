@@ -177,6 +177,8 @@ public class RealidadAumentada extends AppCompatActivity implements SensorEventL
      * nuestro caso siempre es volver hacia atrás, por lo que finalizamos la actividad.
      *
      * @param item  Ítem seleccionado en el menú de opciones.
+     *
+     * @return Se devuelve siempre true.
      */
     public boolean onOptionsItemSelected(MenuItem item){
         finish();
@@ -188,6 +190,8 @@ public class RealidadAumentada extends AppCompatActivity implements SensorEventL
      *  es decir, mover los 2 dedos de izquierda a derecha.
      *
      * @param event Evento táctil detectado.
+     *
+     * @return Se devuelve siempre true.
      */
     @Override
     public boolean onTouchEvent(MotionEvent event) {

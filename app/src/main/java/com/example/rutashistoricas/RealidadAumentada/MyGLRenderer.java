@@ -185,10 +185,12 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     }
 
     /**
-     *  Devuelve la distancia entre dos puntos
+     *  Distancia entre dos puntos.
      *
      * @param a Punto inicial.
      * @param b Punto final.
+     *
+     * @return Devuelve la distancia entre los 2 puntos.
      */
     public float distance(float[] a, float[] b){
         if (a.length!=3 || b.length!=3){
@@ -198,9 +200,11 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     }
 
     /**
-     *  Devuelve la norma de un vector.
+     *  Norma de un vector.
      *
      * @param a Vector al que se le quiere calcular la norma.
+     *
+     * @return Devuelve la norma del vector.
      */
     public float norm(float[] a){
         return distance(a, new float[]{0.0f,0.0f,0.0f});
