@@ -27,27 +27,26 @@ import com.example.rutashistoricas.Navegacion.RutaHistorica;
 import com.example.rutashistoricas.R;
 
 public class RealidadAumentada extends AppCompatActivity implements SensorEventListener {
-    private VelocityTracker mVelocityTracker = null;
-    private int mActivePointerId1;
-    private int mActivePointerId2;
-    private SensorManager sensorManager;
-
     private final float[] accelerometerReading = new float[3];
     private final float[] magnetometerReading = new float[3];
     private final float[] gravityReading = new float[3];
     private  float[] rotationMatrix = new float[9];
     private final float[] orientationAngles = new float[3];
 
-    private final float[] posTriangulo = {0.43f, -0.9f, 0.0f};
+    private SensorManager sensorManager;
+    private VelocityTracker mVelocityTracker = null;
+    private int mActivePointerId1;
+    private int mActivePointerId2;
+
 
     private GLSurfaceView glView;
     private MyGLRenderer myGLRenderer;
+    private final float[] posTriangulo = {0.43f, -0.9f, 0.0f};
+
 
     private static float lastTime = 0.0f;
     private static float currentTime = 0.0f;
-
     private static boolean inTime = false;
-
     private boolean pto_encontrado = false;
 
     private int indexPuntoInteres = -1;
@@ -62,11 +61,11 @@ public class RealidadAumentada extends AppCompatActivity implements SensorEventL
 
         ruta = (RutaHistorica) getIntent().getSerializableExtra("rutaHistorica");
 
-        indexPuntoInteres = getIntent().getIntExtra("indexPuntoInteres", -1);
+        //indexPuntoInteres = getIntent().getIntExtra("indexPuntoInteres", -1);
 
 
-        switch (indexPuntoInteres) {
-            case 1:
+        //switch (indexPuntoInteres) {
+            //case 1:
 
                 id_titulo = R.string.nombre_pto_interes_1;
 
@@ -89,13 +88,13 @@ public class RealidadAumentada extends AppCompatActivity implements SensorEventL
                     sensorManager.registerListener(this, magneticField,
                             SensorManager.SENSOR_DELAY_NORMAL, SensorManager.SENSOR_DELAY_UI);
                 }
-                break;
+       /*         break;
             default:
                 Intent intent = new Intent(this, InfoPuntoInteres.class);
                 intent.putExtra("indexPuntoInteres", indexPuntoInteres);
                 startActivity(intent);
                 break;
-        }
+        }*/
 
         setTitle(getString(id_titulo));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
