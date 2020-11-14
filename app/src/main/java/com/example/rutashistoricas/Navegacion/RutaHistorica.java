@@ -23,8 +23,18 @@ public class RutaHistorica implements Serializable {
      * Lista de paradas de la ruta (se almacenan sus nombres).
      */
     private List<String> nombresParadas = null;
+
     /**
-     * Ruta obtenida a partir de las paradas, usando la API de Mapbox.
+     * Lista de curiosidades de la ruta (se almacenan sus coordenadas).
+     */
+    private List<Point> curiosidades = null;
+    /**
+     * Lista de curiosidades de la ruta (se almacenan sus nombres).
+     */
+    private List<String> nombresCuriosidades = null;
+
+    /**
+     * Ruta de direcciones obtenida a partir de las paradas, usando la API de Mapbox.
      */
     private DirectionsRoute directionsRoute = null;
 
@@ -50,25 +60,40 @@ public class RutaHistorica implements Serializable {
 
         paradas = new ArrayList<>();
         nombresParadas = new ArrayList<>();
+        curiosidades = new ArrayList<>();
+        nombresCuriosidades = new ArrayList<>();
+
         switch (idPnj) {
             case 1:
                 switch (idRuta) {
                     case 1:
-
                         nombresParadas.add("Huerta de San Vicente");
                         paradas.add(Point.fromLngLat(-3.609268, 37.170675));
-
-                        nombresParadas.add("Catedral");
-                        paradas.add(Point.fromLngLat( -3.600633, 37.176316));
 
                         nombresParadas.add("Centro García Lorca");
                         paradas.add(Point.fromLngLat(-3.600693, 37.176633));
 
-                        nombresParadas.add("Monasterio de San Jerónimo");
-                        paradas.add(Point.fromLngLat(-3.602936, 37.179895));
+                        //nombresParadas.add("Catedral");
+                        //paradas.add(Point.fromLngLat( -3.600633, 37.176316));
+
+                        nombresParadas.add("Mirador de San Nicolás");
+                        paradas.add(Point.fromLngLat( -3.592665, 37.181105));
+
+                        //nombresParadas.add("Monasterio de San Jerónimo");
+                        //paradas.add(Point.fromLngLat(-3.602936, 37.179895));
 
                         nombresParadas.add("Monumento a Federico García Lorca");
                         paradas.add(Point.fromLngLat(-3.602994, 37.183474));
+
+                        nombresCuriosidades.add("Facultad de Traducción e Interpretación");
+                        curiosidades.add(Point.fromLngLat(-3.603626, 37.175497)); //37.175497
+
+                        nombresCuriosidades.add("Catedral");
+                        curiosidades.add(Point.fromLngLat( -3.600633, 37.176316));
+
+                        nombresCuriosidades.add("Camino Nuevo de San Nicolás");
+                        curiosidades.add(Point.fromLngLat( -3.593710, 37.180936));
+
                         break;
                 }
         }
@@ -100,6 +125,24 @@ public class RutaHistorica implements Serializable {
      */
     public String getNombreParada(int index) {
         return nombresParadas.get(index);
+    }
+
+    /**
+     * Getter de {@link #curiosidades}.
+     *
+     * @return Devuelve el campo {@link #curiosidades}.
+     */
+    public List<Point> getCuriosidades() {
+        return curiosidades;
+    }
+
+    /**
+     * Getter de {@link #nombresCuriosidades}.
+     *
+     * @return Devuelve el campo {@link #nombresCuriosidades}.
+     */
+    public List<String> getNombresCuriosidades() {
+        return nombresCuriosidades;
     }
 
     /**

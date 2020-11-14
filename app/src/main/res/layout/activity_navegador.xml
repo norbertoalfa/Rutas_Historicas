@@ -17,14 +17,33 @@
     </com.mapbox.navigation.ui.NavigationView>
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/botonContinuarRuta"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="50dp"
-        android:layout_marginBottom="65dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="25dp"
+        android:background="@color/colorMySecButton"
         android:onClick="continueRoute"
         android:text="@string/continuar_ruta"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintBottom_toTopOf="@+id/botonCuriosidad"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/botonCuriosidad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="30dp"
+        android:background="@color/colorMySecButton"
+        android:onClick="mostrarCuriosidad"
+        android:text="Curiosidad"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/botonContinuarRuta" />
+
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

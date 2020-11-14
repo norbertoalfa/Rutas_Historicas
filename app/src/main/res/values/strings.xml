@@ -21,6 +21,9 @@
     <string name="federico_texto_ruta_1">Para realizar a pie y/o con transporte público. Recorre algunos de los rincones más emblemáticos y bellos de la ciudad, que además tuvieron un gran vínculo con el poeta</string>
     <string name="federico_titulo_ruta_2">Ruta del agua</string>
     <string name="federico_titulo_ruta_3">Ruta de Víznar y Alfacar</string>
+    <string name="texto_curiosidad_1">Estás cerca de la Facultad de Traducción e Interpretación de Granada. ¿Sabías que los textos de Federico García Lorca han sido traducidos a idiomas como el alemán, francés, e incluso el japonés?</string>
+    <string name="texto_curiosidad_2">Estás cerca de la Catedral. ¿Sabías que en Semana Santa las todas las hermandades hacen aquí su estación de penitencia?</string>
+    <string name="texto_curiosidad_3">¡Has llegado al Albaycín! Prepárate para deleitarte con las vistas del Mirador de San Nicolás.</string>
     <string name="iniciar_ruta">Iniciar ruta</string>
     <string name="info">Info</string>
     <string name="nombre_pto_interes_1">Casa de Federico García Lorca</string>

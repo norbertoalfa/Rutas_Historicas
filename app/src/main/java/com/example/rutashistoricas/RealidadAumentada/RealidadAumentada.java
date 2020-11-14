@@ -158,7 +158,7 @@ public class RealidadAumentada extends AppCompatActivity implements SensorEventL
 
         AlertDialog.Builder builder1 = new AlertDialog.Builder(RealidadAumentada.this);
         builder1.setMessage("Busque las zonas de interés marcadas. Si desea obtener más información sobre alguna, apunte al símbolo de información durante 2 segundos");
-        builder1.setCancelable(true);
+        builder1.setCancelable(false);
 
         builder1.setPositiveButton(
                 "OK",

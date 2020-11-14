@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ActionBar;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -15,11 +17,15 @@ import com.example.rutashistoricas.InterfazPrincipal.ListadoRutas;
 import com.example.rutashistoricas.R;
 import com.example.rutashistoricas.RealidadAumentada.RealidadAumentada;
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
+import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
+import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.navigation.base.trip.model.RouteLegProgress;
+import com.mapbox.navigation.base.trip.model.RouteProgress;
 import com.mapbox.navigation.core.MapboxNavigation;
 import com.mapbox.navigation.core.arrival.ArrivalController;
 import com.mapbox.navigation.core.arrival.ArrivalOptions;
+import com.mapbox.navigation.core.trip.session.RouteProgressObserver;
 import com.mapbox.navigation.ui.NavigationView;
 import com.mapbox.navigation.ui.NavigationViewOptions;
 import com.mapbox.navigation.ui.OnNavigationReadyCallback;
@@ -27,6 +33,8 @@ import com.mapbox.navigation.ui.listeners.NavigationListener;
 import com.mapbox.navigation.ui.map.NavigationMapboxMap;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 /**
  * Clase correspondiente a la actividad de navegación que nos guía por el mapa.
@@ -64,14 +72,44 @@ public class Navegador extends AppCompatActivity implements OnNavigationReadyCal
     private boolean puntoInteresLanzado=false;
 
     /**
-     * Dialog que se está mostrando en pantalla (en caso de que lo haya).
+     * Dialog que muestra la información de error por funcionalidad no programada(en caso de que lo haya).
      */
-    private AlertDialog currentDialog = null;
+    private AlertDialog dialogoError = null;
+
+    /**
+     * Dialog que muestra la información de la curiosidad (en caso de que lo haya).
+     */
+    private AlertDialog dialogoCuriosidad = null;
 
     /**
      * Botón que nos permite continuar la ruta cuando llegamos a un punto de interés.
      */
     private Button botonContinuarRuta = null;
+
+    /**
+     * Botón que nos permite mostrar la información de la continuidad actual.
+     */
+    private Button botonCuriosidad = null;
+
+    /**
+     * Entero que identifica la curiosidad que está activa en el momento. Una curiosidad está activa si y sólo si el usuario está a menos de una distancia considerada.
+     * Sólo puede haber una curiosidad activa en cada momento.
+     * Si este entero tiene el valor 0 significa que no hay ninguna curiosidad activa.
+     */
+    private int numCuriosidadActiva = 0;
+
+    /**
+     * Controla cómo reacciona la aplicación cuando se llega a una parada. Para la única ruta que está implementada (ruta de Granada ciudad de Federico),
+     * en la primera parada (Huerta de San Vicente) lanza la actividad de realidad aumentada ({@link com.example.rutashistoricas.RealidadAumentada.RealidadAumentada}).
+     * En el resto de paradas lanza un mensaje de que la acrividad aún no ha sido implementada.
+     */
+    private ArrivalController arrivalController;
+
+    /**
+     * Comprueba constantemente la distancia del usuario a los puntos de curiosidad para actualizar la información relacionada con las curiosidades.
+     */
+    private RouteProgressObserver routeProgressObserver;
+
 
     /**
      * Se ejecuta al crear la actividad. Obtiene la información referente a la ruta, que es enviada desde la actividad {@link Mapa}. Pone el título de la ruta.
@@ -86,7 +124,6 @@ public class Navegador extends AppCompatActivity implements OnNavigationReadyCal
         String titulo = "";
 
         ruta = (RutaHistorica) getIntent().getSerializableExtra("rutaHistorica");
-
 
         switch (ruta.getIdPnj()) {
             case 1:
@@ -120,58 +157,126 @@ public class Navegador extends AppCompatActivity implements OnNavigationReadyCal
 
         currentRoute = ruta.getDirectionsRoute();
 
-        botonContinuarRuta =(Button) findViewById(R.id.button3);
-        botonContinuarRuta.setVisibility(View.INVISIBLE);
+        botonContinuarRuta =(Button) findViewById(R.id.botonContinuarRuta);
+        botonContinuarRuta.setVisibility(View.VISIBLE);
         botonContinuarRuta.setEnabled(false);
+
+        botonCuriosidad = (Button) findViewById(R.id.botonCuriosidad);
+        botonCuriosidad.setVisibility(View.VISIBLE);
+        botonCuriosidad.setEnabled(false);
 
         View instrucciones=findViewById(R.id.instructionView);
         instrucciones.setVisibility(View.INVISIBLE);
         instrucciones.setEnabled(false);
 
+        inicializarArrivalController();
+        inicializarRouteProgressObserver();
+
     }
 
     /**
-     * Controla cómo reacciona la aplicación cuando se llega a una parada. Para la única ruta que está implementada (ruta de Granada ciudad de Federico),
-     * en la primera parada (Huerta de San Vicente) lanza la actividad de realidad aumentada ({@link com.example.rutashistoricas.RealidadAumentada.RealidadAumentada}).
-     * En el resto de paradas lanza un mensaje de que la acrividad aún no ha sido implementada.
+     * Crea e inicializa {@link #arrivalController}.
      */
-    private ArrivalController arrivalController = new ArrivalController() {
-        @NotNull
-        @Override
-        public ArrivalOptions arrivalOptions() {
-            // Cuando queden menos de 5 segundos para llegar se llamará a navigatenext route leg
-            return new ArrivalOptions.Builder().arrivalInSeconds(5.0).build();
-        }
+    private void inicializarArrivalController() {
+        arrivalController = new ArrivalController() {
+            @NotNull
+            @Override
+            public ArrivalOptions arrivalOptions() {
+                // Cuando queden menos de 5 segundos para llegar se llamará a navigatenext route leg
+                return new ArrivalOptions.Builder().arrivalInSeconds(5.0).build();
+            }
 
-        @Override
-        public boolean navigateNextRouteLeg(@NotNull RouteLegProgress routeLegProgress) {
+            @Override
+            public boolean navigateNextRouteLeg(@NotNull RouteLegProgress routeLegProgress) {
 
-            if(!puntoInteresLanzado) {
-                puntoInteresLanzado=true;
-                int indexPto = routeLegProgress.getLegIndex() + 1;
-                switch (indexPto) {
-                    case 1:
-                        Intent intent = new Intent(Navegador.this, RealidadAumentada.class);
-                        //dialog.cancel();
-                        intent.putExtra("indexPuntoInteres", indexPto);
-                        intent.putExtra("rutaHistorica", ruta);
-                        startActivity(intent);
-                        break;
-                    default:
+                if(!puntoInteresLanzado) {
+                    puntoInteresLanzado=true;
+                    int indexPto = routeLegProgress.getLegIndex() + 1;
+                    switch (indexPto) {
+                        case 1:
+                            Intent intent = new Intent(Navegador.this, RealidadAumentada.class);
+                            //dialog.cancel();
+                            intent.putExtra("indexPuntoInteres", indexPto);
+                            intent.putExtra("rutaHistorica", ruta);
+                            startActivity(intent);
+                            break;
+                        default:
+                            AlertDialog.Builder builder = new AlertDialog.Builder(Navegador.this);
+                            builder.setMessage("Has llegado a " + ruta.getNombreParada(indexPto-1) + ". La funcionalidad de este punto de interés todavía no está disponible");
+                            builder.setPositiveButton(
+                                    "OK",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            dialog.cancel();
+                                        }
+                                    });
+                            builder.setCancelable(true);
+                            dialogoError = builder.create();
+                            dialogoError.show();
+                            break;
+                    }
+
+                    botonContinuarRuta.setVisibility(View.VISIBLE);
+                    botonContinuarRuta.setEnabled(true);
+                }
+                return false;
+            }
+        };
+
+    }
+
+    /**
+     * Crea e inicializa {@link #routeProgressObserver}.
+     */
+    private void inicializarRouteProgressObserver() {
+        routeProgressObserver = new RouteProgressObserver() {
+            @Override
+            public void onRouteProgressChanged(@NotNull RouteProgress routeProgress) {
+                List<Point> curiosidades = ruta.getCuriosidades();
+                MapboxMap mapboxMap = navigationMapBoxMap.retrieveMap();
+                Location location;
+                //Point p = Point.fromLngLat(location.getLongitude(), location.getLatitude());
+                //navigationView.addMarker(p);
+                double distancia = 0;
+
+                for(int i=0; i<curiosidades.size(); i++) {
+                    Location curiosidad = new Location("curiosidad");
+                    curiosidad.setLongitude(curiosidades.get(i).longitude());
+                    curiosidad.setLatitude(curiosidades.get(i).latitude());
+                    location = mapboxMap.getLocationComponent().getLastKnownLocation();
+                    distancia = location.distanceTo(curiosidad);
+                    if (distancia<85.0) {
+                        numCuriosidadActiva = i+1;
+                        int text_id=0;
+                        switch (i+1) {
+                            case 1:
+                                text_id = R.string.texto_curiosidad_1;
+                                break;
+                            case 2:
+                                text_id = R.string.texto_curiosidad_2;
+                                break;
+                            case 3:
+                                text_id = R.string.texto_curiosidad_3;
+                        }
                         AlertDialog.Builder builder = new AlertDialog.Builder(Navegador.this);
-                        builder.setMessage(getString(R.string.func_no_prog));
-                        builder.setCancelable(true);
-                        currentDialog = builder.create();
-                        currentDialog.show();
-                        break;
+                        dialogoCuriosidad = builder.setMessage(getString(text_id))
+                                            .setCancelable(true)
+                                            .create();
+                        botonCuriosidad.setVisibility(View.VISIBLE);
+                        botonCuriosidad.setEnabled(true);
+
+                    } else if ( (i+1) == numCuriosidadActiva) {
+                        numCuriosidadActiva = 0;
+                        botonCuriosidad.setVisibility(View.INVISIBLE);
+                        botonCuriosidad.setEnabled(false);
+                    }
+
                 }
 
-                botonContinuarRuta.setVisibility(View.VISIBLE);
-                botonContinuarRuta.setEnabled(true);
             }
-            return false;
-        }
-    };
+        };
+
+    }
 
     /**
      * Método lanzado cuando pulsamos en la flecha de ir hacia atrás. Lanzamos de nuevo la actividad {@link Mapa}.
@@ -201,6 +306,10 @@ public class Navegador extends AppCompatActivity implements OnNavigationReadyCal
         mapboxNavigation.navigateNextRouteLeg();
         botonContinuarRuta.setVisibility(View.INVISIBLE);
         botonContinuarRuta.setEnabled(false);
+    }
+
+    public void mostrarCuriosidad(View view) {
+        dialogoCuriosidad.show();
     }
 
     @Override
@@ -286,6 +395,7 @@ public class Navegador extends AppCompatActivity implements OnNavigationReadyCal
                 if(navigationView.retrieveMapboxNavigation()!=null) {
                     mapboxNavigation = navigationView.retrieveMapboxNavigation();
                     mapboxNavigation.setArrivalController(arrivalController);
+                    mapboxNavigation.registerRouteProgressObserver(routeProgressObserver);
                 }
             }
         }
