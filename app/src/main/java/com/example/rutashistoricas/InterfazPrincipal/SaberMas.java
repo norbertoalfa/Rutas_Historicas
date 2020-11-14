@@ -16,13 +16,44 @@ import android.widget.TextView;
 import com.example.rutashistoricas.R;
 
 public class SaberMas extends AppCompatActivity {
+    /**
+     * Para gestión interna de los eventos táctiles. Nos permite saber a que velocidad se mueven los punteros por la pantalla durante un evento táctil.
+     */
     private VelocityTracker mVelocityTracker = null;
-    private int mActivePointerId1;
-    private int mActivePointerId2;
-    private static int index_pnj = 0;
-    private static String  nombre = "",
-            biografia = "";
 
+    /**
+     * Para gestión interna de los eventos táctiles. ID correspondiente a un puntero que produce un evento táctil.
+     */
+    private int mActivePointerId1;
+    /**
+     * Para gestión interna de los eventos táctiles. ID correspondiente a un puntero que produce un evento táctil.
+     */
+    private int mActivePointerId2;
+
+    /**
+     * ID del personaje para el cual se están visualizando las rutas.
+     */
+    private static int idPnj = 0;
+
+    /**
+     * Nombre de la actividad, que será el nombre del personaje cuya biografía se está mostrando.
+     */
+    private static String nombre = "";
+
+    /**
+     * Biografía del personaje.
+     */
+    private static String biografia = "";
+
+
+    /**
+     * Se ejecuta al crear la actividad. Obtiene el ID del personaje seleccionado, que es enviado por la actividad {@link PantallaPersonaje}
+     * (actividad padre de esta).
+     * Inicializa los campos de texto del layout con el nombre del personaje y la biografía asociados a dicho ID.
+     * A continuación, asocia una url con más información del personaje al botón de maś información, de forma que cuando se hace click en él, se abre la url en un navegador.
+     *
+     * @param savedInstanceState Conjunto de datos del estado de la instancia.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,8 +63,8 @@ public class SaberMas extends AppCompatActivity {
         Bundle b = intent.getExtras();
 
         if (b != null) {
-            index_pnj = b.getInt("idPnj");
-            switch (index_pnj) {
+            idPnj = b.getInt("idPnj");
+            switch (idPnj) {
                 case 1:
                     nombre = getString(R.string.nombre_federico);
                     biografia = getString(R.string.biografia_federico);
@@ -59,6 +90,14 @@ public class SaberMas extends AppCompatActivity {
         });
     }
 
+    /**
+     * Se ejecuta cuando se produce un evento táctil. Se encarga de comprobar si se hace un movimiento con dos dedos desplazándose
+     * por la pantalla de izquierda a derecha, y en caso de producirse finaliza la actividad para volver a su actividad padre.
+     *
+     * @param event Evento táctil.
+     *
+     * @return Devuelve siempre true.
+     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         int action = MotionEventCompat.getActionMasked(event);

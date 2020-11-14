@@ -14,10 +14,25 @@ import com.example.rutashistoricas.InterfazPrincipal.ListadoRutas;
 import com.example.rutashistoricas.R;
 
 public class PantallaPersonaje extends AppCompatActivity {
+    /**
+     * Para gestión interna de los eventos táctiles. Nos permite saber a que velocidad se mueven los punteros por la pantalla durante un evento táctil.
+     */
     private VelocityTracker mVelocityTracker = null;
+
+    /**
+     * Para gestión interna de los eventos táctiles. ID correspondiente a un puntero que produce un evento táctil.
+     */
     private int mActivePointerId1;
+    /**
+     * Para gestión interna de los eventos táctiles. ID correspondiente a un puntero que produce un evento táctil.
+     */
     private int mActivePointerId2;
+
+    /**
+     * ID del personaje para el cual se están visualizando las rutas.
+     */
     private static int idPnj = 0;
+
     private static String nombre = "",
                    nacimiento = "",
                    fallecimiento = "",
@@ -33,7 +48,7 @@ public class PantallaPersonaje extends AppCompatActivity {
         Bundle b = intent.getExtras();
 
         if (b != null) {
-            idPnj = b.getInt("index_pnj");
+            idPnj = b.getInt("idPnj");
             switch (idPnj) {
                 case 1:
                     nombre = getString(R.string.nombre_federico);
@@ -56,30 +71,14 @@ public class PantallaPersonaje extends AppCompatActivity {
         textView.setText(descripcion);
     }
 
-    /*@Override
-    protected void onResume() {
-        super.onResume();
-
-        switch (index_pnj) {
-            case 1:
-                nombre = getString(R.string.nombre_federico);
-                nacimiento = getString(R.string.nacimiento_federico);
-                fallecimiento = getString(R.string.fallecimiento_federico);
-                categorias = getString(R.string.categorias_federico);
-                descripcion = getString(R.string.descripcion_federico);
-        }
-
-        setTitle(nombre);
-        TextView textView = findViewById(R.id.nacimiento);
-        textView.setText(nacimiento);
-        textView = findViewById(R.id.fallecimiento);
-        textView.setText(fallecimiento);
-        textView = findViewById(R.id.categorias);
-        textView.setText(categorias);
-        textView = findViewById(R.id.descripcion);
-        textView.setText(descripcion);
-    }*/
-
+    /**
+     * Se ejecuta cuando se produce un evento táctil. Se encarga de comprobar si se hace un movimiento con dos dedos desplazándose
+     * por la pantalla de izquierda a derecha, y en caso de producirse finaliza la actividad para volver a su actividad padre.
+     *
+     * @param event Evento táctil.
+     *
+     * @return Devuelve siempre true.
+     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         int action = MotionEventCompat.getActionMasked(event);
