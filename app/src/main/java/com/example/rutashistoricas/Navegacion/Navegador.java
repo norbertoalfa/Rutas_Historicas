@@ -174,7 +174,7 @@ public class Navegador extends AppCompatActivity implements OnNavigationReadyCal
     };
 
     /**
-     * Método lanzado cuando pulsamos en la flecha de ir hacia atrás. Lanzamos de nuevo la actividad {@link Mapa}
+     * Método lanzado cuando pulsamos en la flecha de ir hacia atrás. Lanzamos de nuevo la actividad {@link Mapa}.
      *
      * @param item Item del menú que ha sido pulsado. En nuestro caso solo puede ser la flecha de ir hacia atrás.
      * @return Se devuelve siempre true.
