@@ -121,7 +121,6 @@ public class RealidadAumentada extends AppCompatActivity implements SensorEventL
         ruta = (RutaHistorica) getIntent().getSerializableExtra("rutaHistorica");
         indexPuntoInteres = getIntent().getIntExtra("indexPuntoInteres", -1);
 
-
         switch (indexPuntoInteres) {
             case 1:
 
@@ -320,7 +319,6 @@ public class RealidadAumentada extends AppCompatActivity implements SensorEventL
                     Intent intent = new Intent(this, InfoPuntoInteres.class);
                     intent.putExtra("indexPuntoInteres", indexPuntoInteres);
                     startActivityForResult(intent, 111);
-                    //finish();
                 }
             }
         } else {
