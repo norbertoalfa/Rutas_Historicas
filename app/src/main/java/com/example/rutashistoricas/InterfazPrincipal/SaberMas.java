@@ -50,7 +50,8 @@ public class SaberMas extends AppCompatActivity {
      * Se ejecuta al crear la actividad. Obtiene el ID del personaje seleccionado, que es enviado por la actividad {@link PantallaPersonaje}
      * (actividad padre de esta).
      * Inicializa los campos de texto del layout con el nombre del personaje y la biografía asociados a dicho ID.
-     * A continuación, asocia una url con más información del personaje al botón de maś información, de forma que cuando se hace click en él, se abre la url en un navegador.
+     * A continuación, asocia una url con más información del personaje al botón de maś información,
+     * de forma que cuando se hace click en él, se abre la url en un navegador.
      *
      * @param savedInstanceState Conjunto de datos del estado de la instancia.
      */
