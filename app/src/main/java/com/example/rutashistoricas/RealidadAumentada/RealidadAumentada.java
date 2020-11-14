@@ -51,6 +51,7 @@ public class RealidadAumentada extends AppCompatActivity implements SensorEventL
     private static boolean inTime = false;
     private boolean pto_encontrado = false;
 
+    private Intent intent_pto_interes = null;
     private int indexPuntoInteres = -1;
 
     RutaHistorica ruta = null;
@@ -92,9 +93,9 @@ public class RealidadAumentada extends AppCompatActivity implements SensorEventL
                 }
                 break;
             default:
-                Intent intent = new Intent(this, InfoPuntoInteres.class);
-                intent.putExtra("indexPuntoInteres", indexPuntoInteres);
-                startActivity(intent);
+                intent_pto_interes = new Intent(this, InfoPuntoInteres.class);
+                intent_pto_interes.putExtra("indexPuntoInteres", indexPuntoInteres);
+                startActivity(intent_pto_interes);
                 break;
         }
 
@@ -203,6 +204,7 @@ public class RealidadAumentada extends AppCompatActivity implements SensorEventL
 
         // Don't receive any more updates from either sensor.
         sensorManager.unregisterListener(this);
+        inTime = false;
     }
 
     // Get readings from accelerometer and magnetometer. To simplify calculations,
@@ -250,8 +252,10 @@ public class RealidadAumentada extends AppCompatActivity implements SensorEventL
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         setResult(111);
-        finish();
+        if (resultCode==111)
+            finish();
     }
 
     // Compute the three orientation angles based on the most recent readings from
