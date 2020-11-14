@@ -35,19 +35,6 @@ public class Cilindro {
     private boolean mShouldLoadTexture = false;
 
     public Cilindro(Context context) {
-        /*vertices[0] = 20.0f;
-        vertices[1] = 0.0f;
-        vertices[2] = -10.0f;
-        indices[0] = (byte) (0);
-        textureCoordinates[0] = 1.0f;
-        textureCoordinates[1] = 1.0f;
-
-        vertices[3] = 20.0f;
-        vertices[4] = 0.0f;
-        vertices[5] = 10.0f;
-        indices[1] = (byte) (1);
-        textureCoordinates[2] = 1.0f;
-        textureCoordinates[3] = 0.0f;*/
 
         for (int i=0; i<21; i++){
             vertices[6*i]   = (float) (20*Math.cos(2*i*Math.PI/20));
@@ -76,13 +63,6 @@ public class Cilindro {
     }
 
     public void draw(GL10 gl) {
-
-        /* Smooth color
-        if (mColorBuffer != null) {
-            // Enable the color array buffer to be used during rendering.
-            gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
-            gl.glColorPointer(4, GL10.GL_FLOAT, 0, mColorBuffer);
-        }*/
 
         if (mShouldLoadTexture) {
             loadGLTexture(gl);

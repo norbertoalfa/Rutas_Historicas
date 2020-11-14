@@ -1,6 +1,5 @@
 package com.example.rutashistoricas.RealidadAumentada;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -13,7 +12,6 @@ import android.opengl.GLSurfaceView;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -23,8 +21,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.MotionEventCompat;
 
 import com.example.rutashistoricas.InterfazPrincipal.InfoPuntoInteres;
-import com.example.rutashistoricas.Navegacion.Mapa;
-import com.example.rutashistoricas.Navegacion.Navegador;
 import com.example.rutashistoricas.Navegacion.RutaHistorica;
 import com.example.rutashistoricas.R;
 
