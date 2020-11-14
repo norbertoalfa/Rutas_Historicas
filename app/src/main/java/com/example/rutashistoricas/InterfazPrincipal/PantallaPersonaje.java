@@ -33,12 +33,38 @@ public class PantallaPersonaje extends AppCompatActivity {
      */
     private static int idPnj = 0;
 
-    private static String nombre = "",
-                   nacimiento = "",
-                   fallecimiento = "",
-                   categorias = "",
-                   descripcion = "";
+    /**
+     * Nombre de la actividad, que será el nombre del personaje seleccionado.
+     */
+    private static String nombre = "";
 
+    /**
+     * Fecha y lugar de nacimiento del personaje seleccionado.
+     */
+    private static String nacimiento = "";
+
+    /**
+     * Fecha y lugar de fallecimiento del personaje seleccionado.
+     */
+    private static String fallecimiento = "";
+
+    /**
+     * Categorías del personaje seleccionado: sus ocupaciones, movimientos a los que pertenecía...
+     */
+    private static String categorias = "";
+
+    /**
+     * Breve descripción del personaje seleccionado.
+     */
+    private static String descripcion = "";
+
+    /**
+     * Se ejecuta al crear la actividad. Obtiene el ID del personaje seleccionado, que es enviado por la actividad {@link com.example.rutashistoricas.InterfazPrincipal.MainActivity}
+     * (actividad padre de esta).
+     * Inicializa los campos de texto del layout con el nombre del personaje, su nacimiento, su fallecimiento, sus categorías y su descripción.
+     *
+     * @param savedInstanceState Conjunto de datos del estado de la instancia.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +83,6 @@ public class PantallaPersonaje extends AppCompatActivity {
                     categorias = "Categorías: " + getString(R.string.categorias_federico);
                     descripcion = getString(R.string.descripcion_federico);
             }
-
         }
 
         setTitle(nombre);
@@ -113,6 +138,12 @@ public class PantallaPersonaje extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Método ejecutado al pulsar el botón para saber más acerca del personaje.
+     * Lanza la actividad {@link com.example.rutashistoricas.InterfazPrincipal.SaberMas} y le envía el ID del personaje.
+     *
+     * @param view Vista del botón que se ha pulsado.
+     */
     public void saberMas(View view) {
         Intent intent = new Intent(this, SaberMas.class);
         Bundle b = new Bundle();
@@ -121,6 +152,12 @@ public class PantallaPersonaje extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /**
+     * Método ejecutado al pulsar el botón para mostrar las rutas del personaje.
+     * Lanza la actividad {@link com.example.rutashistoricas.InterfazPrincipal.ListadoRutas} y le envía el ID del personaje.
+     *
+     * @param view Vista del botón que se ha pulsado.
+     */
     public void mostrarRutas(View view) {
 
         Bundle b = new Bundle();
