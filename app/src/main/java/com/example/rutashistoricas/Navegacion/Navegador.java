@@ -59,21 +59,26 @@ public class Navegador extends AppCompatActivity implements OnNavigationReadyCal
     private RutaHistorica ruta;
 
     /**
-     * Contiene información relacionada con la ruta (paradas).
+     * Se utiliza para saber si hemos llegado a un punto de interés y su actividad ha sido lanzada.
      */
     private boolean puntoInteresLanzado=false;
 
     /**
-     * Contiene información relacionada con la ruta (paradas).
+     * Dialog que se está mostrando en pantalla (en caso de que lo haya).
      */
     private AlertDialog currentDialog = null;
 
     /**
-     * Contiene información relacionada con la ruta (paradas).
+     * Botón que nos permite continuar la ruta cuando llegamos a un punto de interés.
      */
     private Button botonContinuarRuta = null;
 
-
+    /**
+     * Se ejecuta al crear la actividad. Obtiene la información referente a la ruta, que es enviada desde la actividad {@link Mapa}. Pone el título de la ruta.
+     * Obtiene el acceso a la API de MapBox. Pone el layout, crea la vista y la inicializa. Almacena la ruta y deshabilita el botón {@link #botonContinuarRuta}.
+     *
+     * @param savedInstanceState Conjunto de datos del estado de la instancia.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,6 +130,11 @@ public class Navegador extends AppCompatActivity implements OnNavigationReadyCal
 
     }
 
+    /**
+     * Controla cómo reacciona la aplicación cuando se llega a una parada. Para la única ruta que está implementada (ruta de Granada ciudad de Federico),
+     * en la primera parada (Huerta de San Vicente) lanza la actividad de realidad aumentada ({@link com.example.rutashistoricas.RealidadAumentada.RealidadAumentada}).
+     * En el resto de paradas lanza un mensaje de que la acrividad aún no ha sido implementada.
+     */
     private ArrivalController arrivalController = new ArrivalController() {
         @NotNull
         @Override
@@ -163,6 +173,12 @@ public class Navegador extends AppCompatActivity implements OnNavigationReadyCal
         }
     };
 
+    /**
+     * Método lanzado cuando pulsamos en la flecha de ir hacia atrás. Lanzamos de nuevo la actividad {@link Mapa}
+     *
+     * @param item Item del menú que ha sido pulsado. En nuestro caso solo puede ser la flecha de ir hacia atrás.
+     * @return Se devuelve siempre true.
+     */
     public boolean onOptionsItemSelected(MenuItem item){
         Intent myIntent = new Intent(getApplicationContext(), Mapa.class);
         Bundle b = new Bundle();
@@ -173,7 +189,13 @@ public class Navegador extends AppCompatActivity implements OnNavigationReadyCal
         return true;
     }
 
-
+    /**
+     * Método lanzado al pulsar el botón {@link #botonContinuarRuta}. Se continúa la navegación hacia
+     * la siguiente parada, se deshabilita el botón y se hace saber a la actividad que ya no estamos en
+     * un punto de interés.
+     *
+     * @param view Vista del botón.
+     */
     public void continueRoute(View view){
         puntoInteresLanzado=false;
         mapboxNavigation.navigateNextRouteLeg();
@@ -193,6 +215,11 @@ public class Navegador extends AppCompatActivity implements OnNavigationReadyCal
         navigationView.onStart();
     }
 
+    /**
+     * Se ejecuta al volver a esta actividad (por ejemplo, desde otra actividad lanzada desde esta).
+     * En caso de que hayamos vuelto a esta actividad después de haber visualizado un punto de interés,
+     * habilitamos el botón de continuar ruta.
+     */
     @Override
     public void onResume(){
         super.onResume();
@@ -239,6 +266,12 @@ public class Navegador extends AppCompatActivity implements OnNavigationReadyCal
         navigationView.onRestoreInstanceState(outState);
     }
 
+    /**
+     * Se ejecuta cuando la navegación está preparada. Si la navegación aún no ha sido iniciada, inicializamos {@link #navigationMapBoxMap},
+     * iniciamos la navegación, inicializamos {@link #mapboxNavigation} y le asociamos el controlador {@link #arrivalController}.
+     *
+     * @param isRunning Indica si la navegación está corriendo y no ha sido destruido por un cambio en la configuración.
+     */
     @Override
     public void onNavigationReady(boolean isRunning) {
         if(!isRunning && navigationMapBoxMap==null){

@@ -211,7 +211,7 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
 
 
     /**
-     * Obtiene el acceso a la API de MapBox. Pone el layout. Crea la vista la vista del mapa ({@link #mapView}). Inicializa el acelerómetro.
+     * Se ejecuta al crear la actividad. Obtiene el acceso a la API de MapBox. Pone el layout. Crea la vista la vista del mapa ({@link #mapView}). Inicializa el acelerómetro.
      *
      * @param savedInstanceState Conjunto de datos del estado de la instancia.
      */
@@ -512,7 +512,7 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
     }
 
     /**
-     * Se ejecuta cada vez que el acelerómetro detecta un cambio. Si no hemos iniciado aún la navegación y el movimiento del dispositivo es suficientemente grande se lanzará la actividad de navegación por la ruta.
+     * Se ejecuta cada vez que el acelerómetro detecta un cambio. Si no hemos iniciado aún la navegación ({@link Navegador}) y el movimiento del dispositivo es suficientemente grande se lanzará la actividad de navegación por la ruta.
      *
      * @param event Evento que almacena la aceleración detectada.
      */

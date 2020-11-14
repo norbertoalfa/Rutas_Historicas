@@ -10,15 +10,40 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Clase usada para almacenar información de la ruta que ha sido seleccionada en el menú de selección de ruta.
+ */
 public class RutaHistorica implements Serializable {
 
+    /**
+     * Lista de paradas de la ruta (se almacenan sus coordenadas).
+     */
     private List<Point> paradas = null;
+    /**
+     * Lista de paradas de la ruta (se almacenan sus nombres).
+     */
     private List<String> nombresParadas = null;
+    /**
+     * Ruta obtenida a partir de las paradas, usando la API de Mapbox.
+     */
     private DirectionsRoute directionsRoute = null;
 
+    /**
+     * ID del personaje asociado a esta ruta.
+     */
     private int idPnj;
+    /**
+     * ID de la ruta.
+     */
     private int idRuta;
 
+    /**
+     * Constructor de la clase. Crea los vectores {@link #paradas} y {@link #nombresParadas} y los inicializa con las paradas que tendrá la ruta,
+     * la cuál viene deteminada por su ID de personaje e ID de ruta (pasados como argumento).
+     *
+     * @param id_pnj ID del personaje asociado a la ruta.
+     * @param id_ruta ID de la ruta.
+     */
     public RutaHistorica(int id_pnj, int id_ruta) {
         idPnj = id_pnj;
         idRuta = id_ruta;
@@ -49,32 +74,66 @@ public class RutaHistorica implements Serializable {
         }
     }
 
+    /**
+     * Getter de {@link #paradas}.
+     *
+     * @return Devuelve el campo {@link #paradas}.
+     */
     public List<Point> getParadas() {
 
         return paradas;
     }
 
+    /**
+     * Getter de {@link #nombresParadas}.
+     *
+     * @return Devuelve el campo {@link #nombresParadas}.
+     */
     public List<String> getNombresParadas() {
         return nombresParadas;
     }
 
+    /**
+     * Devuelve el elemento i-ésimo del vector {@link #nombresParadas}.
+     *
+     * @return i-ésimo elemento del vector {@link #nombresParadas}.
+     */
     public String getNombreParada(int index) {
         return nombresParadas.get(index);
     }
 
+    /**
+     * Setter de {@link #directionsRoute}.
+     *
+     * @param dirRoute Objeto que será almacenado en el campo {@link #directionsRoute}.
+     */
     public void setDirectionsRoute(DirectionsRoute dirRoute) {
         directionsRoute = dirRoute;
     }
 
+    /**
+     * Getter de {@link #directionsRoute}.
+     *
+     * @return Devuelve el campo {@link #directionsRoute}.
+     */
     public DirectionsRoute getDirectionsRoute() {
         return directionsRoute;
     }
 
-
+    /**
+     * Getter de {@link #idPnj}.
+     *
+     * @return Devuelve el ID del personaje asociado a esta ruta.
+     */
     public int getIdPnj() {
         return idPnj;
     }
 
+    /**
+     * Getter de {@link #idRuta}.
+     *
+     * @return Devuelve el ID de esta ruta.
+     */
     public int getIdRuta() {
         return idRuta;
     }
