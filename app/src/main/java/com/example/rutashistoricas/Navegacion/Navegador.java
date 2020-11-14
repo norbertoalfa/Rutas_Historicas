@@ -28,19 +28,49 @@ import com.mapbox.navigation.ui.map.NavigationMapboxMap;
 
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Clase correspondiente a la actividad de navegación que nos guía por el mapa.
+ */
 public class Navegador extends AppCompatActivity implements OnNavigationReadyCallback, NavigationListener {
 
+    /**
+     * Mapa usado.
+     */
     private NavigationMapboxMap navigationMapBoxMap = null;
+
+    /**
+     * Nos permite personalizar la experiencia de navegación. A través de este campo interactuamos con el SDK de navegación de Mapbox.
+     */
     private MapboxNavigation mapboxNavigation=null;
+
+    /**
+     * Ruta que se va a seguir durante la navegación.
+     */
     private DirectionsRoute currentRoute;
+
+    /**
+     * Vista de la actividad.
+     */
     private NavigationView navigationView;
 
+    /**
+     * Contiene información relacionada con la ruta (paradas y ruta actual).
+     */
     private RutaHistorica ruta;
 
+    /**
+     * Contiene información relacionada con la ruta (paradas).
+     */
     private boolean puntoInteresLanzado=false;
 
+    /**
+     * Contiene información relacionada con la ruta (paradas).
+     */
     private AlertDialog currentDialog = null;
 
+    /**
+     * Contiene información relacionada con la ruta (paradas).
+     */
     private Button botonContinuarRuta = null;
 
 

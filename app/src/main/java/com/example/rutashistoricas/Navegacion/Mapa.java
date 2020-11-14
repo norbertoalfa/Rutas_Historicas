@@ -65,7 +65,7 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconImage;
 
 
 /**
- * Clase correspondiente a la actividad que nos muestra el mapa junto con la ruta correspondiente al personaje seleccionado.
+ * Clase correspondiente a la actividad que nos muestra el mapa junto con la ruta correspondiente del personaje seleccionado.
  *
  */
 public class Mapa extends AppCompatActivity implements OnMapReadyCallback, PermissionsListener, SensorEventListener {
@@ -131,9 +131,18 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
      */
     private boolean navegacion_iniciada = false;
 
+    /**
+     * ID del personaje que se ha seleccionado.
+     */
     private int idPnj = 0;
+    /**
+     * ID de la ruta seleccionada.
+     */
     private int idRuta = 0;
 
+    /**
+     * Contiene información relacionada con la ruta (paradas y ruta actual).
+     */
     private RutaHistorica ruta;
 
 
@@ -410,11 +419,17 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
                 .build();
     }
 
+    /**
+     * Usado durante la petición de permisos.
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         permissionsManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
+    /**
+     * Se usa para mostrar un mensaje cuando se están concediendo los permisos de localización.
+     */
     @Override
     public void onExplanationNeeded(List<String> permissionsToExplain) {
         Toast.makeText(this, R.string.user_location_permission_explanation, Toast.LENGTH_LONG).show();
