@@ -21,10 +21,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void irPantallaPersonaje(View view) {
         boolean irAPantallaValida = true;
-        int index_pnj = 0;
+        int idPnj = 0;
         switch (view.getId()) {
             case (R.id.boton_federico):
-                index_pnj = 1;
+                idPnj = 1;
                 break;
             default:
                 irAPantallaValida = false;
@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         if (irAPantallaValida) {
             Intent intent = new Intent(this, PantallaPersonaje.class);
             Bundle b = new Bundle();
-            b.putInt("index_pnj", index_pnj);
+            b.putInt("idPnj", idPnj);
             intent.putExtras(b);
             startActivity(intent);
         } else {
