@@ -31,9 +31,7 @@
         </activity>
         <activity android:name=".InterfazPrincipal.InfoPuntoInteres"
                   android:parentActivityName=".RealidadAumentada.RealidadAumentada">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".RealidadAumentada.RealidadAumentada" />
+
         </activity>
         <activity android:name=".InterfazPrincipal.MainActivity">
             <intent-filter>
@@ -44,9 +42,6 @@
         </activity>
         <activity android:name=".RealidadAumentada.RealidadAumentada"
             android:parentActivityName=".Navegacion.Navegador">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Navegacion.Navegador" />
         </activity>
         <activity android:name=".InterfazPrincipal.PantallaPersonaje"
             android:parentActivityName=".InterfazPrincipal.MainActivity">
@@ -55,16 +50,13 @@
                 android:value=".InterfazPrincipal.MainActivity" />
         </activity>
         <activity android:name=".Navegacion.Mapa"
-            android:parentActivityName=".InterfazPrincipal.PantallaPersonaje">
+            android:parentActivityName=".InterfazPrincipal.ListadoRutas">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".InterfazPrincipal.PantallaPersonaje" />
+                android:value=".InterfazPrincipal.ListadoRutas" />
         </activity>
         <activity android:name=".Navegacion.Navegador"
             android:parentActivityName=".Navegacion.Mapa">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Navegacion.Mapa" />
         </activity>
         <activity android:name=".InterfazPrincipal.ListadoRutas"
             android:parentActivityName=".InterfazPrincipal.PantallaPersonaje">

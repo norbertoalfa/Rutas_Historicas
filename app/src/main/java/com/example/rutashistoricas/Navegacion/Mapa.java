@@ -162,8 +162,8 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
                 Location location = result.getLastLocation();
 
                 // Comentar esto para que use tu localización
-                location.setLongitude(-3.609903);
-                location.setLatitude(37.174295);
+                location.setLongitude(-3.607407);
+                location.setLatitude(37.1702929);
 
                 if (location == null) {
                     return;

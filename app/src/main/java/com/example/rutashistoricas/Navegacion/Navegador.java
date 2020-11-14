@@ -2,10 +2,12 @@ package com.example.rutashistoricas.Navegacion;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
@@ -37,68 +39,10 @@ public class Navegador extends AppCompatActivity implements OnNavigationReadyCal
 
     private boolean puntoInteresLanzado=false;
 
-    AlertDialog currentDialog = null;
+    private AlertDialog currentDialog = null;
 
-    private ArrivalController arrivalController = new ArrivalController() {
-        @NotNull
-        @Override
-        public ArrivalOptions arrivalOptions() {
-            // Cuando queden menos de 5 segundos para llegar se llamará a navigatenext route leg
-            return new ArrivalOptions.Builder().arrivalInSeconds(5.0).build();
-        }
+    private Button botonContinuarRuta = null;
 
-        @Override
-        public boolean navigateNextRouteLeg(@NotNull RouteLegProgress routeLegProgress) {
-
-            if(!puntoInteresLanzado) {
-                puntoInteresLanzado=true;
-                int indexPto = routeLegProgress.getLegIndex() + 1;
-                switch (indexPto) {
-                    case 1:
-                        Intent intent = new Intent(Navegador.this, RealidadAumentada.class);
-                        //dialog.cancel();
-                        intent.putExtra("indexPuntoInteres", indexPto);
-                        startActivity(intent);
-                        break;
-                    default:
-                        AlertDialog.Builder builder = new AlertDialog.Builder(Navegador.this);
-                        builder.setMessage(getString(R.string.func_no_prog));
-                        builder.setCancelable(true);
-                        currentDialog = builder.create();
-                        currentDialog.show();
-                        break;
-                }
-
-                Button button=(Button) findViewById(R.id.button3);
-                button.setVisibility(View.VISIBLE);
-                button.setEnabled(true);
-            }
-                      /*  }
-                    });
-
-             builder1.setNegativeButton(
-                    "Quiero continuar",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            showDialog = false;
-                            mapboxNavigation.navigateNextRouteLeg();
-                            dialog.cancel();
-                        }
-                    });
-
-            currentDialog = builder1.create();
-            showDialog = true;*/
-            return false;
-        }
-    };
-
-    public void continueRoute(View view){
-        mapboxNavigation.navigateNextRouteLeg();
-        puntoInteresLanzado=false;
-        Button button=(Button) findViewById(R.id.button3);
-        button.setVisibility(View.INVISIBLE);
-        button.setEnabled(false);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,6 +73,10 @@ public class Navegador extends AppCompatActivity implements OnNavigationReadyCal
                 break;
         }
 
+        setTitle(titulo);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         Mapbox.getInstance(this,getString(R.string.mapbox_access_token));
         setContentView(R.layout.activity_navegador);
         navigationView = (NavigationView) findViewById(R.id.navigationView);
@@ -137,14 +85,70 @@ public class Navegador extends AppCompatActivity implements OnNavigationReadyCal
 
         currentRoute = ruta.getDirectionsRoute();
 
-        Button button=(Button) findViewById(R.id.button3);
-        button.setVisibility(View.INVISIBLE);
-        button.setEnabled(false);
+        botonContinuarRuta =(Button) findViewById(R.id.button3);
+        botonContinuarRuta.setVisibility(View.INVISIBLE);
+        botonContinuarRuta.setEnabled(false);
 
-        View inst=findViewById(R.id.instructionView);
-        inst.setVisibility(View.INVISIBLE);
-        inst.setEnabled(false);
+        View instrucciones=findViewById(R.id.instructionView);
+        instrucciones.setVisibility(View.INVISIBLE);
+        instrucciones.setEnabled(false);
 
+    }
+
+    private ArrivalController arrivalController = new ArrivalController() {
+        @NotNull
+        @Override
+        public ArrivalOptions arrivalOptions() {
+            // Cuando queden menos de 5 segundos para llegar se llamará a navigatenext route leg
+            return new ArrivalOptions.Builder().arrivalInSeconds(5.0).build();
+        }
+
+        @Override
+        public boolean navigateNextRouteLeg(@NotNull RouteLegProgress routeLegProgress) {
+
+            if(!puntoInteresLanzado) {
+                puntoInteresLanzado=true;
+                int indexPto = routeLegProgress.getLegIndex() + 1;
+                switch (indexPto) {
+                    case 1:
+                        Intent intent = new Intent(Navegador.this, RealidadAumentada.class);
+                        //dialog.cancel();
+                        intent.putExtra("indexPuntoInteres", indexPto);
+                        intent.putExtra("rutaHistorica", ruta);
+                        startActivity(intent);
+                        break;
+                    default:
+                        AlertDialog.Builder builder = new AlertDialog.Builder(Navegador.this);
+                        builder.setMessage(getString(R.string.func_no_prog));
+                        builder.setCancelable(true);
+                        currentDialog = builder.create();
+                        currentDialog.show();
+                        break;
+                }
+
+                botonContinuarRuta.setVisibility(View.VISIBLE);
+                botonContinuarRuta.setEnabled(true);
+            }
+            return false;
+        }
+    };
+
+    public boolean onOptionsItemSelected(MenuItem item){
+        Intent myIntent = new Intent(getApplicationContext(), Mapa.class);
+        Bundle b = new Bundle();
+        b.putInt("idPnj", ruta.getIdPnj());
+        b.putInt("idRuta", ruta.getIdRuta());
+        myIntent.putExtras(b);
+        startActivityForResult(myIntent, 0);
+        return true;
+    }
+
+
+    public void continueRoute(View view){
+        puntoInteresLanzado=false;
+        mapboxNavigation.navigateNextRouteLeg();
+        botonContinuarRuta.setVisibility(View.INVISIBLE);
+        botonContinuarRuta.setEnabled(false);
     }
 
     @Override
@@ -164,15 +168,15 @@ public class Navegador extends AppCompatActivity implements OnNavigationReadyCal
         super.onResume();
         navigationView.onResume();
         if(puntoInteresLanzado){
-            mapboxNavigation.navigateNextRouteLeg();
-            puntoInteresLanzado=false;
+            botonContinuarRuta.setVisibility(View.VISIBLE);
+            botonContinuarRuta.setEnabled(true);
         }
     }
 
     @Override
     public void onBackPressed(){
-        if (!navigationView.onBackPressed())
-            super.onBackPressed();
+        super.onBackPressed();
+        finish();
     }
 
     @Override
@@ -223,6 +227,12 @@ public class Navegador extends AppCompatActivity implements OnNavigationReadyCal
             }
         }
     }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+    }
+
 
     @Override
     public void onCancelNavigation() {

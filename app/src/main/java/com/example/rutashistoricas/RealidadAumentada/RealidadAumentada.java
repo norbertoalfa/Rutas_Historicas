@@ -12,16 +12,21 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.WindowManager;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.MotionEventCompat;
 
 import com.example.rutashistoricas.InterfazPrincipal.InfoPuntoInteres;
+import com.example.rutashistoricas.Navegacion.Mapa;
+import com.example.rutashistoricas.Navegacion.Navegador;
+import com.example.rutashistoricas.Navegacion.RutaHistorica;
 import com.example.rutashistoricas.R;
 
-public class RealidadAumentada extends Activity implements SensorEventListener {
+public class RealidadAumentada extends AppCompatActivity implements SensorEventListener {
     private VelocityTracker mVelocityTracker = null;
     private int mActivePointerId1;
     private int mActivePointerId2;
@@ -43,20 +48,28 @@ public class RealidadAumentada extends Activity implements SensorEventListener {
 
     private static boolean inTime = false;
 
-    private boolean punto_interes_lanzado = false;
+    private boolean pto_encontrado = false;
 
     private int indexPuntoInteres = -1;
+
+    RutaHistorica ruta = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        int id_titulo=0;
+
+        ruta = (RutaHistorica) getIntent().getSerializableExtra("rutaHistorica");
+
         indexPuntoInteres = getIntent().getIntExtra("indexPuntoInteres", -1);
 
-        Log.d("Franquepasa", ""+indexPuntoInteres);
 
         switch (indexPuntoInteres) {
             case 1:
+
+                id_titulo = R.string.nombre_pto_interes_1;
+
                 setContentView(R.layout.activity_realidad_aumentada);
                 sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
@@ -65,6 +78,17 @@ public class RealidadAumentada extends Activity implements SensorEventListener {
                 myGLRenderer = new MyGLRenderer(this);
                 glView.setRenderer(myGLRenderer);
                 setContentView(glView);
+                Sensor accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+
+                if (accelerometer != null) {
+                    sensorManager.registerListener(this, accelerometer,
+                            SensorManager.SENSOR_DELAY_NORMAL, SensorManager.SENSOR_DELAY_UI);
+                }
+                Sensor magneticField = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+                if (magneticField != null) {
+                    sensorManager.registerListener(this, magneticField,
+                            SensorManager.SENSOR_DELAY_NORMAL, SensorManager.SENSOR_DELAY_UI);
+                }
                 break;
             default:
                 Intent intent = new Intent(this, InfoPuntoInteres.class);
@@ -73,7 +97,15 @@ public class RealidadAumentada extends Activity implements SensorEventListener {
                 break;
         }
 
+        setTitle(getString(id_titulo));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item){
+        finish();
+        return true;
     }
 
     @Override
@@ -121,6 +153,7 @@ public class RealidadAumentada extends Activity implements SensorEventListener {
     @Override
     protected void onResume() {
         super.onResume();
+        pto_encontrado = false;
         setContentView(R.layout.activity_realidad_aumentada);
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
@@ -187,14 +220,23 @@ public class RealidadAumentada extends Activity implements SensorEventListener {
             }
             currentTime = SystemClock.uptimeMillis();
             if (currentTime - lastTime > 2000.0f) {
-                Intent intent = new Intent(this, InfoPuntoInteres.class);
-                intent.putExtra("indexPuntoInteres", indexPuntoInteres);
-                startActivity(intent);
-                finish();
+                if (!pto_encontrado) {
+                    pto_encontrado = true;
+                    Intent intent = new Intent(this, InfoPuntoInteres.class);
+                    intent.putExtra("indexPuntoInteres", indexPuntoInteres);
+                    startActivityForResult(intent, 111);
+                    //finish();
+                }
             }
         } else {
             inTime = false;
         }
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        setResult(111);
+        finish();
     }
 
     // Compute the three orientation angles based on the most recent readings from

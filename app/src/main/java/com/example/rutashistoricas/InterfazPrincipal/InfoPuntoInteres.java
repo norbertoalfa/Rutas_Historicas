@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -50,8 +51,13 @@ public class InfoPuntoInteres extends AppCompatActivity {
         textView.setText(getString(id_texto));
 
         setTitle(getString(id_texto));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+    }
 
+    public boolean onOptionsItemSelected(MenuItem item){
+        finish();
+        return true;
     }
 
     @Override
@@ -89,15 +95,19 @@ public class InfoPuntoInteres extends AppCompatActivity {
     }
 
     public void continuarRuta(View view){
-        super.finish();
+        setResult(111);
+        finish();
     }
 
+    /*
     @Override
     public void finish(){
         Intent intent = new Intent(InfoPuntoInteres.this, RealidadAumentada.class);
         startActivity(intent);
         super.finish();
     }
+
+     */
 
     public void masInfo(View view){
         String url = getString(R.string.url_casa_federico);

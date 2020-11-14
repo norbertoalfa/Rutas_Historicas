@@ -29,20 +29,20 @@ public class RutaHistorica implements Serializable {
             case 1:
                 switch (idRuta) {
                     case 1:
-                        //Huerta de San Vicente
+
                         nombresParadas.add("Huerta de San Vicente");
                         paradas.add(Point.fromLngLat(-3.609268, 37.170675));
-                        //Preguntamos si quiere ir a la catedral
+
                         nombresParadas.add("Catedral");
                         paradas.add(Point.fromLngLat( -3.600633, 37.176316));
-                        //Centro García Lorca
+
                         nombresParadas.add("Centro García Lorca");
                         paradas.add(Point.fromLngLat(-3.600693, 37.176633));
-                        //Preguntar si quiere ir al monasterio san jerónimo
+
                         nombresParadas.add("Monasterio de San Jerónimo");
                         paradas.add(Point.fromLngLat(-3.602936, 37.179895));
-                        //Monumento a federico
-                        nombresParadas.add("Monumento a Federico Gaecía Lorca");
+
+                        nombresParadas.add("Monumento a Federico García Lorca");
                         paradas.add(Point.fromLngLat(-3.602994, 37.183474));
                         break;
                 }
