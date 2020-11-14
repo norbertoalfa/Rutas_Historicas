@@ -9,13 +9,13 @@ import javax.microedition.khronos.opengles.GL10;
 public class MyGLRenderer implements GLSurfaceView.Renderer {
     private Cilindro shape;
 
-    private float[] new_vectorUp = {0.0f,0.0f,-10.0f};
-    private float[] current_vectorUp = {0.0f,0.0f,-10.0f};
-    private float[] new_point = {0.0f,0.0f,-10.0f};
-    private float[] current_point = {0.0f,0.0f,-10.0f};
-    private float alfa = 0.5f;
-    private float norm_point = 0.1f, norm_vect = 0.1f;
-    private float distance_points;
+    private static float[] new_vectorUp = {0.0f,0.0f,-10.0f};
+    private static float[] current_vectorUp = {0.0f,0.0f,-10.0f};
+    private static float[] new_point = {0.0f,0.0f,-10.0f};
+    private static float[] current_point = {0.0f,0.0f,-10.0f};
+    private static float alfa = 0.5f;
+    private static float norm_point = 0.1f, norm_vect = 0.1f;
+    private static float distance_points;
 
     public MyGLRenderer(Context context) {
         shape = new Cilindro(context);
