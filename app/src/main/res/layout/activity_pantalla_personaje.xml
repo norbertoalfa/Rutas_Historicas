@@ -16,6 +16,7 @@
         android:lineSpacingExtra="4sp"
         android:text="Nacimiento: "
         android:textColor="@color/colorText"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -29,6 +30,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:text="Fallecimiento: "
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/nacimiento" />
@@ -41,6 +43,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:text="Categorías: "
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fallecimiento" />
@@ -52,45 +55,52 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:text="@string/descripcion_federico"
+        android:text="Descripción: "
         android:textAlignment="center"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/categorias" />
 
-    <Button
-        android:id="@+id/saberMas"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="30dp"
-        android:background="@color/colorMyButton"
-        android:onClick="saberMas"
-        android:text="@string/saber_mas"
-        android:textColor="@color/colorTextButton"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/mostrarRutas"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/mostrarRutas"
-        android:layout_width="0dp"
-        android:layout_height="120dp"
-        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="32dp"
-        android:background="@color/colorMyButton"
-        android:onClick="mostrarRutas"
-        android:text="@string/mostrar_rutas"
-        android:textColor="@color/colorTextButton"
-        android:textSize="18sp"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/descripcion"
+        app:layout_constraintVertical_bias="1.0">
+
+        <Button
+            android:id="@+id/saberMas"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="4dp"
+            android:layout_weight="2"
+            android:background="@color/colorMyButton"
+            android:onClick="saberMas"
+            android:text="@string/saber_mas"
+            android:textColor="@color/colorTextButton"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/mostrarRutas"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="4dp"
+            android:layout_weight="1"
+            android:background="@color/colorMyButton"
+            android:onClick="mostrarRutas"
+            android:text="@string/mostrar_rutas"
+            android:textColor="@color/colorTextButton"
+            android:textSize="18sp" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

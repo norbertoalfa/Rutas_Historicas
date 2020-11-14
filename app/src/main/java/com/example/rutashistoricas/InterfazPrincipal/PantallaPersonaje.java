@@ -37,9 +37,9 @@ public class PantallaPersonaje extends AppCompatActivity {
             switch (idPnj) {
                 case 1:
                     nombre = getString(R.string.nombre_federico);
-                    nacimiento = getString(R.string.nacimiento_federico);
-                    fallecimiento = getString(R.string.fallecimiento_federico);
-                    categorias = getString(R.string.categorias_federico);
+                    nacimiento = "Nacimiento: " + getString(R.string.nacimiento_federico);
+                    fallecimiento = "Fallecimiento: " + getString(R.string.fallecimiento_federico);
+                    categorias = "Categorías: " + getString(R.string.categorias_federico);
                     descripcion = getString(R.string.descripcion_federico);
             }
 
@@ -56,11 +56,11 @@ public class PantallaPersonaje extends AppCompatActivity {
         textView.setText(descripcion);
     }
 
-    @Override
+    /*@Override
     protected void onResume() {
         super.onResume();
 
-        /*switch (index_pnj) {
+        switch (index_pnj) {
             case 1:
                 nombre = getString(R.string.nombre_federico);
                 nacimiento = getString(R.string.nacimiento_federico);
@@ -77,8 +77,8 @@ public class PantallaPersonaje extends AppCompatActivity {
         textView = findViewById(R.id.categorias);
         textView.setText(categorias);
         textView = findViewById(R.id.descripcion);
-        textView.setText(descripcion);*/
-    }
+        textView.setText(descripcion);
+    }*/
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
