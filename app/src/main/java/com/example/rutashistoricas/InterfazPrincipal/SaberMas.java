@@ -26,7 +26,7 @@ public class SaberMas extends AppCompatActivity {
         Bundle b = intent.getExtras();
 
         if (b != null) {
-            index_pnj = b.getInt("index_pnj");
+            index_pnj = b.getInt("idPnj");
             switch (index_pnj) {
                 case 1:
                     nombre = getString(R.string.nombre_federico);

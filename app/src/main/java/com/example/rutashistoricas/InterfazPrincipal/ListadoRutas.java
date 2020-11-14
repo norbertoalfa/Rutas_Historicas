@@ -19,7 +19,7 @@ public class ListadoRutas extends AppCompatActivity {
     private VelocityTracker mVelocityTracker = null;
     private int mActivePointerId1;
     private int mActivePointerId2;
-    private static String name = "";
+    private static String name = "", titulo_ruta_1 = "", texto_ruta_1 = "", texto_ruta_2 = "", texto_ruta_3 = "";
     private static int idPnj = 0;
 
     AlertDialog currentDialog = null;
@@ -32,7 +32,6 @@ public class ListadoRutas extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle b = intent.getExtras();
 
-        String name = "", titulo_ruta_1 = "", texto_ruta_1 = "", texto_ruta_2 = "", texto_ruta_3 = "";
         if (b != null) {
             idPnj = b.getInt("idPnj");
             switch (idPnj) {

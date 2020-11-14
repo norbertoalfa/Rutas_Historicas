@@ -1,7 +1,9 @@
 package com.example.rutashistoricas.RealidadAumentada;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -61,11 +63,11 @@ public class RealidadAumentada extends AppCompatActivity implements SensorEventL
 
         ruta = (RutaHistorica) getIntent().getSerializableExtra("rutaHistorica");
 
-        //indexPuntoInteres = getIntent().getIntExtra("indexPuntoInteres", -1);
+        indexPuntoInteres = getIntent().getIntExtra("indexPuntoInteres", -1);
 
 
-        //switch (indexPuntoInteres) {
-            //case 1:
+        switch (indexPuntoInteres) {
+            case 1:
 
                 id_titulo = R.string.nombre_pto_interes_1;
 
@@ -88,16 +90,30 @@ public class RealidadAumentada extends AppCompatActivity implements SensorEventL
                     sensorManager.registerListener(this, magneticField,
                             SensorManager.SENSOR_DELAY_NORMAL, SensorManager.SENSOR_DELAY_UI);
                 }
-       /*         break;
+                break;
             default:
                 Intent intent = new Intent(this, InfoPuntoInteres.class);
                 intent.putExtra("indexPuntoInteres", indexPuntoInteres);
                 startActivity(intent);
                 break;
-        }*/
+        }
 
         setTitle(getString(id_titulo));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(RealidadAumentada.this);
+        builder1.setMessage("Busque las zonas de interés marcadas. Si desea obtener más información sobre alguna, apunte al símbolo de información durante 2 segundos");
+        builder1.setCancelable(true);
+
+        builder1.setPositiveButton(
+                "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        builder1.create().show();
 
 
     }
