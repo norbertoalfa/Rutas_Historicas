@@ -27,7 +27,6 @@ import com.example.rutashistoricas.R;
 /**
  * Clase correspondiente a la actividad de visualización de la foto 360 para el punto de interés actual.
  */
-
 public class RealidadAumentada extends AppCompatActivity implements SensorEventListener {
     /**
      * Datos de lectura del acelerómetro.
@@ -122,7 +121,6 @@ public class RealidadAumentada extends AppCompatActivity implements SensorEventL
         ruta = (RutaHistorica) getIntent().getSerializableExtra("rutaHistorica");
         indexPuntoInteres = getIntent().getIntExtra("indexPuntoInteres", -1);
 
-
         switch (indexPuntoInteres) {
             case 1:
 
@@ -178,6 +176,8 @@ public class RealidadAumentada extends AppCompatActivity implements SensorEventL
      * nuestro caso siempre es volver hacia atrás, por lo que finalizamos la actividad.
      *
      * @param item  Ítem seleccionado en el menú de opciones.
+     *
+     * @return Se devuelve siempre true.
      */
     public boolean onOptionsItemSelected(MenuItem item){
         finish();
@@ -189,6 +189,8 @@ public class RealidadAumentada extends AppCompatActivity implements SensorEventL
      *  es decir, mover los 2 dedos de izquierda a derecha.
      *
      * @param event Evento táctil detectado.
+     *
+     * @return Se devuelve siempre true.
      */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -317,7 +319,6 @@ public class RealidadAumentada extends AppCompatActivity implements SensorEventL
                     Intent intent = new Intent(this, InfoPuntoInteres.class);
                     intent.putExtra("indexPuntoInteres", indexPuntoInteres);
                     startActivityForResult(intent, 111);
-                    //finish();
                 }
             }
         } else {

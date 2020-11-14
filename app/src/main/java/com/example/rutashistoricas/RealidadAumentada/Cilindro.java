@@ -13,27 +13,57 @@ import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
 
-
+/**
+ *  Clase cuyos objetos representan cilindros con textura (foto 360).
+ */
 public class Cilindro {
-
+    /**
+     *  Buffer de los vértices del cilindro.
+     */
     private FloatBuffer mFVertexBuffer;
+    /**
+     *  Buffer de los índices de los puntos (orden en el que se dibujan los triángulos y los puntos
+     * con los que se hacen).
+     */
     private ByteBuffer mIndexBuffer;
-    private float[] vertices = new float[126];
-    private byte[] indices = new byte[42];
-    private float[] textureCoordinates = new float[84];
-
-    // Our UV texture buffer.
+    /**
+     *  Buffer de la textura.
+     */
     private FloatBuffer mTextureBuffer;
-
-    // Our texture id.
+    /**
+     *  Vértices del cilindro (son 42, pero tienen 3 coordenadas cada uno, ya que es en 3D).
+     */
+    private float[] vertices = new float[126];
+    /**
+     *  Coordenadas de textura de cada vértice (son 42 pero tienen 2 componentes, las texturas son en
+     * 2D).
+     */
+    private float[] textureCoordinates = new float[84];
+    /**
+     *  Índices de los puntos (orden en el que se dibujan los triángulos y los puntos con los que se
+     * hacen).
+     */
+    private byte[] indices = new byte[42];
+    /**
+     *  Identificador de la textura.
+     */
     private int mTextureId = -1;
-
-    // The bitmap we want to load as a texture.
+    /**
+     *  Mapa de bits que queremos que contenga la textura.
+     */
     private Bitmap mBitmap;
-
-    // Indicates if we need to load the texture.
+    /**
+     *  Variable que indica si es necesario volver a cargar la textura.
+     */
     private boolean mShouldLoadTexture = false;
 
+    /**
+     *  Se ejecuta al crear el objeto Cilindro. Asigna los valores de los vértices, índices y
+     * coordenadas de textura. Genera espacio para guardar los datos en la GPU, mediante los buffers.
+     * Carga la textura.
+     *
+     * @param context Contexto de la actividad que ha creado el objeto.
+     */
     public Cilindro(Context context) {
 
         for (int i=0; i<21; i++){
@@ -62,6 +92,13 @@ public class Cilindro {
         setTextureCoordinates(textureCoordinates);
     }
 
+    /**
+     *  Se ejecuta cuando se quiera visualizar el objeto. Carga la textura si es necesario y procede
+     * a la visualización de los vértices siguiendo el patrón indicado por los índices y añadiendo la
+     * textura según se le indique con las coordenadas de textura.
+     *
+     * @param gl Interfaz GL usada.
+     */
     public void draw(GL10 gl) {
 
         if (mShouldLoadTexture) {
@@ -88,6 +125,13 @@ public class Cilindro {
 
     }
 
+    /**
+     *  Reserva un espacio en la memoria de la GPU a modo de buffer y lo devuelve.
+     *
+     * @param arr Vector que se quiere añadir a la memoria de la GPU mediante un buffer.
+     *
+     * @return Devuelve el buffer creado para el vector de entrada.
+     */
     private static FloatBuffer makeFloatBuffer(float[] arr) {
         ByteBuffer bb = ByteBuffer.allocateDirect(arr.length * 4);
         bb.order(ByteOrder.nativeOrder());
@@ -97,22 +141,36 @@ public class Cilindro {
         return fb;
     }
 
+    /**
+     *  Reserva memoria en la GPU a modo de buffer para las coordenadas de textura.
+     *
+     * @param textureCoords Vector de coordenadas de textura a asignar.
+     */
     protected void setTextureCoordinates(float[] textureCoords) {
         // float is 4 bytes, therefore we multiply the number if
         // vertices with 4.
-        ByteBuffer byteBuf = ByteBuffer.allocateDirect(
-                textureCoords.length * 4);
+        ByteBuffer byteBuf = ByteBuffer.allocateDirect(textureCoords.length * 4);
         byteBuf.order(ByteOrder.nativeOrder());
         mTextureBuffer = byteBuf.asFloatBuffer();
         mTextureBuffer.put(textureCoords);
         mTextureBuffer.position(0);
     }
 
+    /**
+     *  Se actualiza el mapa de bits que se quiere utilizar como textura.
+     *
+     * @param bitmap Mapa de bits a utilizar.
+     */
     public void loadBitmap(Bitmap bitmap) {
         this.mBitmap = bitmap;
         mShouldLoadTexture = true;
     }
 
+    /**
+     *  Asigna las coordenadas de textura y visualiza la textura en el entorno 3D.
+     *
+     * @param gl Interfaz GL usada.
+     */
     private void loadGLTexture(GL10 gl) {
         // Generate one texture pointer...
         int[] textures = new int[1];
