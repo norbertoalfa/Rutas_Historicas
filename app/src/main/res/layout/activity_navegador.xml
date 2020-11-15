@@ -18,29 +18,39 @@
 
     <Button
         android:id="@+id/botonContinuarRuta"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="30dp"
         android:layout_marginEnd="30dp"
-        android:layout_marginBottom="25dp"
         android:background="@color/colorMySecButton"
-        android:onClick="continueRoute"
-        android:text="@string/continuar_ruta"
-        app:layout_constraintBottom_toTopOf="@+id/botonCuriosidad"
+        android:onClick="continuarRuta"
+        android:text="Continuar\n ruta"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
+        android:id="@+id/botonRealidadAumentada"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="30dp"
+        android:background="@color/colorMySecButton"
+        android:onClick="iniciarRealidadAumentada"
+        android:text="Realidad\n Aumentada"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/botonContinuarRuta" />
+
+    <Button
         android:id="@+id/botonCuriosidad"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="30dp"
         android:layout_marginEnd="30dp"
         android:background="@color/colorMySecButton"
         android:onClick="mostrarCuriosidad"
         android:text="Curiosidad"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/botonContinuarRuta" />
+        app:layout_constraintTop_toBottomOf="@+id/botonRealidadAumentada" />
 
 
 

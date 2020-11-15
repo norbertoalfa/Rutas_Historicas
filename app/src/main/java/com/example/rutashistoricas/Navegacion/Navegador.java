@@ -87,6 +87,11 @@ public class Navegador extends AppCompatActivity implements OnNavigationReadyCal
     private Button botonContinuarRuta = null;
 
     /**
+     * Botón que inicia la actividad Realidad Aumentada.
+     */
+    private Button botonRealidadAumentada = null;
+
+    /**
      * Botón que nos permite mostrar la información de la continuidad actual.
      */
     private Button botonCuriosidad = null;
@@ -97,6 +102,11 @@ public class Navegador extends AppCompatActivity implements OnNavigationReadyCal
      * Si este entero tiene el valor 0 significa que no hay ninguna curiosidad activa.
      */
     private int numCuriosidadActiva = 0;
+
+    /**
+     * Entero que identifica el punto de interés en el que se encuentra el usuario. Se usa para lanzar la actividad Realidad Aumentada.
+     */
+    private int indexPuntoActual = 0;
 
     /**
      * Controla cómo reacciona la aplicación cuando se llega a una parada. Para la única ruta que está implementada (ruta de Granada ciudad de Federico),
@@ -158,11 +168,15 @@ public class Navegador extends AppCompatActivity implements OnNavigationReadyCal
         currentRoute = ruta.getDirectionsRoute();
 
         botonContinuarRuta =(Button) findViewById(R.id.botonContinuarRuta);
-        botonContinuarRuta.setVisibility(View.VISIBLE);
+        botonContinuarRuta.setVisibility(View.INVISIBLE);
         botonContinuarRuta.setEnabled(false);
 
+        botonRealidadAumentada =(Button) findViewById(R.id.botonRealidadAumentada);
+        botonRealidadAumentada.setVisibility(View.INVISIBLE);
+        botonRealidadAumentada.setEnabled(false);
+
         botonCuriosidad = (Button) findViewById(R.id.botonCuriosidad);
-        botonCuriosidad.setVisibility(View.VISIBLE);
+        botonCuriosidad.setVisibility(View.INVISIBLE);
         botonCuriosidad.setEnabled(false);
 
         View instrucciones=findViewById(R.id.instructionView);
@@ -191,33 +205,14 @@ public class Navegador extends AppCompatActivity implements OnNavigationReadyCal
 
                 if(!puntoInteresLanzado) {
                     puntoInteresLanzado=true;
-                    int indexPto = routeLegProgress.getLegIndex() + 1;
-                    switch (indexPto) {
-                        case 1:
-                            Intent intent = new Intent(Navegador.this, RealidadAumentada.class);
-                            //dialog.cancel();
-                            intent.putExtra("indexPuntoInteres", indexPto);
-                            intent.putExtra("rutaHistorica", ruta);
-                            startActivity(intent);
-                            break;
-                        default:
-                            AlertDialog.Builder builder = new AlertDialog.Builder(Navegador.this);
-                            builder.setMessage("Has llegado a " + ruta.getNombreParada(indexPto-1) + ". La funcionalidad de este punto de interés todavía no está disponible");
-                            builder.setPositiveButton(
-                                    "OK",
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            dialog.cancel();
-                                        }
-                                    });
-                            builder.setCancelable(true);
-                            dialogoError = builder.create();
-                            dialogoError.show();
-                            break;
-                    }
+                    indexPuntoActual = routeLegProgress.getLegIndex() + 1;
+                    iniciarRealidadAumentada(navigationView);
 
                     botonContinuarRuta.setVisibility(View.VISIBLE);
                     botonContinuarRuta.setEnabled(true);
+
+                    botonRealidadAumentada.setVisibility(View.VISIBLE);
+                    botonRealidadAumentada.setEnabled(true);
                 }
                 return false;
             }
@@ -301,13 +296,51 @@ public class Navegador extends AppCompatActivity implements OnNavigationReadyCal
      *
      * @param view Vista del botón.
      */
-    public void continueRoute(View view){
+    public void continuarRuta(View view){
         puntoInteresLanzado=false;
         mapboxNavigation.navigateNextRouteLeg();
         botonContinuarRuta.setVisibility(View.INVISIBLE);
         botonContinuarRuta.setEnabled(false);
+        botonRealidadAumentada.setVisibility(View.INVISIBLE);
+        botonRealidadAumentada.setEnabled(false);
     }
 
+    /**
+     * Método lanzado al pulsar el botón {@link #botonRealidadAumentada}. Inicia la actividad
+     * de Realidad Aumentada.
+     * @param view Vista del botón.
+     */
+    public void iniciarRealidadAumentada(View view) {
+        switch (indexPuntoActual) {
+            case 1:
+                Intent intent = new Intent(Navegador.this, RealidadAumentada.class);
+                //dialog.cancel();
+                intent.putExtra("indexPuntoInteres", indexPuntoActual);
+                intent.putExtra("rutaHistorica", ruta);
+                startActivity(intent);
+                break;
+            default:
+                AlertDialog.Builder builder = new AlertDialog.Builder(Navegador.this);
+                builder.setMessage("Has llegado a " + ruta.getNombreParada(indexPuntoActual - 1) + ". La funcionalidad de este punto de interés todavía no está disponible");
+                builder.setPositiveButton(
+                        "OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+                builder.setCancelable(true);
+                dialogoError = builder.create();
+                dialogoError.show();
+                break;
+        }
+    }
+
+    /**
+     * Método lanzado al pulsar el botón {@link #botonCuriosidad}. Se muestra la información relacionada
+     * con la curiosidad activa.
+     * @param view Vista del botón.
+     */
     public void mostrarCuriosidad(View view) {
         dialogoCuriosidad.show();
     }
