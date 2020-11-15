@@ -19,6 +19,11 @@ import com.example.rutashistoricas.Navegacion.Navegador;
 import com.example.rutashistoricas.R;
 import com.example.rutashistoricas.RealidadAumentada.RealidadAumentada;
 
+
+/**
+ * Clase correspondiente a la actividad que muestra información sobre un punto de interés de una ruta concreta.
+ *
+ */
 public class InfoPuntoInteres extends AppCompatActivity {
     /**
      * Para gestión interna de los eventos táctiles. Nos permite saber a que velocidad se mueven los punteros por la pantalla durante un evento táctil.

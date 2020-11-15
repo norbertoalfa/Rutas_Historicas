@@ -9,9 +9,12 @@ import android.view.View;
 
 import com.example.rutashistoricas.R;
 
-public class MainActivity extends AppCompatActivity {
-    public static final String ID_PERSONAJE = "com.example.myfirstapp.ID_PERSONAJE";
 
+/**
+ * Clase correspondiente a la actividad principal que nos permite buscar y seleccionar personajes.
+ *
+ */
+public class MainActivity extends AppCompatActivity {
     /**
      * Se ejecuta al crear la actividad.
      *

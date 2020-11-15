@@ -15,6 +15,13 @@ import com.example.rutashistoricas.Navegacion.Mapa;
 import com.example.rutashistoricas.R;
 import com.example.rutashistoricas.RealidadAumentada.RealidadAumentada;
 
+
+/**
+ * Clase correspondiente a la actividad que muestra las rutas de un personaje concreto.
+ * Desde ella se puede seleccionar una ruta, la cual será mostrada en el mapa, o acceder a más
+ * información acerca de la ruta.
+ *
+ */
 public class ListadoRutas extends AppCompatActivity {
     /**
      * Para gestión interna de los eventos táctiles. Nos permite saber a que velocidad se mueven los punteros por la pantalla durante un evento táctil.
