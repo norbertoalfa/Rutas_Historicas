@@ -13,6 +13,13 @@ import android.widget.TextView;
 import com.example.rutashistoricas.InterfazPrincipal.ListadoRutas;
 import com.example.rutashistoricas.R;
 
+
+/**
+ * Clase correspondiente a la actividad que nos presenta un personaje concreto.
+ * Se nos presenta una breve información del personaje y nos permite acceder a otra pantalla
+ * para saber más acerca del mismo o al listado de sus rutas.
+ *
+ */
 public class PantallaPersonaje extends AppCompatActivity {
     /**
      * Para gestión interna de los eventos táctiles. Nos permite saber a que velocidad se mueven los punteros por la pantalla durante un evento táctil.

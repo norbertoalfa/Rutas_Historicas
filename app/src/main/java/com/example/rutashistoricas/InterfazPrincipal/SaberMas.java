@@ -15,6 +15,13 @@ import android.widget.TextView;
 
 import com.example.rutashistoricas.R;
 
+
+/**
+ * Clase correspondiente a la actividad que muestra más información acerca de un personaje concreto.
+ * Además, esta clase también permite abrir una url que nos lleva a una página web relacionada
+ * con el personaje.
+ *
+ */
 public class SaberMas extends AppCompatActivity {
     /**
      * Para gestión interna de los eventos táctiles. Nos permite saber a que velocidad se mueven los punteros por la pantalla durante un evento táctil.
