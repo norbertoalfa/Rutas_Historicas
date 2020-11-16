@@ -1,7 +1,10 @@
 package com.example.rutashistoricas.InterfazPrincipal;
 
 import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -13,7 +16,6 @@ import androidx.core.view.MotionEventCompat;
 
 import com.example.rutashistoricas.Navegacion.Mapa;
 import com.example.rutashistoricas.R;
-import com.example.rutashistoricas.RealidadAumentada.RealidadAumentada;
 
 
 /**
@@ -62,9 +64,13 @@ public class ListadoRutas extends AppCompatActivity {
     private static int idPnj = 0;
 
     /**
-     * Cuadro de diálogo que se está mostrando en pantalla actualmente, en caso de haberlo.
+     * Cuadro de diálogo que muestra que la funcionalidad a la que se quiere acceder no está implementada.
      */
-    AlertDialog currentDialog = null;
+    AlertDialog dialogoFuncionalidad = null;
+    /**
+     * Cuadro de diálogo que indica que los servicios de localización no están activos.
+     */
+    AlertDialog localizationDialog = null;
 
     /**
      * Se ejecuta al crear la actividad. Obtiene el ID del personaje seleccionado, que es enviado por la actividad {@link PantallaPersonaje}
@@ -105,6 +111,22 @@ public class ListadoRutas extends AppCompatActivity {
         textView.setText(texto_ruta_3);
         textView.setAllCaps(true);
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(ListadoRutas.this);
+        builder.setMessage("El servicio de localización está desactivado. Para poder iniciar la ruta actívelo previamente.");
+        builder.setCancelable(false);
+
+        builder.setPositiveButton(
+                "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        localizationDialog = builder.create();
+
+        builder.setMessage(getString(R.string.func_no_prog));
+        //builder.setCancelable(true);
+        dialogoFuncionalidad = builder.create();
     }
 
     /**
@@ -157,13 +179,18 @@ public class ListadoRutas extends AppCompatActivity {
      * @param view Vista del botón que se ha pulsado.
      */
     public void iniciarRuta1(View view) {
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         Bundle b = new Bundle();
         b.putInt("idPnj", idPnj);
         b.putInt("idRuta", 1);
         Intent intent = new Intent(this, Mapa.class);
-        //Intent intent = new Intent(this, RealidadAumentada.class);
-        intent.putExtras(b);
-        startActivity(intent);
+
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            intent.putExtras(b);
+            startActivity(intent);
+        } else {
+            localizationDialog.show();
+        }
     }
 
     /**
@@ -173,12 +200,9 @@ public class ListadoRutas extends AppCompatActivity {
      * @param view Vista del botón que se ha pulsado.
      */
     public void iniciarRuta2(View view) {
+        dialogoFuncionalidad.show();
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(ListadoRutas.this);
-        builder.setMessage(getString(R.string.func_no_prog));
-        builder.setCancelable(true);
-        currentDialog = builder.create();
-        currentDialog.show();
+        // No borrar este comentario
         /*
         Bundle b = new Bundle();
         b.putInt("idPnj", idPnj);
@@ -196,11 +220,7 @@ public class ListadoRutas extends AppCompatActivity {
      * @param view Vista del botón que se ha pulsado.
      */
     public void iniciarRuta3(View view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(ListadoRutas.this);
-        builder.setMessage(getString(R.string.func_no_prog));
-        builder.setCancelable(true);
-        currentDialog = builder.create();
-        currentDialog.show();
+        dialogoFuncionalidad.show();
 
         // No borrar este comentario
         /*
@@ -214,11 +234,7 @@ public class ListadoRutas extends AppCompatActivity {
     }
 
     public void infoRuta1(View view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(ListadoRutas.this);
-        builder.setMessage(getString(R.string.func_no_prog));
-        builder.setCancelable(true);
-        currentDialog = builder.create();
-        currentDialog.show();
+        dialogoFuncionalidad.show();
 
         // No borrar este comentario
         /*
@@ -232,11 +248,7 @@ public class ListadoRutas extends AppCompatActivity {
     }
 
     public void infoRuta2(View view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(ListadoRutas.this);
-        builder.setMessage(getString(R.string.func_no_prog));
-        builder.setCancelable(true);
-        currentDialog = builder.create();
-        currentDialog.show();
+        dialogoFuncionalidad.show();
 
         // No borrar este comentario
         /*
@@ -250,11 +262,7 @@ public class ListadoRutas extends AppCompatActivity {
     }
 
     public void infoRuta3(View view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(ListadoRutas.this);
-        builder.setMessage(getString(R.string.func_no_prog));
-        builder.setCancelable(true);
-        currentDialog = builder.create();
-        currentDialog.show();
+        dialogoFuncionalidad.show();
 
         // No borrar este comentario
         /*
