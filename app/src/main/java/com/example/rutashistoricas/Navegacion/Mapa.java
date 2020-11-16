@@ -14,7 +14,9 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorManager;
 import android.location.Location;
 import android.hardware.SensorEventListener;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -254,9 +256,13 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
 
         setContentView(R.layout.activity_mapa);
 
+        Log.d("Franprueba", "quepasa");
+
         mapView = (MapView) findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
+
+        Log.d("Franprueba", "quepasa");
 
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         if (sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) {
@@ -318,7 +324,7 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
      * @param index Índice de la ruta que será pintada en el mapa. El índice 1 corresponde a la ruta de Federico García Lorca.
      * @param style Estilo del mapa que se está usando.
      */
-    public void dibujarRuta(int index, Style style) {
+    private void dibujarRuta(int index, Style style) {
 
         LocationComponent locationComponent = mapboxMap.getLocationComponent();
         Point origin = Point.fromLngLat(locationComponent.getLastKnownLocation().getLongitude(), locationComponent.getLastKnownLocation().getLatitude());
@@ -370,6 +376,7 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
         );
     }
 
+
     /**
      * Si la aplicación tiene permisos para acceder a la localización, habilita el componente de localización del mapa e inicia el motor de localización (llamando al método {@link #initLocationEngine}). Si no tiene dichos permisos crea el gestor de permisos y los solicita.
      *
@@ -381,13 +388,13 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
             LocationComponent locationComponent = mapboxMap.getLocationComponent();
 
             LocationComponentActivationOptions locationComponentActivationOptions =
-                    LocationComponentActivationOptions.builder(this,loadedMapStyle)
-                            .useDefaultLocationEngine(false).build();
+                    LocationComponentActivationOptions.builder(this,loadedMapStyle).useDefaultLocationEngine(false).build();
             locationComponent.activateLocationComponent(locationComponentActivationOptions);
             locationComponent.setLocationComponentEnabled(true);
             locationComponent.setCameraMode(CameraMode.NONE);
             locationComponent.setRenderMode(RenderMode.NORMAL);
             initLocationEngine();
+
         } else {
             permissionsManager = new PermissionsManager(this);
             permissionsManager.requestLocationPermissions(this);
@@ -436,28 +443,37 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
     }
 
     /**
-     * Se ejecuta cuando le concedemos o denegamos los permisos de localización a la aplicación. En caso de concederselos habilita el componente de localización y dibuja la ruta ({@link #enableLocationComponent}, {@link #dibujarRuta}) y en caso de denegarselos imprime un mensaje y finaliza.
+     * Se ejecuta cuando le concedemos o denegamos los permisos de localización a la aplicación. En caso de concedérselos habilita el componente de localización y dibuja la ruta ({@link #enableLocationComponent}, {@link #dibujarRuta}) y en caso de denegarselos imprime un mensaje y finaliza.
      */
     @Override
     public void onPermissionResult(boolean granted) {
+        Log.d("Franprueba", "hola");
         if (granted) {
-            if (mapboxMap.getStyle() != null) {
-                enableLocationComponent(mapboxMap.getStyle());
-                dibujarRuta(1,mapboxMap.getStyle());
-                AlertDialog.Builder builder1 = new AlertDialog.Builder(Mapa.this);
-                builder1.setMessage("Agita el móvil hacia arriba y abajo para iniciar la navegación.");
-                builder1.setCancelable(true);
+            mapboxMap.setStyle(new Style.Builder().fromUri("mapbox://styles/mapbox/cjf4m44iw0uza2spb3q0a7s41")
+                    , new Style.OnStyleLoaded() {
+                        @Override
+                        public void onStyleLoaded(@NonNull Style style) {
+                            enableLocationComponent(style);
 
-                builder1.setPositiveButton(
-                        "OK",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
+
+                            if(locationEngine!=null) {
+                                dibujarRuta(1, style);
+                                AlertDialog.Builder builder1 = new AlertDialog.Builder(Mapa.this);
+                                builder1.setMessage("Agita el móvil hacia arriba y abajo para iniciar la navegación.");
+                                builder1.setCancelable(true);
+
+                                builder1.setPositiveButton(
+                                        "OK",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                dialog.cancel();
+                                            }
+                                        });
+
+                                builder1.create().show();
                             }
-                        });
-
-                builder1.create().show();
-            }
+                        }
+                    });
         } else {
             Toast.makeText(this, R.string.user_location_permission_not_granted, Toast.LENGTH_LONG).show();
             finish();
@@ -507,8 +523,12 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
         if (locationEngine != null) {
             locationEngine.removeLocationUpdates(callback);
         }
-        mapView.onDestroy();
-        mapboxNavigation.onDestroy();
+        if (mapView != null) {
+            mapView.onDestroy();
+        }
+        if (mapboxNavigation != null) {
+            mapboxNavigation.onDestroy();
+        }
     }
 
     /**

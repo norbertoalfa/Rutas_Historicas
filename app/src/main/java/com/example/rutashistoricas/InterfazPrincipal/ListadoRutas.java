@@ -189,7 +189,65 @@ public class ListadoRutas extends AppCompatActivity {
      * @param view Vista del botón que se ha pulsado.
      */
     public void iniciarRuta3(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(ListadoRutas.this);
+        builder.setMessage(getString(R.string.func_no_prog));
+        builder.setCancelable(true);
+        currentDialog = builder.create();
+        currentDialog.show();
 
+        // No borrar este comentario
+        /*
+        Bundle b = new Bundle();
+        b.putInt("idPnj", idPnj);
+        b.putInt("idRuta", 3);
+        Intent intent = new Intent(this, Mapa.class);
+        intent.putExtras(b);
+        startActivity(intent);
+         */
+    }
+
+    public void infoRuta1(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(ListadoRutas.this);
+        builder.setMessage(getString(R.string.func_no_prog));
+        builder.setCancelable(true);
+        currentDialog = builder.create();
+        currentDialog.show();
+
+        // No borrar este comentario
+        /*
+        Bundle b = new Bundle();
+        b.putInt("idPnj", idPnj);
+        b.putInt("idRuta", 3);
+        Intent intent = new Intent(this, Mapa.class);
+        intent.putExtras(b);
+        startActivity(intent);
+         */
+    }
+
+    public void infoRuta2(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(ListadoRutas.this);
+        builder.setMessage(getString(R.string.func_no_prog));
+        builder.setCancelable(true);
+        currentDialog = builder.create();
+        currentDialog.show();
+
+        // No borrar este comentario
+        /*
+        Bundle b = new Bundle();
+        b.putInt("idPnj", idPnj);
+        b.putInt("idRuta", 3);
+        Intent intent = new Intent(this, Mapa.class);
+        intent.putExtras(b);
+        startActivity(intent);
+         */
+    }
+
+    public void infoRuta3(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(ListadoRutas.this);
+        builder.setMessage(getString(R.string.func_no_prog));
+        builder.setCancelable(true);
+        currentDialog = builder.create();
+        currentDialog.show();
 
         // No borrar este comentario
         /*
