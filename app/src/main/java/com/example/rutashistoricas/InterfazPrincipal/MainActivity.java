@@ -21,6 +21,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 
 import com.example.rutashistoricas.Navegacion.Mapa;
 import com.example.rutashistoricas.R;
@@ -37,9 +39,12 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
 
     private SpeechRecognizer speechRecognizer;
-    private ImageView micButton;
+    private FloatingActionButton micButton;
+    private Intent speechRecognizerIntent;
     public static final Integer RecordAudioRequestCode = 1;
-    int idPnj;
+
+    private boolean escuchando = false;
+    private int idPnj;
 
     /**
      * Se ejecuta al crear la actividad.
@@ -56,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
         micButton = findViewById(R.id.micButton);
 
-        final Intent speechRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        speechRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
 
         speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
 
@@ -68,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onBeginningOfSpeech() {
-                Toast.makeText(MainActivity.this, "Escuchando", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this, "Escuchando", Toast.LENGTH_SHORT).show();
             }
             @Override
             public void onRmsChanged(float v) {
@@ -88,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
                 ArrayList<String> data = bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
                 float[]  scores = bundle.getFloatArray(SpeechRecognizer.CONFIDENCE_SCORES);
 
-                Toast.makeText(MainActivity.this, data.get(0), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this, data.get(0), Toast.LENGTH_SHORT).show();
 
                 idPnj = reconocerPersonaje(data, scores);
 
@@ -117,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
                         "Sí",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
+                                irPantallaPersonaje(idPnj);
                                 dialog.cancel();
                             }
                         });
@@ -148,24 +154,6 @@ public class MainActivity extends AppCompatActivity {
             public void onEvent(int i, Bundle bundle) {
             }
         });
-
-        micButton.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent)
-            {
-                if (motionEvent.getAction() == MotionEvent.ACTION_UP){
-                    speechRecognizer.stopListening();
-                }
-                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN){
-
-                    micButton.setImageResource(R.drawable.ic_mic_black_24dp);
-
-                    speechRecognizer.startListening(speechRecognizerIntent);
-                }
-                return false;
-            }
-        });
-
     }
 
     /**
@@ -185,10 +173,18 @@ public class MainActivity extends AppCompatActivity {
             default:
                 irAPantallaValida = false;
         }
+        irPantallaPersonaje(idPnj);
+    }
+
+    private void irPantallaPersonaje(int id_pnj) {
+        boolean irAPantallaValida = true;
+        if (id_pnj != 1) {
+            irAPantallaValida = false;
+        }
         if (irAPantallaValida) {
             Intent intent = new Intent(this, PantallaPersonaje.class);
             Bundle b = new Bundle();
-            b.putInt("idPnj", idPnj);
+            b.putInt("idPnj", id_pnj);
             intent.putExtras(b);
             startActivity(intent);
         } else {
@@ -197,6 +193,20 @@ public class MainActivity extends AppCompatActivity {
             builder.setCancelable(true);
             android.app.AlertDialog currentDialog = builder.create();
             currentDialog.show();
+        }
+
+    }
+
+    public void voiceButton(View view) {
+        if (escuchando) {
+            escuchando = false;
+            micButton.setImageResource(R.drawable.ic_mic_black_off);
+            speechRecognizer.stopListening();
+        } else {
+            escuchando = true;
+            micButton.setImageResource(R.drawable.ic_mic_black_24dp);
+            speechRecognizer.startListening(speechRecognizerIntent);
+
         }
     }
 

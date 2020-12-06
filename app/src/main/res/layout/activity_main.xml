@@ -6,6 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".InterfazPrincipal.MainActivity">
 
+    <com.example.rutashistoricas.InterfazPrincipal.MovableFloatingActionButton
+        android:id="@+id/micButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:onClick="voiceButton"
+        android:src="@drawable/ic_mic_black_off"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/boton_buscar" />
+
     <TextView
         android:id="@+id/personajes_destacados"
         android:layout_width="0dp"
@@ -100,18 +113,5 @@
             android:text="@string/nombre_ganivet"
             android:textSize="18sp" />
     </LinearLayout>
-
-    <ImageView
-        android:id="@+id/micButton"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        android:backgroundTint="#F9F8FA"
-        android:paddingRight="10dp"
-        android:src="@drawable/ic_mic_black_off"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/boton_buscar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
