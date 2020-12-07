@@ -6,16 +6,26 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.speech.RecognitionListener;
+import android.speech.RecognizerIntent;
+import android.speech.SpeechRecognizer;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.MotionEventCompat;
 
 import com.example.rutashistoricas.Navegacion.Mapa;
 import com.example.rutashistoricas.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.text.Normalizer;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -40,28 +50,14 @@ public class ListadoRutas extends AppCompatActivity {
     private int mActivePointerId2;
 
     /**
-     * Nombre de la actividad, que será el nombre del personaje para el cuál se están visualizando las rutas.
-     */
-    private static String name = "";
-
-    /**
-     * Nombre de la ruta con ID=1 del personaje.
-     */
-    private static String titulo_ruta_1 = "";
-    //private static String texto_ruta_1 = "";
-    /**
-     * Nombre de la ruta con ID=2 del personaje.
-     */
-    private static String texto_ruta_2 = "";
-    /**
-     * Nombre de la ruta con ID=3 del personaje.
-     */
-    private static String texto_ruta_3 = "";
-
-    /**
      * ID del personaje para el cual se están visualizando las rutas.
      */
     private static int idPnj = 0;
+
+    /**
+     * ID de la ruta seleccionada
+     */
+    private static int idRuta = 0;
 
     /**
      * Cuadro de diálogo que muestra que la funcionalidad a la que se quiere acceder no está implementada.
@@ -71,6 +67,13 @@ public class ListadoRutas extends AppCompatActivity {
      * Cuadro de diálogo que indica que los servicios de localización no están activos.
      */
     AlertDialog localizationDialog = null;
+
+    private SpeechRecognizer speechRecognizer;
+    private FloatingActionButton micButton;
+    private Intent speechRecognizerIntent;
+    public static final Integer RecordAudioRequestCode = 1;
+
+    boolean escuchando = false;
 
     /**
      * Se ejecuta al crear la actividad. Obtiene el ID del personaje seleccionado, que es enviado por la actividad {@link PantallaPersonaje}
@@ -87,6 +90,11 @@ public class ListadoRutas extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle b = intent.getExtras();
 
+        String titulo_ruta_1 = "";
+        String texto_ruta_2 = "";
+        String texto_ruta_3 = "";
+        String name = "";
+
         if (b != null) {
             idPnj = b.getInt("idPnj");
             switch (idPnj) {
@@ -95,6 +103,9 @@ public class ListadoRutas extends AppCompatActivity {
                     titulo_ruta_1 = getString(R.string.federico_titulo_ruta_1);
                     texto_ruta_2 = getString(R.string.federico_titulo_ruta_2);
                     texto_ruta_3 = getString(R.string.federico_titulo_ruta_3);
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -112,7 +123,7 @@ public class ListadoRutas extends AppCompatActivity {
         textView.setAllCaps(true);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(ListadoRutas.this);
-        builder.setMessage("El servicio de localización está desactivado. Para poder iniciar la ruta actívelo previamente.");
+        builder.setMessage("El servicio de localización está desactivado. Para poder iniciar la ruta debes activarlo.");
         builder.setCancelable(false);
 
         builder.setPositiveButton(
@@ -127,6 +138,130 @@ public class ListadoRutas extends AppCompatActivity {
         builder.setMessage(getString(R.string.func_no_prog));
         //builder.setCancelable(true);
         dialogoFuncionalidad = builder.create();
+
+        micButton = findViewById(R.id.micButton);
+        iniciarSpeechRecognizer();
+    }
+
+    private void iniciarSpeechRecognizer() {
+        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
+
+        speechRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+
+        speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+
+        speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "es-ES");
+        speechRecognizer.setRecognitionListener(new RecognitionListener() {
+            @Override
+            public void onReadyForSpeech(Bundle bundle) {
+            }
+
+            @Override
+            public void onBeginningOfSpeech() {
+                //Toast.makeText(MainActivity.this, "Escuchando", Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void onRmsChanged(float v) {
+            }
+            @Override
+            public void onBufferReceived(byte[] bytes) {
+            }
+            @Override
+            public void onEndOfSpeech() {
+            }
+            @Override
+            public void onError(int i) {
+            }
+            @Override
+            public void onResults(Bundle bundle) {
+                int id_opcion = -1;
+                micButton.setImageResource(R.drawable.ic_mic_black_off);
+                ArrayList<String> data = bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+                float[] scores = bundle.getFloatArray(SpeechRecognizer.CONFIDENCE_SCORES);
+
+                //Toast.makeText(ListadoRutas.this, data.get(0), Toast.LENGTH_SHORT).show();
+                //Log.d("FRANPRUEBA", data.get(0));
+
+                idRuta = -1;
+                id_opcion = reconocer(data, scores);
+
+                switch (id_opcion) {
+                    case -1:
+                        break;
+                    case 0:
+                        finish();
+                        break;
+                    case 1:
+                        iniciarRuta(idRuta);
+                        break;
+                    case 2:
+                        infoRuta(idRuta);
+                        break;
+                }
+
+            }
+            @Override
+            public void onPartialResults(Bundle bundle) {
+            }
+            @Override
+            public void onEvent(int i, Bundle bundle) {
+            }
+        });
+    }
+
+    private int reconocer(ArrayList<String> data, float[] scores) {
+        int size = data.size(), ret = -1;
+        String cad = "";
+
+        for (int i=0; i<size; i++) {
+            if ( scores[i] > 0.6 ) {
+                cad = "";
+                cad = data.get(i).toLowerCase();
+                cad = Normalizer.normalize(cad, Normalizer.Form.NFD);
+                cad = cad.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+                //Log.d("FRANPRUEBA", cad);
+                if ( cad.indexOf("atras") != -1 ) {
+                    return 0;
+                } else if (  ( cad.indexOf("inicia") != -1 ) && ( cad.indexOf("ruta") != -1 ) ) {
+                    if ( cad.indexOf("granada ciudad") != -1 ) {
+                        idRuta = 1;
+                    } else if ( cad.indexOf("agua") != -1 ) {
+                        idRuta = 2;
+                    } else if ( cad.indexOf("viznar y alfacar") != -1 ) {
+                        idRuta = 3;
+                    }
+                    if (idRuta != -1) {
+                        ret = 1;
+                    }
+                } else if ( ( cad.indexOf("muestra") != -1 || cad.indexOf("mostrar") != -1 ) &&  cad.indexOf("informacion") != -1  &&  cad.indexOf("ruta") != -1 ) {
+                    if ( cad.indexOf("granada ciudad") != -1 ) {
+                        idRuta = 1;
+                    } else if ( cad.indexOf("agua") != -1 ) {
+                        idRuta = 2;
+                    } else if ( cad.indexOf("viznar y alfacar") != -1 ) {
+                        idRuta = 3;
+                    }
+                    if (idRuta != -1) {
+                        ret = 2;
+                    }
+                }
+            }
+        }
+
+        return ret;
+    }
+
+    public void voiceButton(View view) {
+        if (escuchando) {
+            escuchando = false;
+            micButton.setImageResource(R.drawable.ic_mic_black_off);
+            speechRecognizer.stopListening();
+        } else {
+            escuchando = true;
+            micButton.setImageResource(R.drawable.ic_mic_black_24dp);
+            speechRecognizer.startListening(speechRecognizerIntent);
+
+        }
     }
 
     /**
@@ -169,6 +304,25 @@ public class ListadoRutas extends AppCompatActivity {
         }
 
         return true;
+    }
+
+    private void iniciarRuta(int i) {
+        if (i!= 1) {
+            dialogoFuncionalidad.show();
+        } else {
+            LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            Bundle b = new Bundle();
+            b.putInt("idPnj", idPnj);
+            b.putInt("idRuta", i);
+            Intent intent = new Intent(this, Mapa.class);
+
+            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                intent.putExtras(b);
+                startActivity(intent);
+            } else {
+                localizationDialog.show();
+            }
+        }
     }
 
     /**
@@ -231,6 +385,10 @@ public class ListadoRutas extends AppCompatActivity {
         intent.putExtras(b);
         startActivity(intent);
          */
+    }
+
+    private void infoRuta(int i) {
+        dialogoFuncionalidad.show();
     }
 
     public void infoRuta1(View view) {

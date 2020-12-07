@@ -28,6 +28,7 @@ import com.example.rutashistoricas.Navegacion.Mapa;
 import com.example.rutashistoricas.R;
 
 import java.lang.reflect.Array;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -44,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     public static final Integer RecordAudioRequestCode = 1;
 
     private boolean escuchando = false;
-    private int idPnj = 0;
+    private int idPnj = -1;
 
     /**
      * Se ejecuta al crear la actividad.
@@ -183,14 +184,13 @@ public class MainActivity extends AppCompatActivity {
      * @param view Vista del botón que se ha pulsado.
      */
     public void irPantallaPersonaje(View view) {
-        boolean irAPantallaValida = true;
-        idPnj = 0;
+        idPnj = -1;
         switch (view.getId()) {
             case (R.id.boton_federico):
                 idPnj = 1;
                 break;
             default:
-                irAPantallaValida = false;
+                break;
         }
         irPantallaPersonaje(idPnj);
     }
@@ -231,19 +231,23 @@ public class MainActivity extends AppCompatActivity {
 
     private int reconocer(ArrayList<String> data, float[] scores) {
         int size = data.size();
-        idPnj = 0;
+        String cad = "";
 
         for (int i=0; i<size; i++) {
             if ( scores[i] > 0.6 ) {
-                if ( data.get(i).indexOf("cerrar") != -1 ) {
+                cad = "";
+                cad = data.get(i).toLowerCase();
+                cad = Normalizer.normalize(cad, Normalizer.Form.NFD);
+                cad = cad.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+                if ( cad.indexOf("cerrar") != -1 || cad.indexOf("cierra") != -1 ) {
                     return 0;
-                } else if ( data.get(i).indexOf("Federico García Lorca") != -1 ) {
+                } else if ( cad.indexOf("federico garcia lorca") != -1 ) {
                     idPnj = 1;
                     return 1;
-                } else if ( data.get(i).indexOf("Mariana Pineda") != -1 ) {
+                } else if ( cad.indexOf("mariana pineda") != -1 ) {
                     idPnj = 2;
                     return 1;
-                } else if ( data.get(i).indexOf("Ángel Ganivet") != -1 ) {
+                } else if ( cad.indexOf("angel ganivet") != -1 ) {
                     idPnj = 3;
                     return 1;
                 }

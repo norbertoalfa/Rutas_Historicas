@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -19,6 +20,7 @@ import com.example.rutashistoricas.InterfazPrincipal.ListadoRutas;
 import com.example.rutashistoricas.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.text.Normalizer;
 import java.util.ArrayList;
 
 
@@ -247,7 +249,8 @@ public class PantallaPersonaje extends AppCompatActivity {
             }
             @Override
             public void onResults(Bundle bundle) {
-                int id_opcion;
+                int id_opcion = -1;
+
                 micButton.setImageResource(R.drawable.ic_mic_black_off);
                 ArrayList<String> data = bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
                 float[] scores = bundle.getFloatArray(SpeechRecognizer.CONFIDENCE_SCORES);
@@ -282,14 +285,20 @@ public class PantallaPersonaje extends AppCompatActivity {
 
     private int reconocer(ArrayList<String> data, float[] scores) {
         int size = data.size();
+        String cad = "";
 
         for (int i=0; i<size; i++) {
             if ( scores[i] > 0.6 ) {
-                if ( data.get(i).indexOf("atrás") != -1 ) {
+                cad = "";
+                cad = data.get(i).toLowerCase();
+                cad = Normalizer.normalize(cad, Normalizer.Form.NFD);
+                cad = cad.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+                Log.d("FRANPRUEBA", cad);
+                if ( cad.indexOf("atras") != -1 || cad.indexOf("retroced") != -1 ) {
                     return 0;
-                } else if ( data.get(i).indexOf("saber más") != -1 ) {
+                } else if ( cad.indexOf("saber mas") != -1 || ( (cad.indexOf("mostrar") != -1 || cad.indexOf("muestra") != -1 ) && cad.indexOf("informacion") != -1 ) ) {
                     return 1;
-                } else if ( data.get(i).indexOf("mostrar rutas") != -1 ) {
+                } else if ( (cad.indexOf("mostrar") != -1 || cad.indexOf("muestra") != 1 ) && cad.indexOf("ruta") != -1 ) {
                     return 2;
                 }
             }
