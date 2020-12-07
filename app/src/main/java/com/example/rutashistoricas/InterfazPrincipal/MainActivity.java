@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     public static final Integer RecordAudioRequestCode = 1;
 
     private boolean escuchando = false;
-    private int idPnj;
+    private int idPnj = 0;
 
     /**
      * Se ejecuta al crear la actividad.
@@ -58,8 +58,13 @@ public class MainActivity extends AppCompatActivity {
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED){
             checkPermission();
         }
-        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
         micButton = findViewById(R.id.micButton);
+        iniciarSpeechRecognizer();
+
+    }
+
+    private void iniciarSpeechRecognizer() {
+        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
 
         speechRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
 
@@ -89,14 +94,26 @@ public class MainActivity extends AppCompatActivity {
             }
             @Override
             public void onResults(Bundle bundle) {
+                int id_opcion;
                 micButton.setImageResource(R.drawable.ic_mic_black_off);
                 ArrayList<String> data = bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
                 float[]  scores = bundle.getFloatArray(SpeechRecognizer.CONFIDENCE_SCORES);
 
                 //Toast.makeText(MainActivity.this, data.get(0), Toast.LENGTH_SHORT).show();
 
-                idPnj = reconocerPersonaje(data, scores);
+                id_opcion = reconocer(data, scores);
 
+                switch (id_opcion) {
+                    case -1:
+                        break;
+                    case 0:
+                        finish();
+                        break;
+                    case 1:
+                        irPantallaPersonaje(idPnj);
+                }
+
+                /*
                 String texto="Creo que te refieres a ";
                 switch (idPnj){
                     case 1:
@@ -118,14 +135,14 @@ public class MainActivity extends AppCompatActivity {
                 builder1.setCancelable(true);
 
                 if (idPnj != 0) {
-                builder1.setPositiveButton(
-                        "Sí",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                irPantallaPersonaje(idPnj);
-                                dialog.cancel();
-                            }
-                        });
+                    builder1.setPositiveButton(
+                            "Sí",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    irPantallaPersonaje(idPnj);
+                                    dialog.cancel();
+                                }
+                            });
 
                     builder1.setNegativeButton(
                             "No",
@@ -145,6 +162,8 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 builder1.create().show();
+
+                 */
 
             }
             @Override
@@ -210,23 +229,34 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private int reconocerPersonaje(ArrayList<String> data, float[] scores) {
+    private int reconocer(ArrayList<String> data, float[] scores) {
         int size = data.size();
+        idPnj = 0;
 
         for (int i=0; i<size; i++) {
             if ( scores[i] > 0.6 ) {
-                if ( data.get(i).indexOf("Federico") != -1 ) {
+                if ( data.get(i).indexOf("cerrar") != -1 ) {
+                    return 0;
+                } else if ( data.get(i).indexOf("Federico García Lorca") != -1 ) {
+                    idPnj = 1;
                     return 1;
-                } else if ( data.get(i).indexOf("Mariana") != -1 ) {
-                    return 2;
-                } else if ( data.get(i).indexOf("Ganivet") != -1 ) {
-                    return 3;
+                } else if ( data.get(i).indexOf("Mariana Pineda") != -1 ) {
+                    idPnj = 2;
+                    return 1;
+                } else if ( data.get(i).indexOf("Ángel Ganivet") != -1 ) {
+                    idPnj = 3;
+                    return 1;
                 }
             }
         }
 
-        return 0;
+        return -1;
 
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
     }
 
     @Override
