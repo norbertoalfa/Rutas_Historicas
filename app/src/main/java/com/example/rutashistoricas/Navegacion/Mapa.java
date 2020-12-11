@@ -17,10 +17,15 @@ import android.hardware.SensorEventListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.speech.RecognitionListener;
+import android.speech.RecognizerIntent;
+import android.speech.SpeechRecognizer;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.example.rutashistoricas.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mapbox.android.core.location.LocationEngine;
 import com.mapbox.android.core.location.LocationEngineCallback;
 import com.mapbox.android.core.location.LocationEngineProvider;
@@ -58,6 +63,7 @@ import com.mapbox.navigation.ui.route.NavigationMapRoute;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.ref.WeakReference;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -146,6 +152,13 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
      * Contiene información relacionada con la ruta (paradas y ruta actual).
      */
     private RutaHistorica ruta;
+
+    private SpeechRecognizer speechRecognizer;
+    private FloatingActionButton micButton;
+    private Intent speechRecognizerIntent;
+    public static final Integer RecordAudioRequestCode = 1;
+
+    boolean escuchando = false;
 
 
     /**
@@ -276,6 +289,10 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
 
         lastZ=0;
         setTitle(titulo);
+
+        micButton = findViewById(R.id.micButton);
+        iniciarSpeechRecognizer();
+
     }
 
 
@@ -426,6 +443,98 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
                 .build();
     }
 
+    private void iniciarSpeechRecognizer() {
+        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
+
+        speechRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+
+        speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+
+        speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "es-ES");
+        speechRecognizer.setRecognitionListener(new RecognitionListener() {
+            @Override
+            public void onReadyForSpeech(Bundle bundle) {
+            }
+
+            @Override
+            public void onBeginningOfSpeech() {
+                //Toast.makeText(MainActivity.this, "Escuchando", Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void onRmsChanged(float v) {
+            }
+            @Override
+            public void onBufferReceived(byte[] bytes) {
+            }
+            @Override
+            public void onEndOfSpeech() {
+            }
+            @Override
+            public void onError(int i) {
+            }
+            @Override
+            public void onResults(Bundle bundle) {
+                int id_opcion = -1;
+
+                micButton.setImageResource(R.drawable.ic_mic_black_off);
+                ArrayList<String> data = bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+                float[] scores = bundle.getFloatArray(SpeechRecognizer.CONFIDENCE_SCORES);
+
+                //Toast.makeText(MainActivity.this, data.get(0), Toast.LENGTH_SHORT).show();
+
+                id_opcion = reconocer(data, scores);
+
+                switch (id_opcion) {
+                    case -1:
+                        break;
+                    case 0:
+                        finish();
+                        break;
+                }
+
+            }
+            @Override
+            public void onPartialResults(Bundle bundle) {
+            }
+            @Override
+            public void onEvent(int i, Bundle bundle) {
+            }
+        });
+    }
+
+    private int reconocer(ArrayList<String> data, float[] scores) {
+        int size = data.size();
+        String cad = "";
+
+        for (int i=0; i<size; i++) {
+            if ( scores[i] > 0.6 ) {
+                cad = "";
+                cad = data.get(i).toLowerCase();
+                cad = Normalizer.normalize(cad, Normalizer.Form.NFD);
+                cad = cad.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+                Log.d("FRANPRUEBA", cad);
+                if ( cad.indexOf("atras") != -1 || cad.indexOf("retroced") != -1 ) {
+                    return 0;
+                }
+            }
+        }
+
+        return -1;
+    }
+
+    public void voiceButton(View view) {
+        if (escuchando) {
+            escuchando = false;
+            micButton.setImageResource(R.drawable.ic_mic_black_off);
+            speechRecognizer.stopListening();
+        } else {
+            escuchando = true;
+            micButton.setImageResource(R.drawable.ic_mic_black_24dp);
+            speechRecognizer.startListening(speechRecognizerIntent);
+
+        }
+    }
+
     /**
      * Usado durante la petición de permisos.
      */
@@ -478,6 +587,12 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
             Toast.makeText(this, R.string.user_location_permission_not_granted, Toast.LENGTH_LONG).show();
             finish();
         }
+    }
+
+    @Override
+    public void onBackPressed(){
+        //super.onBackPressed();
+        finish();
     }
 
     @Override

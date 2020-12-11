@@ -7,6 +7,10 @@ import androidx.core.view.MotionEventCompat;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.speech.RecognitionListener;
+import android.speech.RecognizerIntent;
+import android.speech.SpeechRecognizer;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -14,6 +18,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.rutashistoricas.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.text.Normalizer;
+import java.util.ArrayList;
 
 
 /**
@@ -51,6 +59,13 @@ public class SaberMas extends AppCompatActivity {
      * Biografía del personaje.
      */
     private static String biografia = "";
+
+    private SpeechRecognizer speechRecognizer;
+    private FloatingActionButton micButton;
+    private Intent speechRecognizerIntent;
+    public static final Integer RecordAudioRequestCode = 1;
+
+    boolean escuchando = false;
 
 
     /**
@@ -96,6 +111,9 @@ public class SaberMas extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        micButton = findViewById(R.id.micButton);
+        iniciarSpeechRecognizer();
     }
 
     /**
@@ -139,4 +157,105 @@ public class SaberMas extends AppCompatActivity {
 
         return true;
     }
+
+    private void iniciarSpeechRecognizer() {
+        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
+
+        speechRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+
+        speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+
+        speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "es-ES");
+        speechRecognizer.setRecognitionListener(new RecognitionListener() {
+            @Override
+            public void onReadyForSpeech(Bundle bundle) {
+            }
+
+            @Override
+            public void onBeginningOfSpeech() {
+                //Toast.makeText(MainActivity.this, "Escuchando", Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void onRmsChanged(float v) {
+            }
+            @Override
+            public void onBufferReceived(byte[] bytes) {
+            }
+            @Override
+            public void onEndOfSpeech() {
+            }
+            @Override
+            public void onError(int i) {
+            }
+            @Override
+            public void onResults(Bundle bundle) {
+                int id_opcion = -1;
+
+                micButton.setImageResource(R.drawable.ic_mic_black_off);
+                ArrayList<String> data = bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+                float[] scores = bundle.getFloatArray(SpeechRecognizer.CONFIDENCE_SCORES);
+
+                //Toast.makeText(MainActivity.this, data.get(0), Toast.LENGTH_SHORT).show();
+
+                id_opcion = reconocer(data, scores);
+
+                switch (id_opcion) {
+                    case -1:
+                        break;
+                    case 0:
+                        finish();
+                        break;
+                    case 1:
+                        String url = getString(R.string.url_federico);
+                        Uri uri = Uri.parse(url);
+                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                        startActivity(intent);
+                        break;
+                }
+
+            }
+            @Override
+            public void onPartialResults(Bundle bundle) {
+            }
+            @Override
+            public void onEvent(int i, Bundle bundle) {
+            }
+        });
+    }
+
+    private int reconocer(ArrayList<String> data, float[] scores) {
+        int size = data.size();
+        String cad = "";
+
+        for (int i=0; i<size; i++) {
+            if ( scores[i] > 0.6 ) {
+                cad = "";
+                cad = data.get(i).toLowerCase();
+                cad = Normalizer.normalize(cad, Normalizer.Form.NFD);
+                cad = cad.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+                Log.d("FRANPRUEBA", cad);
+                if ( cad.indexOf("atras") != -1 || cad.indexOf("retroced") != -1 ) {
+                    return 0;
+                } else if ( cad.indexOf("saber mas") != -1 || cad.indexOf("mas informacion") != -1 ) {
+                    return 1;
+                }
+            }
+        }
+
+        return -1;
+    }
+
+    public void voiceButton(View view) {
+        if (escuchando) {
+            escuchando = false;
+            micButton.setImageResource(R.drawable.ic_mic_black_off);
+            speechRecognizer.stopListening();
+        } else {
+            escuchando = true;
+            micButton.setImageResource(R.drawable.ic_mic_black_24dp);
+            speechRecognizer.startListening(speechRecognizerIntent);
+
+        }
+    }
+
 }
