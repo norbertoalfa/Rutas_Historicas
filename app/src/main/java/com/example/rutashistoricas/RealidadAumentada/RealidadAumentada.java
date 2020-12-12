@@ -12,9 +12,13 @@ import android.opengl.GLSurfaceView;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.speech.RecognitionListener;
+import android.speech.RecognizerIntent;
+import android.speech.SpeechRecognizer;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
+import android.view.View;
 import android.view.WindowManager;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +27,10 @@ import androidx.core.view.MotionEventCompat;
 import com.example.rutashistoricas.InterfazPrincipal.InfoPuntoInteres;
 import com.example.rutashistoricas.Navegacion.RutaHistorica;
 import com.example.rutashistoricas.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.text.Normalizer;
+import java.util.ArrayList;
 
 /**
  * Clase correspondiente a la actividad de visualización de la foto 360 para el punto de interés actual.
@@ -105,6 +113,7 @@ public class RealidadAumentada extends AppCompatActivity implements SensorEventL
      */
     RutaHistorica ruta = null;
 
+
     /**
      *  Se ejecuta al iniciar la actividad. Visualiza la escena 3D y muestra un cuadro de diálogo
      * indicando qué gestos debe realizar para poder obtener más información sobre el edificio
@@ -169,7 +178,10 @@ public class RealidadAumentada extends AppCompatActivity implements SensorEventL
                 });
 
         builder1.create().show();
+
     }
+
+
 
     /**
      *  Se ejecuta cuando un "item" del menú de opciones es seleccionado. El ítem seleccionado en

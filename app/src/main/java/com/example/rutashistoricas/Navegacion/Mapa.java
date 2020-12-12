@@ -156,7 +156,6 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
     private SpeechRecognizer speechRecognizer;
     private FloatingActionButton micButton;
     private Intent speechRecognizerIntent;
-    public static final Integer RecordAudioRequestCode = 1;
 
     boolean escuchando = false;
 
@@ -512,7 +511,6 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
                 cad = data.get(i).toLowerCase();
                 cad = Normalizer.normalize(cad, Normalizer.Form.NFD);
                 cad = cad.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
-                Log.d("FRANPRUEBA", cad);
                 if ( cad.indexOf("atras") != -1 || cad.indexOf("retroced") != -1 ) {
                     return 0;
                 }

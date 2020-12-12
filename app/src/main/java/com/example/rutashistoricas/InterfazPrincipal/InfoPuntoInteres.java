@@ -7,6 +7,9 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.speech.RecognitionListener;
+import android.speech.RecognizerIntent;
+import android.speech.SpeechRecognizer;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -18,6 +21,10 @@ import com.example.rutashistoricas.Navegacion.Mapa;
 import com.example.rutashistoricas.Navegacion.Navegador;
 import com.example.rutashistoricas.R;
 import com.example.rutashistoricas.RealidadAumentada.RealidadAumentada;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.text.Normalizer;
+import java.util.ArrayList;
 
 
 /**
@@ -44,6 +51,11 @@ public class InfoPuntoInteres extends AppCompatActivity {
      */
     private int indexPuntoInteres = -1;
 
+    private SpeechRecognizer speechRecognizer;
+    private FloatingActionButton micButton;
+    private Intent speechRecognizerIntent;
+
+    boolean escuchando = false;
 
     /**
      * Se ejecuta al crear la actividad. Obtiene el ID del punto de interés, que debe ser enviado a esta actividad mediante un extra antes de iniciarla.
@@ -81,6 +93,110 @@ public class InfoPuntoInteres extends AppCompatActivity {
         setTitle(getString(id_titulo));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        micButton = findViewById(R.id.micButton);
+        iniciarSpeechRecognizer();
+
+    }
+
+    private void iniciarSpeechRecognizer() {
+        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
+
+        speechRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+
+        speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+
+        speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "es-ES");
+        speechRecognizer.setRecognitionListener(new RecognitionListener() {
+            @Override
+            public void onReadyForSpeech(Bundle bundle) {
+            }
+
+            @Override
+            public void onBeginningOfSpeech() {
+                //Toast.makeText(MainActivity.this, "Escuchando", Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void onRmsChanged(float v) {
+            }
+            @Override
+            public void onBufferReceived(byte[] bytes) {
+            }
+            @Override
+            public void onEndOfSpeech() {
+            }
+            @Override
+            public void onError(int i) {
+            }
+            @Override
+            public void onResults(Bundle bundle) {
+                int id_opcion = -1;
+
+                micButton.setImageResource(R.drawable.ic_mic_black_off);
+                ArrayList<String> data = bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+                float[] scores = bundle.getFloatArray(SpeechRecognizer.CONFIDENCE_SCORES);
+
+                //Toast.makeText(MainActivity.this, data.get(0), Toast.LENGTH_SHORT).show();
+
+                id_opcion = reconocer(data, scores);
+
+                switch (id_opcion) {
+                    case -1:
+                        break;
+                    case 0:
+                        finish();
+                        break;
+                    case 1:
+                        masInfo();
+                        break;
+                    case 2:
+                        continuarRuta();
+                        break;
+                }
+
+            }
+            @Override
+            public void onPartialResults(Bundle bundle) {
+            }
+            @Override
+            public void onEvent(int i, Bundle bundle) {
+            }
+        });
+    }
+
+    private int reconocer(ArrayList<String> data, float[] scores) {
+        int size = data.size();
+        String cad = "";
+
+        for (int i=0; i<size; i++) {
+            if ( scores[i] > 0.6 ) {
+                cad = "";
+                cad = data.get(i).toLowerCase();
+                cad = Normalizer.normalize(cad, Normalizer.Form.NFD);
+                cad = cad.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+                if ( cad.indexOf("atras") != -1 || cad.indexOf("retroced") != -1 ) {
+                    return 0;
+                } else if ( cad.indexOf("saber mas") != -1 || cad.indexOf("mas informacion") != -1  ) {
+                    return 1;
+                } else if ( cad.indexOf("continu") != -1  && cad.indexOf("ruta") != -1 ) {
+                    return 2;
+                }
+            }
+        }
+
+        return -1;
+    }
+
+    public void voiceButton(View view) {
+        if (escuchando) {
+            escuchando = false;
+            micButton.setImageResource(R.drawable.ic_mic_black_off);
+            speechRecognizer.stopListening();
+        } else {
+            escuchando = true;
+            micButton.setImageResource(R.drawable.ic_mic_black_24dp);
+            speechRecognizer.startListening(speechRecognizerIntent);
+
+        }
     }
 
     /**
@@ -143,6 +259,10 @@ public class InfoPuntoInteres extends AppCompatActivity {
      * @param view Vista del botón.
      */
     public void continuarRuta(View view){
+        continuarRuta();
+    }
+
+    public void continuarRuta() {
         setResult(111);
         finish();
     }
@@ -163,6 +283,10 @@ public class InfoPuntoInteres extends AppCompatActivity {
      * @param view Vista del botón.
      */
     public void masInfo(View view){
+        masInfo();
+    }
+
+    public void masInfo() {
         String url = "";
 
         switch (indexPuntoInteres) {

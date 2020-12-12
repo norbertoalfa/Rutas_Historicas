@@ -6,6 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".InterfazPrincipal.InfoPuntoInteres">
 
+    <com.example.rutashistoricas.InterfazPrincipal.MovableFloatingActionButton
+        android:id="@+id/micButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="30dp"
+        android:onClick="voiceButton"
+        android:src="@drawable/ic_mic_black_off"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imgPtoInteres" />
+
+
     <TextView
         android:id="@+id/textoPtoInteres"
         android:layout_width="0dp"

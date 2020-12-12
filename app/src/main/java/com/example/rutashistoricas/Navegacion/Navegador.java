@@ -8,6 +8,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.speech.RecognitionListener;
+import android.speech.RecognizerIntent;
+import android.speech.SpeechRecognizer;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +19,7 @@ import android.widget.Button;
 import com.example.rutashistoricas.InterfazPrincipal.ListadoRutas;
 import com.example.rutashistoricas.R;
 import com.example.rutashistoricas.RealidadAumentada.RealidadAumentada;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
@@ -34,6 +38,8 @@ import com.mapbox.navigation.ui.map.NavigationMapboxMap;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.text.Normalizer;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -120,6 +126,11 @@ public class Navegador extends AppCompatActivity implements OnNavigationReadyCal
      */
     private RouteProgressObserver routeProgressObserver;
 
+    private SpeechRecognizer speechRecognizer;
+    private FloatingActionButton micButton;
+    private Intent speechRecognizerIntent;
+
+    boolean escuchando = false;
 
     /**
      * Se ejecuta al crear la actividad. Obtiene la información referente a la ruta, que es enviada desde la actividad {@link Mapa}. Pone el título de la ruta.
@@ -186,6 +197,8 @@ public class Navegador extends AppCompatActivity implements OnNavigationReadyCal
         inicializarArrivalController();
         inicializarRouteProgressObserver();
 
+        micButton = findViewById(R.id.micButton);
+        iniciarSpeechRecognizer();
     }
 
     /**
@@ -297,6 +310,10 @@ public class Navegador extends AppCompatActivity implements OnNavigationReadyCal
      * @param view Vista del botón.
      */
     public void continuarRuta(View view){
+        continuarRuta();
+    }
+
+    public void continuarRuta() {
         puntoInteresLanzado=false;
         mapboxNavigation.navigateNextRouteLeg();
         botonContinuarRuta.setVisibility(View.INVISIBLE);
@@ -305,12 +322,17 @@ public class Navegador extends AppCompatActivity implements OnNavigationReadyCal
         botonRealidadAumentada.setEnabled(false);
     }
 
+
     /**
      * Método lanzado al pulsar el botón {@link #botonRealidadAumentada}. Inicia la actividad
      * de Realidad Aumentada.
      * @param view Vista del botón.
      */
     public void iniciarRealidadAumentada(View view) {
+        iniciarRealidadAumentada();
+    }
+
+    public void iniciarRealidadAumentada() {
         switch (indexPuntoActual) {
             case 1:
                 Intent intent = new Intent(Navegador.this, RealidadAumentada.class);
@@ -342,7 +364,123 @@ public class Navegador extends AppCompatActivity implements OnNavigationReadyCal
      * @param view Vista del botón.
      */
     public void mostrarCuriosidad(View view) {
+        mostrarCuriosidad();
+    }
+
+    public void mostrarCuriosidad() {
         dialogoCuriosidad.show();
+    }
+
+    private void iniciarSpeechRecognizer() {
+        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
+
+        speechRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+
+        speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+
+        speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "es-ES");
+        speechRecognizer.setRecognitionListener(new RecognitionListener() {
+            @Override
+            public void onReadyForSpeech(Bundle bundle) {
+            }
+
+            @Override
+            public void onBeginningOfSpeech() {
+                //Toast.makeText(MainActivity.this, "Escuchando", Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void onRmsChanged(float v) {
+            }
+            @Override
+            public void onBufferReceived(byte[] bytes) {
+            }
+            @Override
+            public void onEndOfSpeech() {
+            }
+            @Override
+            public void onError(int i) {
+            }
+            @Override
+            public void onResults(Bundle bundle) {
+                int id_opcion = -1;
+
+                micButton.setImageResource(R.drawable.ic_mic_black_off);
+                ArrayList<String> data = bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+                float[] scores = bundle.getFloatArray(SpeechRecognizer.CONFIDENCE_SCORES);
+
+                //Toast.makeText(MainActivity.this, data.get(0), Toast.LENGTH_SHORT).show();
+
+                id_opcion = reconocer(data, scores);
+
+                switch (id_opcion) {
+                    case -1:
+                        break;
+                    case 0:
+                        finish();
+                        break;
+                    case 1:
+                        if (puntoInteresLanzado) {
+                            continuarRuta();
+                        }
+                        break;
+                    case 2:
+                        if ( puntoInteresLanzado) {
+                            iniciarRealidadAumentada();
+                        }
+                        break;
+                    case 3:
+                        if (numCuriosidadActiva !=0) {
+                            mostrarCuriosidad();
+                        }
+                        break;
+                }
+
+            }
+            @Override
+            public void onPartialResults(Bundle bundle) {
+            }
+            @Override
+            public void onEvent(int i, Bundle bundle) {
+            }
+        });
+    }
+
+    private int reconocer(ArrayList<String> data, float[] scores) {
+        int size = data.size();
+        String cad = "";
+
+        for (int i=0; i<size; i++) {
+            if ( scores[i] > 0.6 ) {
+                cad = "";
+                cad = data.get(i).toLowerCase();
+                cad = Normalizer.normalize(cad, Normalizer.Form.NFD);
+                cad = cad.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+                if ( cad.indexOf("atras") != -1 || cad.indexOf("retroced") != -1 ) {
+                    return 0;
+                } else if ( cad.indexOf("continua") != -1 && cad.indexOf("ruta") != -1 ) {
+                    return 1;
+                } else if ( cad.indexOf("realidad aumentada") != -1 ) {
+                    return 2;
+                } else if ( cad.indexOf("curiosidad") != -1 ) {
+                    return 3;
+                }
+            }
+        }
+
+        return -1;
+    }
+
+    public void voiceButton(View view) {
+        if (escuchando) {
+            escuchando = false;
+            micButton.setImageResource(R.drawable.ic_mic_black_off);
+            speechRecognizer.stopListening();
+        } else {
+            escuchando = true;
+            micButton.setImageResource(R.drawable.ic_mic_black_24dp);
+            speechRecognizer.startListening(speechRecognizerIntent);
+
+        }
     }
 
     @Override

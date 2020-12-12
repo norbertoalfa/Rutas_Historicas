@@ -63,7 +63,6 @@ public class SaberMas extends AppCompatActivity {
     private SpeechRecognizer speechRecognizer;
     private FloatingActionButton micButton;
     private Intent speechRecognizerIntent;
-    public static final Integer RecordAudioRequestCode = 1;
 
     boolean escuchando = false;
 
