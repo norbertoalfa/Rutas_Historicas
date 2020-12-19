@@ -126,15 +126,30 @@ public class Navegador extends AppCompatActivity implements OnNavigationReadyCal
      */
     private RouteProgressObserver routeProgressObserver;
 
+    /**
+     * Nos proporciona acceso al servicio de reconocimiento de voz.
+     */
     private SpeechRecognizer speechRecognizer;
+
+    /**
+     * Botón (desplazable) del micrófono. Al pulsarlo se activa el reconocedor de voz.
+     */
     private FloatingActionButton micButton;
+
+    /**
+     * Intent asociado al reconocedor de voz.
+     */
     private Intent speechRecognizerIntent;
 
+    /**
+     * Nos permite saber si está activo el reconocedor de voz.
+     */
     boolean escuchando = false;
 
     /**
      * Se ejecuta al crear la actividad. Obtiene la información referente a la ruta, que es enviada desde la actividad {@link Mapa}. Pone el título de la ruta.
      * Obtiene el acceso a la API de MapBox. Pone el layout, crea la vista y la inicializa. Almacena la ruta y deshabilita el botón {@link #botonContinuarRuta}.
+     * Inicializa el reconocedor de voz y el botón asociado a este.
      *
      * @param savedInstanceState Conjunto de datos del estado de la instancia.
      */
@@ -303,9 +318,7 @@ public class Navegador extends AppCompatActivity implements OnNavigationReadyCal
     }
 
     /**
-     * Método lanzado al pulsar el botón {@link #botonContinuarRuta}. Se continúa la navegación hacia
-     * la siguiente parada, se deshabilita el botón y se hace saber a la actividad que ya no estamos en
-     * un punto de interés.
+     * Método lanzado al pulsar el botón {@link #botonContinuarRuta}. Llama al método {@link #continuarRuta()}.
      *
      * @param view Vista del botón.
      */
@@ -313,6 +326,11 @@ public class Navegador extends AppCompatActivity implements OnNavigationReadyCal
         continuarRuta();
     }
 
+    /**
+     * Si la ruta está parada en un punto de interés, se continúa la navegación hacia la siguiente
+     * parada, se deshabilita el botón y se hace saber a la actividad que ya no estamos en un punto
+     * de interés.
+     */
     public void continuarRuta() {
         puntoInteresLanzado=false;
         mapboxNavigation.navigateNextRouteLeg();
@@ -324,14 +342,16 @@ public class Navegador extends AppCompatActivity implements OnNavigationReadyCal
 
 
     /**
-     * Método lanzado al pulsar el botón {@link #botonRealidadAumentada}. Inicia la actividad
-     * de Realidad Aumentada.
+     * Método lanzado al pulsar el botón {@link #botonRealidadAumentada}. Llama al método {@link #iniciarRealidadAumentada()}
      * @param view Vista del botón.
      */
     public void iniciarRealidadAumentada(View view) {
         iniciarRealidadAumentada();
     }
 
+    /**
+     * Inicia la actividad de Realidad Aumentada.
+     */
     public void iniciarRealidadAumentada() {
         switch (indexPuntoActual) {
             case 1:
@@ -359,18 +379,26 @@ public class Navegador extends AppCompatActivity implements OnNavigationReadyCal
     }
 
     /**
-     * Método lanzado al pulsar el botón {@link #botonCuriosidad}. Se muestra la información relacionada
-     * con la curiosidad activa.
+     * Método lanzado al pulsar el botón {@link #botonCuriosidad}. Llama al método {@link #mostrarCuriosidad()}.
      * @param view Vista del botón.
      */
     public void mostrarCuriosidad(View view) {
         mostrarCuriosidad();
     }
 
+    /**
+     * Se muestra la información relacionada con la curiosidad activa.
+     */
     public void mostrarCuriosidad() {
         dialogoCuriosidad.show();
     }
 
+    /**
+     * Inicializa el servicio de reconocimiento de voz.
+     * Establece el Listener que se usará cuando el reconocimiento de voz sea activado (es decir, cuando el botón {@link #micButton} sea pulsado).
+     * Cuando el reconocedor obtenga un resultado se llamará al método {@link #reconocer}, que analizará el resultado obtenido. La aplicación
+     * reaccionará de diferentes formas en función de lo que el usuario haya dicho.
+     */
     private void iniciarSpeechRecognizer() {
         speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
 
@@ -445,6 +473,13 @@ public class Navegador extends AppCompatActivity implements OnNavigationReadyCal
         });
     }
 
+    /**
+     * Se encarga de analizar el resultado que el reconocedor de voz haya percibido.
+     *
+     * @param data Array con el texto asociado a las palabras que el reconocedor de voz ha percibido.
+     * @param scores Porcentaje de seguridad con el que el reconocedor ha percibido cada String.
+     * @return Entero que nos permite identificar si el usuario ha dicho algo que deba provocar un cambio en la aplicación.
+     */
     private int reconocer(ArrayList<String> data, float[] scores) {
         int size = data.size();
         String cad = "";
@@ -470,6 +505,11 @@ public class Navegador extends AppCompatActivity implements OnNavigationReadyCal
         return -1;
     }
 
+    /**
+     * Método lanzado al pulsar el botón del micrófono, el cuál activa el reconocimiento de voz o lo desactiva si ya estaba activo.
+     *
+     * @param view Vista del botón.
+     */
     public void voiceButton(View view) {
         if (escuchando) {
             escuchando = false;
