@@ -6,6 +6,7 @@ import androidx.core.view.MotionEventCompat;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
@@ -306,6 +307,9 @@ public class PantallaPersonaje extends AppCompatActivity {
                     case 2:
                         mostrarRutas();
                         break;
+                    case 3:
+                        decirOpciones();
+                        break;
                 }
 
             }
@@ -316,6 +320,16 @@ public class PantallaPersonaje extends AppCompatActivity {
             public void onEvent(int i, Bundle bundle) {
             }
         });
+    }
+
+    public void decirOpciones(){
+        String text="Las opciones disponibles son Saber más, mostrar las rutas del personaje o retroceder a la pantalla anterior.";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            textToSpeechEngine.speak(text,TextToSpeech.QUEUE_FLUSH,null,"tts1");
+        }
+        else{
+            textToSpeechEngine.speak(text,TextToSpeech.QUEUE_FLUSH,null);
+        }
     }
 
     /**
@@ -342,6 +356,8 @@ public class PantallaPersonaje extends AppCompatActivity {
                     return 1;
                 } else if ( (cad.indexOf("mostrar") != -1 || cad.indexOf("muestra") != 1 ) && cad.indexOf("ruta") != -1 ) {
                     return 2;
+                } else if ( cad.indexOf("opciones") != -1 ){
+                    return 3;
                 }
             }
         }

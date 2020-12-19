@@ -6,6 +6,7 @@ import androidx.core.view.MotionEventCompat;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
@@ -186,7 +187,8 @@ public class InfoPuntoInteres extends AppCompatActivity {
                         continuarRuta();
                         break;
                     case 3:
-                        //decirOpciones();
+                        decirOpciones();
+                        break;
                 }
 
             }
@@ -197,6 +199,16 @@ public class InfoPuntoInteres extends AppCompatActivity {
             public void onEvent(int i, Bundle bundle) {
             }
         });
+    }
+
+    public void decirOpciones(){
+        String text="Las opciones disponibles son Saber más, Continuar la ruta o retroceder a la pantalla anterior.";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            textToSpeechEngine.speak(text,TextToSpeech.QUEUE_FLUSH,null,"tts1");
+        }
+        else{
+            textToSpeechEngine.speak(text,TextToSpeech.QUEUE_FLUSH,null);
+        }
     }
 
     /**
@@ -222,6 +234,8 @@ public class InfoPuntoInteres extends AppCompatActivity {
                     return 1;
                 } else if ( cad.indexOf("continu") != -1  && cad.indexOf("ruta") != -1 ) {
                     return 2;
+                } else if ( cad.indexOf("opciones") != -1 ){
+                    return 3;
                 }
             }
         }

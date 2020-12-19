@@ -7,14 +7,17 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.rutashistoricas.InterfazPrincipal.ListadoRutas;
 import com.example.rutashistoricas.R;
@@ -41,6 +44,7 @@ import org.jetbrains.annotations.NotNull;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Clase correspondiente a la actividad de navegación que nos guía por el mapa.
@@ -146,6 +150,10 @@ public class Navegador extends AppCompatActivity implements OnNavigationReadyCal
      */
     boolean escuchando = false;
 
+    private TextToSpeech textToSpeechEngine;
+
+    int textIdCuriosidadActiva;
+
     /**
      * Se ejecuta al crear la actividad. Obtiene la información referente a la ruta, que es enviada desde la actividad {@link Mapa}. Pone el título de la ruta.
      * Obtiene el acceso a la API de MapBox. Pone el layout, crea la vista y la inicializa. Almacena la ruta y deshabilita el botón {@link #botonContinuarRuta}.
@@ -214,6 +222,17 @@ public class Navegador extends AppCompatActivity implements OnNavigationReadyCal
 
         micButton = findViewById(R.id.micButton);
         iniciarSpeechRecognizer();
+
+        Locale spanish = new Locale("es", "ES");
+
+        textToSpeechEngine= new TextToSpeech(this,new TextToSpeech.OnInitListener(){
+            @Override
+            public void onInit(int status) {
+                if (status == TextToSpeech.SUCCESS) {
+                    textToSpeechEngine.setLanguage(spanish);
+                }
+            }
+        });
     }
 
     /**
@@ -270,19 +289,18 @@ public class Navegador extends AppCompatActivity implements OnNavigationReadyCal
                     distancia = location.distanceTo(curiosidad);
                     if (distancia<85.0) {
                         numCuriosidadActiva = i+1;
-                        int text_id=0;
                         switch (i+1) {
                             case 1:
-                                text_id = R.string.texto_curiosidad_1;
+                                textIdCuriosidadActiva = R.string.texto_curiosidad_1;
                                 break;
                             case 2:
-                                text_id = R.string.texto_curiosidad_2;
+                                textIdCuriosidadActiva = R.string.texto_curiosidad_2;
                                 break;
                             case 3:
-                                text_id = R.string.texto_curiosidad_3;
+                                textIdCuriosidadActiva = R.string.texto_curiosidad_3;
                         }
                         AlertDialog.Builder builder = new AlertDialog.Builder(Navegador.this);
-                        dialogoCuriosidad = builder.setMessage(getString(text_id))
+                        dialogoCuriosidad = builder.setMessage(getString(textIdCuriosidadActiva))
                                             .setCancelable(true)
                                             .create();
                         botonCuriosidad.setVisibility(View.VISIBLE);
@@ -290,6 +308,7 @@ public class Navegador extends AppCompatActivity implements OnNavigationReadyCal
 
                     } else if ( (i+1) == numCuriosidadActiva) {
                         numCuriosidadActiva = 0;
+                        textIdCuriosidadActiva=-1;
                         botonCuriosidad.setVisibility(View.INVISIBLE);
                         botonCuriosidad.setEnabled(false);
                     }
@@ -393,6 +412,15 @@ public class Navegador extends AppCompatActivity implements OnNavigationReadyCal
         dialogoCuriosidad.show();
     }
 
+    public void decirCuriosidad(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            textToSpeechEngine.speak(getString(textIdCuriosidadActiva), TextToSpeech.QUEUE_FLUSH,null,"tts1");
+        }
+        else{
+            textToSpeechEngine.speak(getString(textIdCuriosidadActiva),TextToSpeech.QUEUE_FLUSH,null);
+        }
+    }
+
     /**
      * Inicializa el servicio de reconocimiento de voz.
      * Establece el Listener que se usará cuando el reconocimiento de voz sea activado (es decir, cuando el botón {@link #micButton} sea pulsado).
@@ -458,7 +486,7 @@ public class Navegador extends AppCompatActivity implements OnNavigationReadyCal
                         break;
                     case 3:
                         if (numCuriosidadActiva !=0) {
-                            mostrarCuriosidad();
+                            decirCuriosidad();
                         }
                         break;
                 }

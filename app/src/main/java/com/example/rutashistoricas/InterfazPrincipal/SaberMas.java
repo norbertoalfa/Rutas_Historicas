@@ -6,6 +6,7 @@ import androidx.core.view.MotionEventCompat;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
@@ -247,6 +248,9 @@ public class SaberMas extends AppCompatActivity {
                         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                         startActivity(intent);
                         break;
+                    case 2:
+                        decirOpciones();
+                        break;
                 }
 
             }
@@ -257,6 +261,16 @@ public class SaberMas extends AppCompatActivity {
             public void onEvent(int i, Bundle bundle) {
             }
         });
+    }
+
+    public void decirOpciones(){
+        String text="Las opciones disponibles son Saber más o retroceder a la pantalla anterior.";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            textToSpeechEngine.speak(text,TextToSpeech.QUEUE_FLUSH,null,"tts1");
+        }
+        else{
+            textToSpeechEngine.speak(text,TextToSpeech.QUEUE_FLUSH,null);
+        }
     }
 
     /**
@@ -281,6 +295,8 @@ public class SaberMas extends AppCompatActivity {
                     return 0;
                 } else if ( cad.indexOf("saber mas") != -1 || cad.indexOf("mas informacion") != -1 ) {
                     return 1;
+                } else if ( cad.indexOf("opciones") != -1 ){
+                    return 2;
                 }
             }
         }

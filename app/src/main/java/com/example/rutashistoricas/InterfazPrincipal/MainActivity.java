@@ -155,6 +155,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case 1:
                         irPantallaPersonaje(idPnj);
+                        break;
                     case 2:
                         decirPersonajesDisponibles();
                         break;

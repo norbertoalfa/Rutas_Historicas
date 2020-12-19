@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
@@ -233,6 +234,9 @@ public class ListadoRutas extends AppCompatActivity {
                     case 2:
                         infoRuta(idRuta);
                         break;
+                    case 3:
+                        decirOpciones();
+                        break;
                 }
 
             }
@@ -243,6 +247,16 @@ public class ListadoRutas extends AppCompatActivity {
             public void onEvent(int i, Bundle bundle) {
             }
         });
+    }
+
+    public void decirOpciones(){
+        String text="Las opciones disponibles son iniciar una de las tres rutas, mostrar información de una de las tres rutas o retroceder a la pantalla anterior.";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            textToSpeechEngine.speak(text,TextToSpeech.QUEUE_FLUSH,null,"tts1");
+        }
+        else{
+            textToSpeechEngine.speak(text,TextToSpeech.QUEUE_FLUSH,null);
+        }
     }
 
     /**
@@ -263,7 +277,7 @@ public class ListadoRutas extends AppCompatActivity {
                 cad = Normalizer.normalize(cad, Normalizer.Form.NFD);
                 cad = cad.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
                 //Log.d("FRANPRUEBA", cad);
-                if ( cad.indexOf("atras") != -1 ) {
+                if ( cad.indexOf("atras") != -1 || cad.indexOf("retroced") != -1 ) {
                     return 0;
                 } else if (  ( cad.indexOf("inicia") != -1 ) && ( cad.indexOf("ruta") != -1 ) ) {
                     if ( cad.indexOf("granada ciudad") != -1 ) {
@@ -287,6 +301,8 @@ public class ListadoRutas extends AppCompatActivity {
                     if (idRuta != -1) {
                         ret = 2;
                     }
+                } else if ( cad.indexOf("opciones") != -1 ){
+                    return 3;
                 }
             }
         }

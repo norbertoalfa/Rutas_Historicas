@@ -15,6 +15,7 @@ import android.hardware.SensorManager;
 import android.location.Location;
 import android.hardware.SensorEventListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.speech.RecognitionListener;
@@ -527,6 +528,9 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
                     case 1:
                         iniciaNavegacion();
                         break;
+                    case 2:
+                        decirOpciones();
+                        break;
                 }
 
             }
@@ -537,6 +541,16 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
             public void onEvent(int i, Bundle bundle) {
             }
         });
+    }
+
+    public void decirOpciones(){
+        String text="Las opciones disponibles son Iniciar la ruta o retroceder a la pantalla anterior.";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            textToSpeechEngine.speak(text,TextToSpeech.QUEUE_FLUSH,null,"tts1");
+        }
+        else{
+            textToSpeechEngine.speak(text,TextToSpeech.QUEUE_FLUSH,null);
+        }
     }
 
     /**
@@ -560,6 +574,8 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
                     return 0;
                 } else if (  ( cad.indexOf("inicia") != -1 ) && ( cad.indexOf("ruta") != -1 ) ) {
                     return 1;
+                } else if ( cad.indexOf("opciones") != -1 ){
+                    return 2;
                 }
             }
         }
