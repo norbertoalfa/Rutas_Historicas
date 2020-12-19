@@ -176,6 +176,9 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
      */
     boolean escuchando = false;
 
+    /**
+     * Motor utilizado para decir mediante voz un String.
+     */
     private TextToSpeech textToSpeechEngine;
 
 
@@ -246,6 +249,7 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
     /**
      * Se ejecuta al crear la actividad. Obtiene el acceso a la API de MapBox. Pone el layout. Crea la vista del mapa ({@link #mapView}). Inicializa el acelerómetro.
      * Inicializa el reconocedor de voz y el botón asociado a este.
+     * Inicializa {@link #textToSpeechEngine} y le asigna el idioma español.
      *
      * @param savedInstanceState Conjunto de datos del estado de la instancia.
      */
@@ -543,6 +547,9 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
         });
     }
 
+    /**
+     * Método que utiliza {@link #textToSpeechEngine} para decir las opciones de voz disponibles para el usuario.
+     */
     public void decirOpciones(){
         String text="Las opciones disponibles son Iniciar la ruta o retroceder a la pantalla anterior.";
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

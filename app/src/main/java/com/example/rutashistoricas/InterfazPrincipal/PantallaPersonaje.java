@@ -98,6 +98,9 @@ public class PantallaPersonaje extends AppCompatActivity {
      */
     boolean escuchando = false;
 
+    /**
+     * Motor utilizado para decir mediante voz un String.
+     */
     private TextToSpeech textToSpeechEngine;
 
     /**
@@ -105,6 +108,7 @@ public class PantallaPersonaje extends AppCompatActivity {
      * (actividad padre de esta).
      * Inicializa los campos de texto del layout con el nombre del personaje, su nacimiento, su fallecimiento, sus categorías y su descripción.
      * Inicializa el reconocedor de voz y el botón asociado a este.
+     * Inicializa {@link #textToSpeechEngine} y le asigna el idioma español.
      *
      * @param savedInstanceState Conjunto de datos del estado de la instancia.
      */
@@ -322,6 +326,9 @@ public class PantallaPersonaje extends AppCompatActivity {
         });
     }
 
+    /**
+     * Método que utiliza {@link #textToSpeechEngine} para decir las opciones de voz disponibles para el usuario.
+     */
     public void decirOpciones(){
         String text="Las opciones disponibles son Saber más, mostrar las rutas del personaje o retroceder a la pantalla anterior.";
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

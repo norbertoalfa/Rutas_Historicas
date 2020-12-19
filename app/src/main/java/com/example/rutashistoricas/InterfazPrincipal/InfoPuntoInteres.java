@@ -74,12 +74,16 @@ public class InfoPuntoInteres extends AppCompatActivity {
      */
     boolean escuchando = false;
 
+    /**
+     * Motor utilizado para decir mediante voz un String.
+     */
     private TextToSpeech textToSpeechEngine;
 
     /**
      * Se ejecuta al crear la actividad. Obtiene el ID del punto de interés, que debe ser enviado a esta actividad mediante un extra antes de iniciarla.
      * Inicializa el campo de texto del layout, el título de la actividad y selecciona la imágen que se mostrará en función del id del punto de interés en
      * el que estamos. Inicializa el reconocedor de voz y el botón asociado a este.
+     * Inicializa {@link #textToSpeechEngine} y le asigna el idioma español.
      *
      * @param savedInstanceState Conjunto de datos del estado de la instancia.
      */
@@ -201,6 +205,9 @@ public class InfoPuntoInteres extends AppCompatActivity {
         });
     }
 
+    /**
+     * Método que utiliza {@link #textToSpeechEngine} para decir las opciones de voz disponibles para el usuario.
+     */
     public void decirOpciones(){
         String text="Las opciones disponibles son Saber más, Continuar la ruta o retroceder a la pantalla anterior.";
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

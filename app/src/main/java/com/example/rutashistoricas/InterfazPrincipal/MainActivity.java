@@ -70,12 +70,16 @@ public class MainActivity extends AppCompatActivity {
      */
     private int idPnj = -1;
 
+    /**
+     * Motor utilizado para decir mediante voz un String.
+     */
     private TextToSpeech textToSpeechEngine;
 
     /**
      * Se ejecuta al crear la actividad. Comprueba si la aplicación tiene permisos para grabar audio,
      * y en caso de que no inicia la petición de permisos al usuario.
      * Inicializa el reconocedor de voz y el botón asociado a este.
+     * Inicializa {@link #textToSpeechEngine} y le asigna el idioma español.
      *
      * @param savedInstanceState Conjunto de datos del estado de la instancia.
      */
@@ -223,6 +227,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Método que utiliza {@link #textToSpeechEngine} para decir la lista de los personajes disponibles.
+     */
     public void decirPersonajesDisponibles(){
         String text="Los personajes disponibles son Federico García Lorca, Mariana Pineda y Ángel Ganivet.";
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

@@ -150,6 +150,9 @@ public class Navegador extends AppCompatActivity implements OnNavigationReadyCal
      */
     boolean escuchando = false;
 
+    /**
+     * Motor utilizado para decir mediante voz un String.
+     */
     private TextToSpeech textToSpeechEngine;
 
     int textIdCuriosidadActiva;
@@ -158,6 +161,7 @@ public class Navegador extends AppCompatActivity implements OnNavigationReadyCal
      * Se ejecuta al crear la actividad. Obtiene la información referente a la ruta, que es enviada desde la actividad {@link Mapa}. Pone el título de la ruta.
      * Obtiene el acceso a la API de MapBox. Pone el layout, crea la vista y la inicializa. Almacena la ruta y deshabilita el botón {@link #botonContinuarRuta}.
      * Inicializa el reconocedor de voz y el botón asociado a este.
+     * Inicializa {@link #textToSpeechEngine} y le asigna el idioma español.
      *
      * @param savedInstanceState Conjunto de datos del estado de la instancia.
      */
@@ -412,6 +416,9 @@ public class Navegador extends AppCompatActivity implements OnNavigationReadyCal
         dialogoCuriosidad.show();
     }
 
+    /**
+     * Método que utiliza {@link #textToSpeechEngine} para decir la curiosidad actual.
+     */
     public void decirCuriosidad(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             textToSpeechEngine.speak(getString(textIdCuriosidadActiva), TextToSpeech.QUEUE_FLUSH,null,"tts1");

@@ -83,6 +83,9 @@ public class SaberMas extends AppCompatActivity {
      */
     boolean escuchando = false;
 
+    /**
+     * Motor utilizado para decir mediante voz un String.
+     */
     private TextToSpeech textToSpeechEngine;
 
 
@@ -94,6 +97,7 @@ public class SaberMas extends AppCompatActivity {
      * A continuación, asocia una url con más información del personaje al botón de maś información,
      * de forma que cuando se hace click en él, se abre la url en un navegador.
      * Inicializa el reconocedor de voz y el botón asociado a este.
+     * Inicializa {@link #textToSpeechEngine} y le asigna el idioma español.
      *
      * @param savedInstanceState Conjunto de datos del estado de la instancia.
      */
@@ -263,6 +267,9 @@ public class SaberMas extends AppCompatActivity {
         });
     }
 
+    /**
+     * Método que utiliza {@link #textToSpeechEngine} para decir las opciones de voz disponibles para el usuario.
+     */
     public void decirOpciones(){
         String text="Las opciones disponibles son Saber más o retroceder a la pantalla anterior.";
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
