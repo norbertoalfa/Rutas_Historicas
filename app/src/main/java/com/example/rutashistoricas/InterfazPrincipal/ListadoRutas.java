@@ -68,17 +68,32 @@ public class ListadoRutas extends AppCompatActivity {
      */
     AlertDialog localizationDialog = null;
 
+    /**
+     * Nos proporciona acceso al servicio de reconocimiento de voz.
+     */
     private SpeechRecognizer speechRecognizer;
-    private FloatingActionButton micButton;
-    private Intent speechRecognizerIntent;
-    public static final Integer RecordAudioRequestCode = 1;
 
+    /**
+     * Botón (desplazable) del micrófono. Al pulsarlo se activa el reconocedor de voz.
+     */
+    private FloatingActionButton micButton;
+
+    /**
+     * Intent asociado al reconocedor de voz.
+     */
+    private Intent speechRecognizerIntent;
+
+    /**
+     * Nos permite saber si está activo el reconocedor de voz.
+     */
     boolean escuchando = false;
+
 
     /**
      * Se ejecuta al crear la actividad. Obtiene el ID del personaje seleccionado, que es enviado por la actividad {@link PantallaPersonaje}
      * (actividad padre de esta).
      * Inicializa los campos de texto del layout con el nombre de las rutas y el nombre del personaje asociados a dicho ID.
+     * Inicializa el reconocedor de voz y el botón asociado a este.
      *
      * @param savedInstanceState Conjunto de datos del estado de la instancia.
      */
@@ -143,6 +158,12 @@ public class ListadoRutas extends AppCompatActivity {
         iniciarSpeechRecognizer();
     }
 
+    /**
+     * Inicializa el servicio de reconocimiento de voz.
+     * Establece el Listener que se usará cuando el reconocimiento de voz sea activado (es decir, cuando el botón {@link #micButton} sea pulsado).
+     * Cuando el reconocedor obtenga un resultado se llamará al método {@link #reconocer}, que analizará el resultado obtenido. La aplicación
+     * reaccionará de diferentes formas en función de lo que el usuario haya dicho.
+     */
     private void iniciarSpeechRecognizer() {
         speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
 
@@ -209,6 +230,13 @@ public class ListadoRutas extends AppCompatActivity {
         });
     }
 
+    /**
+     * Se encarga de analizar el resultado que el reconocedor de voz haya percibido.
+     *
+     * @param data Array con el texto asociado a las palabras que el reconocedor de voz ha percibido.
+     * @param scores Porcentaje de seguridad con el que el reconocedor ha percibido cada String.
+     * @return Entero que nos permite identificar si el usuario ha dicho algo que deba provocar un cambio en la aplicación.
+     */
     private int reconocer(ArrayList<String> data, float[] scores) {
         int size = data.size(), ret = -1;
         String cad = "";
@@ -251,6 +279,11 @@ public class ListadoRutas extends AppCompatActivity {
         return ret;
     }
 
+    /**
+     * Método lanzado al pulsar el botón del micrófono, el cuál activa el reconocimiento de voz o lo desactiva si ya estaba activo.
+     *
+     * @param view Vista del botón.
+     */
     public void voiceButton(View view) {
         if (escuchando) {
             escuchando = false;
@@ -306,6 +339,13 @@ public class ListadoRutas extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Si el ID de ruta que recibe como parámetro es 1, lanza la actividad {@link com.example.rutashistoricas.Navegacion.Mapa}
+     * y le envía el ID del personaje y el ID de la ruta. En otro caso, dado que sólo está implementada la ruta 1, informa de
+     * que la ruta seleccionada no está implementada.
+     *
+     * @param i ID de la ruta que se va a iniciar.
+     */
     private void iniciarRuta(int i) {
         if (i!= 1) {
             dialogoFuncionalidad.show();
@@ -387,10 +427,22 @@ public class ListadoRutas extends AppCompatActivity {
          */
     }
 
+    /**
+     * Método que nos debería mostrar información de la ruta correspondiente al ID que recibe como parámetro.
+     * Dado que esta opción no está implementada, este método avisa de ello por pantalla.
+     *
+     * @param i ID de la ruta.
+     */
     private void infoRuta(int i) {
         dialogoFuncionalidad.show();
     }
 
+    /**
+     * Método ejecutado al pulsar el botón correspondiente a obtener información de la primera ruta.
+     * Dado que esta opción no está implementada, este método avisa de ello por pantalla.
+     *
+     * @param view Vista del botón que se ha pulsado.
+     */
     public void infoRuta1(View view) {
         dialogoFuncionalidad.show();
 
@@ -405,6 +457,12 @@ public class ListadoRutas extends AppCompatActivity {
          */
     }
 
+    /**
+     * Método ejecutado al pulsar el botón correspondiente a obtener información de la primera ruta.
+     * Dado que esta opción no está implementada, este método avisa de ello por pantalla.
+     *
+     * @param view Vista del botón que se ha pulsado.
+     */
     public void infoRuta2(View view) {
         dialogoFuncionalidad.show();
 
@@ -419,6 +477,12 @@ public class ListadoRutas extends AppCompatActivity {
          */
     }
 
+    /**
+     * Método ejecutado al pulsar el botón correspondiente a obtener información de la primera ruta.
+     * Dado que esta opción no está implementada, este método avisa de ello por pantalla.
+     *
+     * @param view Vista del botón que se ha pulsado.
+     */
     public void infoRuta3(View view) {
         dialogoFuncionalidad.show();
 

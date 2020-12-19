@@ -75,16 +75,31 @@ public class PantallaPersonaje extends AppCompatActivity {
      */
     private static String descripcion = "";
 
+    /**
+     * Nos proporciona acceso al servicio de reconocimiento de voz.
+     */
     private SpeechRecognizer speechRecognizer;
+
+    /**
+     * Botón (desplazable) del micrófono. Al pulsarlo se activa el reconocedor de voz.
+     */
     private FloatingActionButton micButton;
+
+    /**
+     * Intent asociado al reconocedor de voz.
+     */
     private Intent speechRecognizerIntent;
 
+    /**
+     * Nos permite saber si está activo el reconocedor de voz.
+     */
     boolean escuchando = false;
 
     /**
      * Se ejecuta al crear la actividad. Obtiene el ID del personaje seleccionado, que es enviado por la actividad {@link com.example.rutashistoricas.InterfazPrincipal.MainActivity}
      * (actividad padre de esta).
      * Inicializa los campos de texto del layout con el nombre del personaje, su nacimiento, su fallecimiento, sus categorías y su descripción.
+     * Inicializa el reconocedor de voz y el botón asociado a este.
      *
      * @param savedInstanceState Conjunto de datos del estado de la instancia.
      */
@@ -199,8 +214,7 @@ public class PantallaPersonaje extends AppCompatActivity {
     }
 
     /**
-     * Método ejecutado al pulsar el botón para mostrar las rutas del personaje.
-     * Lanza la actividad {@link com.example.rutashistoricas.InterfazPrincipal.ListadoRutas} y le envía el ID del personaje.
+     * Método ejecutado al pulsar el botón para mostrar las rutas del personaje. Llama al método {@link #mostrarRutas()}
      *
      * @param view Vista del botón que se ha pulsado.
      */
@@ -208,6 +222,9 @@ public class PantallaPersonaje extends AppCompatActivity {
         mostrarRutas();
     }
 
+    /**
+     * Lanza la actividad {@link com.example.rutashistoricas.InterfazPrincipal.ListadoRutas} y le envía el ID del personaje.
+     */
     private void mostrarRutas() {
         Bundle b = new Bundle();
         b.putInt("idPnj", idPnj);
@@ -217,6 +234,12 @@ public class PantallaPersonaje extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /**
+     * Inicializa el servicio de reconocimiento de voz.
+     * Establece el Listener que se usará cuando el reconocimiento de voz sea activado (es decir, cuando el botón {@link #micButton} sea pulsado).
+     * Cuando el reconocedor obtenga un resultado se llamará al método {@link #reconocer}, que analizará el resultado obtenido. La aplicación
+     * reaccionará de diferentes formas en función de lo que el usuario haya dicho.
+     */
     private void iniciarSpeechRecognizer() {
         speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
 
@@ -282,6 +305,13 @@ public class PantallaPersonaje extends AppCompatActivity {
         });
     }
 
+    /**
+     * Se encarga de analizar el resultado que el reconocedor de voz haya percibido.
+     *
+     * @param data Array con el texto asociado a las palabras que el reconocedor de voz ha percibido.
+     * @param scores Porcentaje de seguridad con el que el reconocedor ha percibido cada String.
+     * @return Entero que nos permite identificar si el usuario ha dicho algo que deba provocar un cambio en la aplicación.
+     */
     private int reconocer(ArrayList<String> data, float[] scores) {
         int size = data.size();
         String cad = "";
@@ -306,6 +336,11 @@ public class PantallaPersonaje extends AppCompatActivity {
         return -1;
     }
 
+    /**
+     * Método lanzado al pulsar el botón del micrófono, el cuál activa el reconocimiento de voz o lo desactiva si ya estaba activo.
+     *
+     * @param view Vista del botón.
+     */
     public void voiceButton(View view) {
         if (escuchando) {
             escuchando = false;

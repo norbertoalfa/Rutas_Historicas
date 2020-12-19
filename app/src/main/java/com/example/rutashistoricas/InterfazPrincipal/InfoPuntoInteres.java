@@ -51,16 +51,30 @@ public class InfoPuntoInteres extends AppCompatActivity {
      */
     private int indexPuntoInteres = -1;
 
+    /**
+     * Nos proporciona acceso al servicio de reconocimiento de voz.
+     */
     private SpeechRecognizer speechRecognizer;
+
+    /**
+     * Botón (desplazable) del micrófono. Al pulsarlo se activa el reconocedor de voz.
+     */
     private FloatingActionButton micButton;
+
+    /**
+     * Intent asociado al reconocedor de voz.
+     */
     private Intent speechRecognizerIntent;
 
+    /**
+     * Nos permite saber si está activo el reconocedor de voz.
+     */
     boolean escuchando = false;
 
     /**
      * Se ejecuta al crear la actividad. Obtiene el ID del punto de interés, que debe ser enviado a esta actividad mediante un extra antes de iniciarla.
      * Inicializa el campo de texto del layout, el título de la actividad y selecciona la imágen que se mostrará en función del id del punto de interés en
-     * el que estamos.
+     * el que estamos. Inicializa el reconocedor de voz y el botón asociado a este.
      *
      * @param savedInstanceState Conjunto de datos del estado de la instancia.
      */
@@ -98,6 +112,12 @@ public class InfoPuntoInteres extends AppCompatActivity {
 
     }
 
+    /**
+     * Inicializa el servicio de reconocimiento de voz.
+     * Establece el Listener que se usará cuando el reconocimiento de voz sea activado (es decir, cuando el botón {@link #micButton} sea pulsado).
+     * Cuando el reconocedor obtenga un resultado se llamará al método {@link #reconocer}, que analizará el resultado obtenido. La aplicación
+     * reaccionará de diferentes formas en función de lo que el usuario haya dicho.
+     */
     private void iniciarSpeechRecognizer() {
         speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
 
@@ -163,6 +183,13 @@ public class InfoPuntoInteres extends AppCompatActivity {
         });
     }
 
+    /**
+     * Se encarga de analizar el resultado que el reconocedor de voz haya percibido.
+     *
+     * @param data Array con el texto asociado a las palabras que el reconocedor de voz ha percibido.
+     * @param scores Porcentaje de seguridad con el que el reconocedor ha percibido cada String.
+     * @return Entero que nos permite identificar si el usuario ha dicho algo que deba provocar un cambio en la aplicación.
+     */
     private int reconocer(ArrayList<String> data, float[] scores) {
         int size = data.size();
         String cad = "";
@@ -186,6 +213,11 @@ public class InfoPuntoInteres extends AppCompatActivity {
         return -1;
     }
 
+    /**
+     * Método lanzado al pulsar el botón del micrófono, el cuál activa el reconocimiento de voz o lo desactiva si ya estaba activo.
+     *
+     * @param view Vista del botón.
+     */
     public void voiceButton(View view) {
         if (escuchando) {
             escuchando = false;
@@ -253,8 +285,7 @@ public class InfoPuntoInteres extends AppCompatActivity {
     }
 
     /**
-     * Método lanzado al pulsar el botón correspondiente a continuar la ruta. Se finaliza esta actividad y se vuelve a la
-     * actividad {@link com.example.rutashistoricas.Navegacion.Navegador}.
+     * Método lanzado al pulsar el botón correspondiente a continuar la ruta. Llama al método {@link #continuarRuta()}
      *
      * @param view Vista del botón.
      */
@@ -262,6 +293,9 @@ public class InfoPuntoInteres extends AppCompatActivity {
         continuarRuta();
     }
 
+    /**
+     * Se finaliza esta actividad y se vuelve a la actividad {@link com.example.rutashistoricas.Navegacion.Navegador}.
+     */
     public void continuarRuta() {
         setResult(111);
         finish();
@@ -278,7 +312,7 @@ public class InfoPuntoInteres extends AppCompatActivity {
      */
 
     /**
-     * Método lanzado al pulsar el botón correspondiente a obtener más información. Se lanzará una URL en el navegador.
+     * Método lanzado al pulsar el botón correspondiente a obtener más información. Llama al método {@link #masInfo()}.
      *
      * @param view Vista del botón.
      */
@@ -286,6 +320,9 @@ public class InfoPuntoInteres extends AppCompatActivity {
         masInfo();
     }
 
+    /**
+     * Lanza una URL en el navegador con la información correspondiente.
+     */
     public void masInfo() {
         String url = "";
 

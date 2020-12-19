@@ -9,6 +9,10 @@ import android.view.ViewGroup;
 import com.example.rutashistoricas.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+/**
+ * Clase que implementa un botón que se puede desplazar por la pantalla.
+ * Es utilizado para el botón del micrófono que nos permite implementar la interacción oral.
+ */
 public class MovableFloatingActionButton extends FloatingActionButton implements View.OnTouchListener {
 
     private final static float CLICK_DRAG_TOLERANCE = 10; // Often, there will be a slight, unintentional, drag when the user taps the FAB, so we need to account for this.

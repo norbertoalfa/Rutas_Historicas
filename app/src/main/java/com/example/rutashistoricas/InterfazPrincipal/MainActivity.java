@@ -39,16 +39,40 @@ import java.util.Locale;
  */
 public class MainActivity extends AppCompatActivity {
 
+    /**
+     * Nos proporciona acceso al servicio de reconocimiento de voz.
+     */
     private SpeechRecognizer speechRecognizer;
+
+    /**
+     * Botón (desplazable) del micrófono. Al pulsarlo se activa el reconocedor de voz.
+     */
     private FloatingActionButton micButton;
+
+    /**
+     * Intent asociado al reconocedor de voz.
+     */
     private Intent speechRecognizerIntent;
+
+    /**
+     * Nos permite saber si está activo el reconocedor de voz.
+     */
+    boolean escuchando = false;
+
+    /**
+     * Utilizado durante la solicitud de permisos para grabar audio, necesarios para el reconocimiento por voz.
+     */
     public static final Integer RecordAudioRequestCode = 1;
 
-    private boolean escuchando = false;
+    /**
+     * ID del personaje seleccionado.
+     */
     private int idPnj = -1;
 
     /**
-     * Se ejecuta al crear la actividad.
+     * Se ejecuta al crear la actividad. Comprueba si la aplicación tiene permisos para grabar audio,
+     * y en caso de que no inicia la petición de permisos al usuario.
+     * Inicializa el reconocedor de voz y el botón asociado a este.
      *
      * @param savedInstanceState Conjunto de datos del estado de la instancia.
      */
@@ -64,6 +88,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Inicializa el servicio de reconocimiento de voz.
+     * Establece el Listener que se usará cuando el reconocimiento de voz sea activado (es decir, cuando el botón {@link #micButton} sea pulsado).
+     * Cuando el reconocedor obtenga un resultado se llamará al método {@link #reconocer}, que analizará el resultado obtenido. La aplicación
+     * reaccionará de diferentes formas en función de lo que el usuario haya dicho.
+     */
     private void iniciarSpeechRecognizer() {
         speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
 
@@ -195,6 +225,12 @@ public class MainActivity extends AppCompatActivity {
         irPantallaPersonaje(idPnj);
     }
 
+    /**
+     * Lanza la actividad {@link com.example.rutashistoricas.InterfazPrincipal.PantallaPersonaje} y le envía el ID del personaje.
+     * En caso de no estar disponible el personaje seleccionado, se muestra un mensaje que informa al usuario de ello.
+     *
+     * @param id_pnj ID del personaje seleccionado.
+     */
     private void irPantallaPersonaje(int id_pnj) {
         boolean irAPantallaValida = true;
         if (id_pnj != 1) {
@@ -216,6 +252,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Método lanzado al pulsar el botón del micrófono, el cuál activa el reconocimiento de voz o lo desactiva si ya estaba activo.
+     *
+     * @param view Vista del botón.
+     */
     public void voiceButton(View view) {
         if (escuchando) {
             escuchando = false;
@@ -229,6 +270,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Se encarga de analizar el resultado que el reconocedor de voz haya percibido.
+     *
+     * @param data Array con el texto asociado a las palabras que el reconocedor de voz ha percibido.
+     * @param scores Porcentaje de seguridad con el que el reconocedor ha percibido cada String.
+     * @return Entero que nos permite identificar si el usuario ha dicho algo que deba provocar un cambio en la aplicación.
+     */
     private int reconocer(ArrayList<String> data, float[] scores) {
         int size = data.size();
         String cad = "";
@@ -268,11 +316,19 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         speechRecognizer.destroy();
     }
+
+    /**
+     * Lanza una petición de permisos para grabar audio al usuario.
+     */
     private void checkPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.RECORD_AUDIO}, RecordAudioRequestCode);
         }
     }
+
+    /**
+     * Método que es llamado cuando el usuario ha repondido a la petición de permisos.
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions,
