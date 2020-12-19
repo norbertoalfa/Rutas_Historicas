@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -26,6 +27,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -87,6 +89,8 @@ public class ListadoRutas extends AppCompatActivity {
      * Nos permite saber si está activo el reconocedor de voz.
      */
     boolean escuchando = false;
+
+    private TextToSpeech textToSpeechEngine;
 
 
     /**
@@ -156,6 +160,17 @@ public class ListadoRutas extends AppCompatActivity {
 
         micButton = findViewById(R.id.micButton);
         iniciarSpeechRecognizer();
+
+        Locale spanish = new Locale("es", "ES");
+
+        textToSpeechEngine= new TextToSpeech(this,new TextToSpeech.OnInitListener(){
+            @Override
+            public void onInit(int status) {
+                if (status == TextToSpeech.SUCCESS) {
+                    textToSpeechEngine.setLanguage(spanish);
+                }
+            }
+        });
     }
 
     /**

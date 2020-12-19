@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
+import android.speech.tts.TextToSpeech;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -69,6 +70,8 @@ public class MainActivity extends AppCompatActivity {
      */
     private int idPnj = -1;
 
+    private TextToSpeech textToSpeechEngine;
+
     /**
      * Se ejecuta al crear la actividad. Comprueba si la aplicación tiene permisos para grabar audio,
      * y en caso de que no inicia la petición de permisos al usuario.
@@ -86,6 +89,16 @@ public class MainActivity extends AppCompatActivity {
         micButton = findViewById(R.id.micButton);
         iniciarSpeechRecognizer();
 
+        Locale spanish = new Locale("es", "ES");
+
+        textToSpeechEngine= new TextToSpeech(this,new TextToSpeech.OnInitListener(){
+            @Override
+            public void onInit(int status) {
+                if (status == TextToSpeech.SUCCESS) {
+                    textToSpeechEngine.setLanguage(spanish);
+                }
+            }
+        });
     }
 
     /**
@@ -142,6 +155,9 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case 1:
                         irPantallaPersonaje(idPnj);
+                    case 2:
+                        decirPersonajesDisponibles();
+                        break;
                 }
 
                 /*
@@ -204,6 +220,16 @@ public class MainActivity extends AppCompatActivity {
             public void onEvent(int i, Bundle bundle) {
             }
         });
+    }
+
+    public void decirPersonajesDisponibles(){
+        String text="Los personajes disponibles son Federico García Lorca, Mariana Pineda y Ángel Ganivet.";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            textToSpeechEngine.speak(text,TextToSpeech.QUEUE_FLUSH,null,"tts1");
+        }
+        else{
+            textToSpeechEngine.speak(text,TextToSpeech.QUEUE_FLUSH,null);
+        }
     }
 
     /**
@@ -298,7 +324,10 @@ public class MainActivity extends AppCompatActivity {
                 } else if ( cad.indexOf("angel ganivet") != -1 ) {
                     idPnj = 3;
                     return 1;
+                } else if ( cad.indexOf("opciones") != -1 ){
+                    return 2;
                 }
+
             }
         }
 

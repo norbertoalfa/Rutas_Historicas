@@ -20,6 +20,7 @@ import android.provider.Settings;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -66,6 +67,7 @@ import java.lang.ref.WeakReference;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconAllowOverlap;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconIgnorePlacement;
@@ -172,6 +174,8 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
      * Nos permite saber si está activo el reconocedor de voz.
      */
     boolean escuchando = false;
+
+    private TextToSpeech textToSpeechEngine;
 
 
     /**
@@ -307,6 +311,16 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
         micButton = findViewById(R.id.micButton);
         iniciarSpeechRecognizer();
 
+        Locale spanish = new Locale("es", "ES");
+
+        textToSpeechEngine= new TextToSpeech(this,new TextToSpeech.OnInitListener(){
+            @Override
+            public void onInit(int status) {
+                if (status == TextToSpeech.SUCCESS) {
+                    textToSpeechEngine.setLanguage(spanish);
+                }
+            }
+        });
     }
 
 

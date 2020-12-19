@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
+import android.speech.tts.TextToSpeech;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -25,6 +26,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.Normalizer;
 import java.util.ArrayList;
+import java.util.Locale;
 
 
 /**
@@ -71,6 +73,8 @@ public class InfoPuntoInteres extends AppCompatActivity {
      */
     boolean escuchando = false;
 
+    private TextToSpeech textToSpeechEngine;
+
     /**
      * Se ejecuta al crear la actividad. Obtiene el ID del punto de interés, que debe ser enviado a esta actividad mediante un extra antes de iniciarla.
      * Inicializa el campo de texto del layout, el título de la actividad y selecciona la imágen que se mostrará en función del id del punto de interés en
@@ -110,6 +114,16 @@ public class InfoPuntoInteres extends AppCompatActivity {
         micButton = findViewById(R.id.micButton);
         iniciarSpeechRecognizer();
 
+        Locale spanish = new Locale("es", "ES");
+
+        textToSpeechEngine= new TextToSpeech(this,new TextToSpeech.OnInitListener(){
+            @Override
+            public void onInit(int status) {
+                if (status == TextToSpeech.SUCCESS) {
+                    textToSpeechEngine.setLanguage(spanish);
+                }
+            }
+        });
     }
 
     /**
@@ -171,6 +185,8 @@ public class InfoPuntoInteres extends AppCompatActivity {
                     case 2:
                         continuarRuta();
                         break;
+                    case 3:
+                        //decirOpciones();
                 }
 
             }
