@@ -118,11 +118,6 @@ public class RealidadAumentada extends AppCompatActivity implements SensorEventL
      */
     RutaHistorica ruta = null;
 
-    private SpeechRecognizer speechRecognizer;
-    private Button micButton;
-    private Intent speechRecognizerIntent;
-
-    boolean escuchando = false;
 
     /**
      *  Se ejecuta al iniciar la actividad. Visualiza la escena 3D y muestra un cuadro de diálogo
@@ -153,22 +148,6 @@ public class RealidadAumentada extends AppCompatActivity implements SensorEventL
                 myGLRenderer = new MyGLRenderer(this);
                 glView.setRenderer(myGLRenderer);
                 setContentView(glView);
-                /*
-                glView.setZOrderMediaOverlay(true);
-
-                micButton = new Button(this);
-                micButton.setText("zoomIn");
-
-                LinearLayout ll = new LinearLayout(this);
-
-                ll.addView(micButton);
-
-                this.addContentView(ll,new
-                        ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,
-                        ViewGroup.LayoutParams.FILL_PARENT));
-
-                ll.bringChildToFront(micButton);
-                ll.bringToFront();*/
 
                 Sensor accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
@@ -205,10 +184,6 @@ public class RealidadAumentada extends AppCompatActivity implements SensorEventL
                 });
 
         builder1.create().show();
-
-        micButton = findViewById(R.id.micButton);
-        //micButton.bringToFront();
-        iniciarSpeechRecognizer();
     }
 
 
@@ -395,107 +370,6 @@ public class RealidadAumentada extends AppCompatActivity implements SensorEventL
                 accelerometerReading, magnetometerReading);
 
         SensorManager.getOrientation(rotationMatrix, orientationAngles);
-    }
-
-    private void iniciarSpeechRecognizer() {
-        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
-
-        speechRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-
-        speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-
-        speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "es-ES");
-        speechRecognizer.setRecognitionListener(new RecognitionListener() {
-            @Override
-            public void onReadyForSpeech(Bundle bundle) {
-            }
-
-            @Override
-            public void onBeginningOfSpeech() {
-                //Toast.makeText(MainActivity.this, "Escuchando", Toast.LENGTH_SHORT).show();
-            }
-            @Override
-            public void onRmsChanged(float v) {
-            }
-            @Override
-            public void onBufferReceived(byte[] bytes) {
-            }
-            @Override
-            public void onEndOfSpeech() {
-            }
-            @Override
-            public void onError(int i) {
-            }
-            @Override
-            public void onResults(Bundle bundle) {
-                int id_opcion = -1;
-
-                //micButton.setImageResource(R.drawable.ic_mic_black_off);
-                ArrayList<String> data = bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
-                float[] scores = bundle.getFloatArray(SpeechRecognizer.CONFIDENCE_SCORES);
-
-                //Toast.makeText(MainActivity.this, data.get(0), Toast.LENGTH_SHORT).show();
-
-                id_opcion = reconocer(data, scores);
-
-                switch (id_opcion) {
-                    case -1:
-                        break;
-                    case 0:
-                        finish();
-                        break;
-                    /*case 1:
-                        String url = getString(R.string.url_federico);
-                        Uri uri = Uri.parse(url);
-                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                        startActivity(intent);
-                        break;*/
-                }
-
-            }
-            @Override
-            public void onPartialResults(Bundle bundle) {
-            }
-            @Override
-            public void onEvent(int i, Bundle bundle) {
-            }
-        });
-    }
-
-    private int reconocer(ArrayList<String> data, float[] scores) {
-        int size = data.size();
-        String cad = "";
-
-        for (int i=0; i<size; i++) {
-            if ( scores[i] > 0.6 ) {
-                cad = "";
-                cad = data.get(i).toLowerCase();
-                cad = Normalizer.normalize(cad, Normalizer.Form.NFD);
-                cad = cad.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
-                if ( cad.indexOf("atras") != -1 || cad.indexOf("retroced") != -1 ) {
-                    return 0;
-                } /*else if ( cad.indexOf("saber mas") != -1 || cad.indexOf("mas informacion") != -1  ) {
-                    return 1;
-                } else if ( cad.indexOf("continu") != -1  && cad.indexOf("ruta") != -1 ) {
-                    return 2;
-                }*/
-            }
-        }
-
-        return -1;
-    }
-
-    public void voiceButton(View view) {
-        if (escuchando) {
-            escuchando = false;
-            //micButton.setImageResource(R.drawable.ic_mic_black_off);
-            speechRecognizer.stopListening();
-        } else {
-            escuchando = true;
-            //micButton.setImageResource(R.drawable.ic_mic_black_24dp);
-            speechRecognizer.startListening(speechRecognizerIntent);
-
-        }
     }
 
 }
