@@ -489,6 +489,9 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
                     case 0:
                         finish();
                         break;
+                    case 1:
+                        iniciaNavegacion();
+                        break;
                 }
 
             }
@@ -513,6 +516,8 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
                 cad = cad.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
                 if ( cad.indexOf("atras") != -1 || cad.indexOf("retroced") != -1 ) {
                     return 0;
+                } else if (  ( cad.indexOf("inicia") != -1 ) && ( cad.indexOf("ruta") != -1 ) ) {
+                    return 1;
                 }
             }
         }
@@ -653,13 +658,19 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback, Permi
     public void onSensorChanged(SensorEvent event) {
         float deltaZ=Math.abs(lastZ-event.values[2]);
         if(deltaZ>15.0f && !navegacion_iniciada){
+            iniciaNavegacion();
+        }
+        lastZ=event.values[2];
+    }
+
+    public void iniciaNavegacion(){
+        if (!navegacion_iniciada){
             navegacion_iniciada = true;
             Intent intent = new Intent(Mapa.this, Navegador.class);
             intent.putExtra("rutaHistorica", ruta);
             startActivity(intent);
             Toast.makeText(this, "Iniciando navegación", Toast.LENGTH_LONG).show();
         }
-        lastZ=event.values[2];
     }
 
     @Override
